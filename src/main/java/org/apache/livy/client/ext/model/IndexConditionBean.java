@@ -19,8 +19,6 @@ package org.apache.livy.client.ext.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
-
 /**
  * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
  * @class-name: IndexConditionBean
@@ -45,13 +43,5 @@ public class IndexConditionBean extends BaseConditionBean {
      * 别名，eg：金额(求和)
      */
     private String aliasName;
-    /**
-     * 字段值
-     */
-    private List<String> fieldValue;
-    /**
-     * 年季月周标识
-     */
-    private String granularity;
 }
 

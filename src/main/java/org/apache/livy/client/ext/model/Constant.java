@@ -25,13 +25,13 @@ package org.apache.livy.client.ext.model;
  * @date: 2017/10/19 20:26
  */
 public class Constant {
+
     public static final String SORT_ASC = "ASC";
     public static final String SORT_DESC = "DESC";
     public static final String AGG_SUM = "SUM";
     public static final String AGG_COUNT = "COUNT";
     public static final String AGG_AVG = "AVG";
     public static final String PIVOT_ALIAS = "y";
-
     /**
      * @package: cn.com.tcsl.loongboss.common.constant
      * @class-name: DataType

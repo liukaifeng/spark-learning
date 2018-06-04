@@ -32,12 +32,6 @@ public class SparkSqlCondition {
      */
     private String selectSql;
     /**
-     * 查询类型
-     * 0-默认值（普通查询）
-     * 1-筛选项数据查询
-     */
-    private int queryType;
-    /**
      * 查询字段
      */
     private List<String> selectList;
@@ -53,30 +47,16 @@ public class SparkSqlCondition {
      * 分组字段
      */
     private List<String> groupList;
-    /**
-     * 维度条件字段
-     */
-    private List<String> dimensionList;
 
     /**
      * 对比字段
      */
     private List<String> compareList;
 
-
-    /**
-     * 字段名与中文名对应关系
-     */
-    private Map<String, String> fieldMap;
-
     /**
      * 排序字段
      */
-    private Map<String, List<String>> orderMap;
-    /**
-     * 聚合字段
-     */
-    private Map<String, List<String>> aggMap;
+    private List<Map<String, String>> orderList;
 
     /**
      * spark配置参数
@@ -84,33 +64,12 @@ public class SparkSqlCondition {
     private Map<String, String> sparkConfig;
 
 
-    /**
-     * 结果数量限制
-     */
-    private int limit;
-
     public String getSelectSql() {
         return selectSql;
     }
 
     public void setSelectSql(String selectSql) {
         this.selectSql = selectSql;
-    }
-
-    public List<String> getSelectList() {
-        return selectList;
-    }
-
-    public void setSelectList(List<String> selectList) {
-        this.selectList = selectList;
-    }
-
-    public List<String> getIndexList() {
-        return indexList;
-    }
-
-    public void setIndexList(List<String> indexList) {
-        this.indexList = indexList;
     }
 
     public List<String> getSumList() {
@@ -129,14 +88,6 @@ public class SparkSqlCondition {
         this.groupList = groupList;
     }
 
-    public List<String> getDimensionList() {
-        return dimensionList;
-    }
-
-    public void setDimensionList(List<String> dimensionList) {
-        this.dimensionList = dimensionList;
-    }
-
     public List<String> getCompareList() {
         return compareList;
     }
@@ -145,20 +96,19 @@ public class SparkSqlCondition {
         this.compareList = compareList;
     }
 
-    public Map<String, List<String>> getOrderMap() {
-        return orderMap;
+    public List<Map<String, String>> getOrderList() {
+        return orderList;
     }
 
-    public void setOrderMap(Map<String, List<String>> orderMap) {
-        this.orderMap = orderMap;
+    public void setOrderList(List<Map<String, String>> orderList) {
+        this.orderList = orderList;
     }
 
-    public Map<String, List<String>> getAggMap() {
-        return aggMap;
+    private SparkSqlCondition() {
     }
 
-    public void setAggMap(Map<String, List<String>> aggMap) {
-        this.aggMap = aggMap;
+    public static SparkSqlCondition build() {
+        return new SparkSqlCondition();
     }
 
     public Map<String, String> getSparkConfig() {
@@ -168,29 +118,20 @@ public class SparkSqlCondition {
     public void setSparkConfig(Map<String, String> sparkConfig) {
         this.sparkConfig = sparkConfig;
     }
-
-    public Map<String, String> getFieldMap() {
-        return fieldMap;
+    public List<String> getSelectList() {
+        return selectList;
     }
 
-    public void setFieldMap(Map<String, String> fieldMap) {
-        this.fieldMap = fieldMap;
-    }
-
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public void setSelectList( List<String> selectList ) {
+        this.selectList = selectList;
     }
 
 
-    public int getQueryType() {
-        return queryType;
+    public List<String> getIndexList() {
+        return indexList;
     }
 
-    public void setQueryType(int queryType) {
-        this.queryType = queryType;
+    public void setIndexList( List<String> indexList ) {
+        this.indexList = indexList;
     }
 }

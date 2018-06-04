@@ -18,15 +18,10 @@ package org.apache.livy.client.ext.model;
 
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static org.apache.livy.client.ext.model.Constant.*;
 
 
 /**
@@ -38,14 +33,12 @@ import static org.apache.livy.client.ext.model.Constant.*;
  */
 public class SearchSqlBuilder {
 
-    private static final String SELECT = "select ";
-    private static final String FROM = " from ";
-    private static final String WHERE = " where ";
-    private static final String LIMIT_ITEM = " limit ";
-    //聚合条件(sum,count,avg)
-    private final Map<String, List<String>> aggMap = Maps.newConcurrentMap();
-    //排序条件
-    private final Map<String, List<String>> orderMap = Maps.newConcurrentMap();
+    private  final String SELECT = "select ";
+    private  final String FROM = " from ";
+    private  final String WHERE = " where ";
+    private  final String GROUP_BY = " group by ";
+    private  final String ORDER_BY = " order by ";
+    private  final String LIMIT_ITEM = " limit ";
 
     /**
      * @method-name: selectBuilder
@@ -62,7 +55,7 @@ public class SearchSqlBuilder {
      * description:
      * *****************************************************
      */
-    private String selectBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+    private  String selectBuilder( SqlConditionBuilder sqlConditionBuilder ) {
         StringBuilder stringBuilder = new StringBuilder(SELECT);
         List<String> selectSqlList = sqlConditionBuilder.getSelectSqlList();
         int size = selectSqlList.size();
@@ -75,7 +68,7 @@ public class SearchSqlBuilder {
         return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
-    private String tableBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+    private  String tableBuilder( SqlConditionBuilder sqlConditionBuilder ) {
         return FROM + sqlConditionBuilder.getTableName();
     }
 
@@ -94,7 +87,7 @@ public class SearchSqlBuilder {
      * description:
      * *****************************************************
      */
-    private String whereBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+    private  String whereBuilder( SqlConditionBuilder sqlConditionBuilder ) {
         StringBuilder stringBuilder = new StringBuilder(WHERE);
         List<String> whereList = sqlConditionBuilder.getWhereList();
         List<String> selectList = sqlConditionBuilder.getSelectList();
@@ -105,7 +98,7 @@ public class SearchSqlBuilder {
             stringBuilder.append(whereList.parallelStream().collect(Collectors.joining(and)));
         }
         if (!selectList.isEmpty() && selectList.size() > 0) {
-            selectList.forEach(s -> {
+            selectList.parallelStream().forEach(s -> {
                 stringBuilder.append(and).append(s).append(notNull);
             });
         }
@@ -127,14 +120,14 @@ public class SearchSqlBuilder {
      * description:
      * *****************************************************
      */
-    private List<String> groupBuilder( SqlConditionBuilder sqlConditionBuilder ) {
-        if (Objects.nonNull(sqlConditionBuilder.getGroupByList()) && !sqlConditionBuilder.getGroupByList().isEmpty()) {
-            return sqlConditionBuilder.getGroupByList();
+    private  String groupBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+        if (!Strings.isNullOrEmpty(sqlConditionBuilder.getGroupBy())) {
+            return GROUP_BY + sqlConditionBuilder.getGroupBy();
         }
-        return Lists.newArrayList();
+        return "";
     }
 
-    private List<String> compareBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+    private  List<String> compareBuilder( SqlConditionBuilder sqlConditionBuilder ) {
         return sqlConditionBuilder.getCompareList();
     }
 
@@ -153,53 +146,43 @@ public class SearchSqlBuilder {
      * description:
      * *****************************************************
      */
-    private Map<String, List<String>> orderBuilder( SqlConditionBuilder sqlConditionBuilder ) {
-        //升序排序项
-        if (Objects.nonNull(sqlConditionBuilder.getAscList()) && !sqlConditionBuilder.getAscList().isEmpty()) {
-            orderMap.put(Constant.SORT_ASC, sqlConditionBuilder.getAscList());
+    private  String orderBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+        String dotStr = ",";
+        StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
+        if (!sqlConditionBuilder.getCompareList().isEmpty()) {
+            stringBuilder.append(" y").append(dotStr);
         }
-        //降序排序项
-        if (Objects.nonNull(sqlConditionBuilder.getDescList()) && !sqlConditionBuilder.getDescList().isEmpty()) {
-            orderMap.put(Constant.SORT_DESC, sqlConditionBuilder.getDescList());
-        }
-        //未指定排序项
-        if (orderMap.isEmpty()) {
-            int queryPoint = sqlConditionBuilder.getQueryPoint();
-            String sort = Constant.SORT_ASC;
-            if (queryPoint == 2) {
-                sort = Constant.SORT_DESC;
-            }
-            //维度条件
+        List<String> orderByList = sqlConditionBuilder.getOrderByList();
+        if (orderByList != null && !orderByList.isEmpty()) {
+            orderByList.forEach(order -> {
+                stringBuilder.append(order).append(dotStr);
+            });
+        } else {
+            //分组条件
             List<String> groupByList = sqlConditionBuilder.getGroupByList();
-            //计算字段
-            List<String> sumList = sqlConditionBuilder.getSumList();
-            //优先使用计算字段排序
-            if (Objects.nonNull(sumList) && !sumList.isEmpty()) {
-                orderMap.put(sort, Lists.newArrayList(sumList.get(0)));
-            } else if (Objects.nonNull(groupByList) && !groupByList.isEmpty()) {
-                orderMap.put(sort, Lists.newArrayList(groupByList.get(0)));
+            //查询字段
+            List<String> selectList = sqlConditionBuilder.getSelectList();
+            if (groupByList != null && !groupByList.isEmpty()) {
+                stringBuilder.append(groupByList.get(0)).append(dotStr);
+            } else if (selectList != null && !selectList.isEmpty()) {
+                stringBuilder.append(selectList.get(0)).append(dotStr);
             }
         }
-        return orderMap;
+
+        if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
+            return "";
+        }
+        return stringBuilder.substring(0, stringBuilder.length() - dotStr.length());
     }
 
-    private Map<String, List<String>> aggBuilder( SqlConditionBuilder sqlConditionBuilder ) {
-        if (Objects.nonNull(sqlConditionBuilder.getSumList()) && !sqlConditionBuilder.getSumList().isEmpty()) {
-            aggMap.put(AGG_SUM, sqlConditionBuilder.getSumList());
-        }
-        if (Objects.nonNull(sqlConditionBuilder.getCountList()) && !sqlConditionBuilder.getCountList().isEmpty()) {
-            aggMap.put(AGG_COUNT, sqlConditionBuilder.getCountList());
-        }
-        if (Objects.nonNull(sqlConditionBuilder.getAvgList()) && !sqlConditionBuilder.getAvgList().isEmpty()) {
-            aggMap.put(AGG_AVG, sqlConditionBuilder.getAvgList());
-        }
-        return aggMap;
+    private  List<String> sumBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+        return sqlConditionBuilder.getSumList();
     }
 
-    private String limitBuilder( SqlConditionBuilder sqlConditionBuilder ) {
+    private  String limitBuilder( SqlConditionBuilder sqlConditionBuilder ) {
         String limitResult = "";
         if (!Strings.isNullOrEmpty(sqlConditionBuilder.getLimit())) {
-            limitResult = sqlConditionBuilder.getLimit();
+            limitResult = LIMIT_ITEM.concat(sqlConditionBuilder.getLimit());
         }
         return limitResult;
     }
@@ -219,8 +202,8 @@ public class SearchSqlBuilder {
      * description:
      * *****************************************************
      */
-    public SparkSqlCondition toSparkSql( SqlConditionBuilder sqlConditionBuilder ) {
-        SparkSqlCondition sparkSqlCondition = new SparkSqlCondition();
+    public  SparkSqlCondition toSparkSql( SqlConditionBuilder sqlConditionBuilder ) {
+        SparkSqlCondition sparkSqlCondition = SparkSqlCondition.build();
         StringBuilder sqlBuilder = new StringBuilder();
         //select
         sqlBuilder.append(selectBuilder(sqlConditionBuilder));
@@ -228,42 +211,39 @@ public class SearchSqlBuilder {
         //where
         String where = whereBuilder(sqlConditionBuilder);
         //group
-        List<String> groupList = groupBuilder(sqlConditionBuilder);
+        String group = groupBuilder(sqlConditionBuilder);
         //compare
         List<String> compare = compareBuilder(sqlConditionBuilder);
+        //sum
+        List<String> sum = sumBuilder(sqlConditionBuilder);
         //order by
-        Map<String, List<String>> orderByMap = orderBuilder(sqlConditionBuilder);
+        String orderBy = orderBuilder(sqlConditionBuilder);
         //limit
         String limit = limitBuilder(sqlConditionBuilder);
-        //聚合条件
-        Map<String, List<String>> aggMap = aggBuilder(sqlConditionBuilder);
         if (!Strings.isNullOrEmpty(where)) {
             sqlBuilder.append(where);
         }
-        if (Objects.nonNull(groupList) && !groupList.isEmpty()) {
+        if (!Strings.isNullOrEmpty(group)) {
+            sqlBuilder.append(group);
             sparkSqlCondition.setGroupList(sqlConditionBuilder.getGroupByList());
         }
-        if (Objects.nonNull(orderByMap) && !orderByMap.isEmpty()) {
-            sparkSqlCondition.setOrderMap(orderByMap);
+        if (!Strings.isNullOrEmpty(orderBy)) {
+            sqlBuilder.append(orderBy);
+        }
+        if (!sum.isEmpty()) {
+            sparkSqlCondition.setSumList(sum);
         }
         if (compare != null && !compare.isEmpty()) {
             sparkSqlCondition.setCompareList(compare);
         }
-        if (Objects.nonNull(aggMap) && !aggMap.isEmpty()) {
-            sparkSqlCondition.setAggMap(aggMap);
-        }
         if (!Strings.isNullOrEmpty(limit)) {
-            sparkSqlCondition.setLimit(Integer.valueOf(limit));
+            sqlBuilder.append(limit);
         }
-        //完整SQL语句
-        sparkSqlCondition.setSelectSql(sqlBuilder.toString());
-        sparkSqlCondition.setSelectList(sqlConditionBuilder.getSelectList());
         sparkSqlCondition.setIndexList(sqlConditionBuilder.getIndexList());
-        sparkSqlCondition.setDimensionList(sqlConditionBuilder.getDimensionList());
-        sparkSqlCondition.setFieldMap(sqlConditionBuilder.getFieldMap());
+        sparkSqlCondition.setSelectList(sqlConditionBuilder.getSelectList());
+        sparkSqlCondition.setSelectSql(sqlBuilder.toString());
         //spark配置信息
         sparkSqlCondition.setSparkConfig(sqlConditionBuilder.getSparkConfig());
-        sparkSqlCondition.setQueryType(sqlConditionBuilder.getQueryType());
         return sparkSqlCondition;
     }
 }

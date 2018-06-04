@@ -18,6 +18,7 @@ package org.apache.livy.client.ext.model;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,74 +35,65 @@ import java.util.Objects;
 public class SparkSqlBuild {
     private static Logger logger = LoggerFactory.getLogger(SparkSqlBuild.class);
 
-    public SparkSqlCondition buildSqlStatement( String param ) {
-        logger.info("【SparkSqlBuild::buildSqlStatement】-进入方法：{}", System.currentTimeMillis());
-
+    public  SparkSqlCondition buildSqlStatement( String param ) {
         BiReportBuildInDTO biReportBuildInDTO = JSONObject.parseObject(param, BiReportBuildInDTO.class);
         SqlConditionBuilder sqlConditionBuilder = new SqlConditionBuilder();
-        //spark 配置项
         sqlConditionBuilder.sparkConfigBuilder(biReportBuildInDTO.getSparkConfig());
-        sqlConditionBuilder.queryTypeBuilder(biReportBuildInDTO.getQueryType());
-        sqlConditionBuilder.setQueryPoint(biReportBuildInDTO.getQueryPoint());
+
         //指标条件-拼成select条件
         List<IndexConditionBean> indexConditionBeanList = biReportBuildInDTO.getIndexCondition();
-        logger.info("【SparkSqlBuild::buildSqlStatement】-进入方法：{}", JSONObject.toJSON(indexConditionBeanList));
-
         //构造select条件
         indexConditionBeanList.forEach(index -> {
-            //构造字段名与中文名映射集合
-            sqlConditionBuilder.fieldMapBuilder(index.getFieldName(), index.getFieldDescription(), index.getAliasName());
-            //收集指标条件入参
             sqlConditionBuilder.indexBuilder(index.getFieldName());
-            //构造查询项
-            sqlConditionBuilder.selectSqlBuilder(index.getFieldName()
-                    , index.getDataType()
-                    , index.getAggregator()
+            sqlConditionBuilder.selectBuilder(index.getFieldName());
+            sqlConditionBuilder.selectSqlBuilder(index.getFieldName(),
+                    index.getDataType(),
+                    index.getAggregator().toLowerCase()
                     , index.getAliasName());
         });
-
         //筛选条件-拼成where条件
         List<FilterConditionBean> filterConditionBeanList = biReportBuildInDTO.getFilterCondition();
         //构造where条件
         if (filterConditionBeanList != null && !filterConditionBeanList.isEmpty()) {
             filterConditionBeanList.forEach(filterConditionBean -> {
+                logger.info("【SparkSqlBuild::SparkSqlCondition】-where条件：" + JSONObject.toJSONString(filterConditionBean));
                 sqlConditionBuilder.whereBuilder(filterConditionBean.getFieldName(), filterConditionBean.getFieldValue(), filterConditionBean.getDataType());
             });
         }
-
         //维度条件-拼成group条件
         List<DimensionConditionBean> dimensionConditionBeanList = biReportBuildInDTO.getDimensionCondition();
+        List<String> groupSqlList = Lists.newArrayList();
         if (Objects.nonNull(dimensionConditionBeanList) && !dimensionConditionBeanList.isEmpty()) {
-            dimensionConditionBeanList.forEach(dimension -> {
-                //构造字段名与中文名映射集合
-                sqlConditionBuilder.fieldMapBuilder(dimension.getFieldName(), dimension.getFieldDescription(), dimension.getAliasName());
-                //构造查询项
-                sqlConditionBuilder.selectSqlBuilder(dimension.getFieldName(), dimension.getDataType(), "", "");
-                //构造分组条件
-                sqlConditionBuilder.groupSparkBuilder(dimension.getFieldName());
-                //收集维度条件入参
-                sqlConditionBuilder.dimensionBuilder(dimension.getFieldName());
+            dimensionConditionBeanList.forEach(dimensionConditionBean -> {
+                groupSqlList.add(dimensionConditionBean.getFieldName());
+                sqlConditionBuilder.selectSqlBuilder(dimensionConditionBean.getFieldName(), dimensionConditionBean.getDataType(), "", "");
+                sqlConditionBuilder.selectBuilder(dimensionConditionBean.getFieldName());
+                sqlConditionBuilder.groupSparkBuilder(dimensionConditionBean.getFieldName());
             });
         }
-        //对比条件，使用【:%】分割，使用别名【y】替代
+        //对比条件
         List<CompareConditionBean> compareConditionList = biReportBuildInDTO.getCompareCondition();
         if (Objects.nonNull(compareConditionList) && !compareConditionList.isEmpty()) {
-            logger.info("【SparkSqlBuild::SparkSqlCondition】-对比项入参：{}", JSONObject.toJSON(compareConditionList));
+            logger.info("【SparkSqlBuild::SparkSqlCondition】-进入对比条件");
             String split = " || ':%' || ";
             StringBuilder compareFieldNameBuilder = new StringBuilder();
             compareConditionList.forEach(compareConditionBean -> {
+                sqlConditionBuilder.selectBuilder(compareConditionBean.getFieldName());
                 compareFieldNameBuilder.append(compareConditionBean.getFieldName()).append(split);
                 sqlConditionBuilder.compareBuilder(compareConditionBean.getFieldName());
             });
             if (!Strings.isNullOrEmpty(compareFieldNameBuilder.toString())) {
                 String compareFieldName = compareFieldNameBuilder.substring(0, compareFieldNameBuilder.length() - split.length());
-                //构造查询项
+                logger.info("【SparkSqlBuild::SparkSqlCondition】-对比条件：" + compareFieldNameBuilder.toString());
+                groupSqlList.add("y");
                 sqlConditionBuilder.selectSqlBuilder(compareFieldName + " as y ", "str", "", "");
             }
-            logger.info("【SparkSqlBuild::SparkSqlCondition】-对比条件：" + compareFieldNameBuilder.toString());
-
         }
+        logger.info("【SparkSqlBuild::SparkSqlCondition】-分组条件：" + JSONObject.toJSONString(groupSqlList));
 
+        if (!groupSqlList.isEmpty()) {
+            sqlConditionBuilder.groupSqlBuilder(groupSqlList);
+        }
         //排序条件-拼成orderBy条件
         List<SortConditionBean> sortConditionBeanList = biReportBuildInDTO.getSortCondition();
         if (Objects.nonNull(sortConditionBeanList) && !sortConditionBeanList.isEmpty()) {
@@ -111,7 +103,7 @@ public class SparkSqlBuild {
         }
         sqlConditionBuilder.limitBuilder(biReportBuildInDTO.getLimit());
         sqlConditionBuilder.tableBuilder(biReportBuildInDTO.getDbName(), biReportBuildInDTO.getTbName());
-        return new SearchSqlBuilder().toSparkSql(sqlConditionBuilder);
+        return SearchSqlBuilder.toSparkSql(sqlConditionBuilder);
     }
 
 

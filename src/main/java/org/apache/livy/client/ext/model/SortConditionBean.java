@@ -35,8 +35,4 @@ public class SortConditionBean extends BaseConditionBean {
      * 排序标识：desc-降序；asc-升序
      */
     private String sortFlag;
-    /**
-     * 排序类型 0-默认；1-按结果排序
-     */
-    private int sortType;
 }
