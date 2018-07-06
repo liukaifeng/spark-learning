@@ -3,8 +3,8 @@ import java.io.StringWriter
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
+import scala.collection.JavaConverters._
 import scala.collection.immutable.TreeMap
-import scala.util.parsing.json.JSONObject
 
 /**
   * Author :sentiYu 
@@ -67,7 +67,7 @@ object Test2 {
 
 object TestDecimal {
   def main(args: Array[String]) {
-    val data = List("1.3624277377996066E8", "2.3624277377996066E8")
+    val data = List("9.8543742472353E-4", "7.057748993232865E-4")
     var result: List[String] = List()
     data.foreach(value => {
       val formatData = "%.2f".format(BigDecimal.apply(value).toDouble)
@@ -101,5 +101,12 @@ object TestMap {
     println("last_total".hashCode)
     println("misc_total".hashCode)
     println("income_total".hashCode)
+  }
+}
+
+object TestStringSort {
+  def main(args: Array[String]): Unit = {
+
+
   }
 }

@@ -56,7 +56,12 @@ public class BiReportBuildInDTO {
      * 2-后几条
      */
     private int queryPoint;
-
+    /**
+     * 查询类型
+     * 0-默认值（普通查询）
+     * 1-筛选项数据查询
+     */
+    private int queryType;
     /**
      * 过滤条件
      */

@@ -17,6 +17,12 @@
 package org.apache.livy.client.ext.model;
 
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import java.util.List;
+import java.util.Map;
+
 /**
  * @package: cn.com.tcsl.loongboss.common.constant
  * @class-name: Constant
@@ -32,6 +38,40 @@ public class Constant {
     public static final String AGG_COUNT = "COUNT";
     public static final String AGG_AVG = "AVG";
     public static final String PIVOT_ALIAS = "y";
+
+    public static final String ALIAS_SPLIT_SUFFIX = "_0_";
+    public static final String ALIAS_SPLIT_PREFIX = "ljc_";
+    public static final String COMPARE_SPLIT_CHAR = ":%";
+    public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newLinkedHashMap();
+
+    public static final List<String> AGG_FUNCTION = Lists.newArrayList();
+
+    public static String weekFormula = "CASE \n" +
+            "WHEN dayofweek(%s) = 1 THEN '周一'\n" +
+            "WHEN dayofweek(%s) = 2 THEN '周二'\n" +
+            "WHEN dayofweek(%s) = 3 THEN '周三'\n" +
+            "WHEN dayofweek(%s) = 4 THEN '周四'\n" +
+            "WHEN dayofweek(%s) = 5 THEN '周五'\n" +
+            "WHEN dayofweek(%s) = 6 THEN '周六'\n" +
+            "WHEN dayofweek(%s) = 7 THEN '周日'\n" +
+            "END";
+    public static String seasonFormula = "CASE\n" +
+            "WHEN (date_format(settle_biz_date,'M') BETWEEN 1 and 3) THEN '第1季度'\n" +
+            "WHEN (date_format(settle_biz_date,'M') BETWEEN 4 and 6) THEN '第2季度'\n" +
+            "WHEN (date_format(settle_biz_date,'M') BETWEEN 7 and 9) THEN '第3季度'\n" +
+            "WHEN (date_format(settle_biz_date,'M') BETWEEN 10 and 12) THEN '第4季度'\n" +
+            "END ";
+
+    static {
+        for (SparkUdf sparkUdf : SparkUdf.values()) {
+            SPARK_UDF_MAP.put(sparkUdf.getCode(), sparkUdf.getFunction());
+        }
+        //聚合函数名
+        for (FunctionType functionType : FunctionType.values()) {
+            AGG_FUNCTION.add(functionType.getCode());
+        }
+    }
+
     /**
      * @package: cn.com.tcsl.loongboss.common.constant
      * @class-name: DataType
@@ -80,6 +120,103 @@ public class Constant {
 
         public String getDesc() {
             return desc;
+        }
+    }
+
+    /**
+     * 日期类型
+     */
+    public enum DateType {
+        DATE_YEAR("year"),
+        DATE_SEASON("season"),
+        DATE_MONTH("month"),
+        DATE_WEEK("week"),
+        DATE_DAY("day"),
+        DATE_UD("ud");
+
+        private String code;
+
+        DateType( String code ) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 函数类型
+     */
+    public enum FunctionType {
+        FUNC_SUM("sum"),
+        FUNC_COUNT("count"),
+        FUNC_AVG("avg"),
+        FUNC_DISTINCT_COUNT("dis_count"),
+        FUNC_FILTER("filter"),
+        FUNC_COMPARE("compare"),
+        FUNC_MIN("min"),
+        FUNC_MAX("max"),
+        FUNC_GROUP("group");
+
+        private String code;
+
+        FunctionType( String code ) {
+            this.code = code;
+
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 逻辑运算符
+     */
+    public enum LogicalOperator {
+        LOGICAL_BETWEEN("between_and"),
+        LOGICAL_EQUAL("equal"),
+        LOGICAL_NOT_EQUAL("not_equal"),
+        LOGICAL_LT("lt"),
+        LOGICAL_GT("gt"),
+        LOGICAL_LTE("lte"),
+        LOGICAL_GTE("gte");
+
+        private String code;
+
+        LogicalOperator( String code ) {
+            this.code = code;
+
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * spark 用户自定义函数枚举
+     */
+    public enum SparkUdf {
+        /**
+         * 自定义排序字段转换函数
+         */
+        UDF_ORDER_BY(1, "to_orderby(%s)");
+        private int code;
+        private String function;
+
+        SparkUdf( int code, String function ) {
+            this.code = code;
+            this.function = function;
+        }
+
+        public String getFunction() {
+            return this.function;
+        }
+
+        public int getCode() {
+            return this.code;
         }
     }
 }

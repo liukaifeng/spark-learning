@@ -31,12 +31,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public class DimensionConditionBean extends BaseConditionBean {
 
-    /**
-     * 年季月周标识
-     */
-    private String granularity;
-    /**
-     * 别名
-     */
-    private String aliasName;
+
 }

@@ -39,9 +39,6 @@ public class IndexConditionBean extends BaseConditionBean {
      * 聚合名称，eg：求和
      */
     private String aggregatorName;
-    /**
-     * 别名，eg：金额(求和)
-     */
-    private String aliasName;
+
 }
 

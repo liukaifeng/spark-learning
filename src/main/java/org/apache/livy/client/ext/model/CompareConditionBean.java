@@ -29,9 +29,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class CompareConditionBean extends BaseConditionBean {
-    /**
-     * 对比粒度，比如：day
-     */
-    private String granularity;
 
 }

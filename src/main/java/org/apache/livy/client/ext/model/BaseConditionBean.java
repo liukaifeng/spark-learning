@@ -40,7 +40,35 @@ public class BaseConditionBean {
      */
     private String fieldDescription;
     /**
+     * 别名
+     */
+    private String aliasName;
+    /**
      * 字段的数据类型
      */
     private String dataType;
+    /**
+     * 使用自定义函数标识
+     * 0-默认值（不使用）
+     * 1-自定义排序字段转换函数（to_orderby）
+     */
+    private int udfType;
+
+    /**
+     * 表达式类型
+     * 0-默认值
+     * 1-自定义组合字段
+     * 2-自定义计算字段
+     */
+    private int isBuildAggregated;
+
+    /**
+     * 字段计算公式
+     */
+    private String fieldFormula;
+
+    /**
+     * 年季月周标识
+     */
+    private String granularity;
 }

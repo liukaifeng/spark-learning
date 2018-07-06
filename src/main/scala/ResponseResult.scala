@@ -22,10 +22,12 @@ class ResponseResult {
     this.yAxis
   }
 
-   def getMsg: String = msg
+   def getMsg: String = {
+     this.msg
+   }
 
-   def setMsg(value: String): Unit = {
-    msg = value
+   def setMsg(msg: String): Unit = {
+     this.msg = msg
   }
 }
 

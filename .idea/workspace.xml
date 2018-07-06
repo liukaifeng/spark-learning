@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/../gitlab/loongboss/livy/biz/src/main/java/cn/com/tcsl/loongboss/livy/biz/session/LivySessionContextService.java" description="return addSession(sessionId);" line="56" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0e7ad99-8524-4621-a358-4e8f1fe7ec4f" name="Default" comment="" />
+    <list default="true" id="d0e7ad99-8524-4621-a358-4e8f1fe7ec4f" name="Default" comment="可监控的线程池实现测试">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorHandler.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorableThreadPoolExecutor.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/pool/TimeMonitorHandler.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/NewPermission.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/NonSynchronizedThis.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/ReflectDemo.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/SynchronizedThis.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/Text.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/lkf/sync/UnSafeThread.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTask.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTaskTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/Person.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/polling/PollTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRandomPoll.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRoundRobinPoll.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseBuilder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/DateUtils.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchBuilder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlBuilder.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchSqlBuilder.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlConditionBuilder.java" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/spark/TestDemo.java" afterPath="$PROJECT_DIR$/src/main/java/com/spark/TestDemo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BiReportBuildInDTO.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BiReportBuildInDTO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/CompareConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/CompareConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/Constant.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/Constant.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/DimensionConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/DimensionConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/FilterConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/FilterConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/IndexConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/IndexConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SortConditionBean.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SortConditionBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlCondition.java" afterPath="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlCondition.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/ResponseResult.scala" afterPath="$PROJECT_DIR$/src/main/scala/ResponseResult.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter.scala" afterPath="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala" afterPath="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/scala/SparkTest.scala" afterPath="$PROJECT_DIR$/src/main/scala/SparkTest.scala" />
+    </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -10,17 +52,189 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/spark_learning$ReflectDemo.coverage" NAME="ReflectDemo Coverage Results" MODIFIED="1530533455810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.lkf.sync.*</FILTER>
+    </SUITE>
+  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="SQLExtInterpreter3.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SQLExtInterpreter3.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+            <state relative-caret-position="222">
+              <caret line="55" column="71" lean-forward="true" selection-start-line="55" selection-start-column="71" selection-end-line="55" selection-end-column="71" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
+                <element signature="e#5538#5723#0" expanded="false" />
+                <element signature="e#5608#5715#0" expanded="false" />
+                <element signature="e#6392#6504#0" expanded="false" />
+                <element signature="e#6423#6498#0" expanded="false" />
+                <element signature="e#7040#7654#0" expanded="false" />
+                <element signature="e#7277#7623#0" expanded="false" />
+                <element signature="e#7316#7617#0" expanded="false" />
+                <element signature="e#7418#7485#0" expanded="false" />
+                <element signature="e#7541#7609#0" expanded="false" />
+                <element signature="e#11186#11228#0" expanded="false" />
+                <element signature="e#11392#12797#0" expanded="false" />
+                <element signature="e#12138#12783#0" expanded="false" />
+                <element signature="e#12196#12254#0" expanded="false" />
+                <element signature="e#12365#12644#0" expanded="false" />
+                <element signature="e#12421#12636#0" expanded="false" />
+                <element signature="e#12456#12626#0" expanded="false" />
+                <element signature="e#12522#12614#0" expanded="false" />
+                <element signature="e#12656#12777#0" expanded="false" />
+                <element signature="e#12689#12769#0" expanded="false" />
+                <element signature="e#14297#14463#0" expanded="false" />
+                <element signature="e#14475#14607#0" expanded="false" />
+                <element signature="e#14653#14769#0" expanded="false" />
+                <element signature="e#14791#15396#0" expanded="false" />
+                <element signature="e#14980#15367#0" expanded="false" />
+                <element signature="e#15097#15270#0" expanded="false" />
+                <element signature="e#15188#15262#0" expanded="false" />
+                <element signature="e#15400#16716#0" expanded="false" />
+                <element signature="e#15531#15565#0" expanded="true" />
+                <element signature="e#16075#16099#0" expanded="false" />
+                <element signature="e#16307#16353#0" expanded="false" />
+                <element signature="e#16395#16450#0" expanded="false" />
+                <element signature="e#16495#16590#0" expanded="false" />
+                <element signature="e#16596#16663#0" expanded="false" />
+                <element signature="e#16994#17041#0" expanded="false" />
+                <element signature="e#17126#17285#0" expanded="false" />
+                <element signature="e#17224#17260#0" expanded="false" />
+                <element signature="e#17328#17626#0" expanded="false" />
+                <element signature="e#17435#17510#0" expanded="false" />
+                <element signature="e#17522#17601#0" expanded="false" />
+                <element signature="e#17668#18144#0" expanded="false" />
+                <element signature="e#17703#18138#0" expanded="false" />
+                <element signature="e#17829#18130#0" expanded="false" />
+                <element signature="e#17935#18027#0" expanded="false" />
+                <element signature="e#18033#18120#0" expanded="false" />
+                <element signature="e#18233#18492#0" expanded="false" />
+                <element signature="e#18287#18413#0" expanded="false" />
+                <element signature="e#18517#19007#0" expanded="false" />
+                <element signature="e#18740#18980#0" expanded="false" />
+                <element signature="e#19011#19262#0" expanded="false" />
+                <element signature="e#19266#19960#0" expanded="false" />
+                <element signature="e#19617#19721#0" expanded="false" />
+                <element signature="e#19731#19940#0" expanded="false" />
+                <element signature="e#19964#21020#0" expanded="false" />
+                <element signature="e#20538#20789#0" expanded="false" />
+                <element signature="e#20893#20986#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SparkSqlBuild.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="547">
+              <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SqlBuilder.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="203" column="0" lean-forward="true" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
+              <folding>
+                <element signature="docComment;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#1703#1719#0" expanded="false" />
+                <element signature="docComment;field#selectSqlList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#whereSqlList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#filterCustomFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#filterFormulaList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#groupSqlList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#groupList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#indexList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#selectFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#selectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#compareFieldMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#sparkConfigMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#sparkAggMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#fieldAndDescMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#fieldAndAliasMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#fieldAndFormulaTypeMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#fieldAndTypeMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#orderByMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#crosstabByMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#aggFieldAliasMap#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#tableName#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;field#delFilterField#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#3948#3961#0" expanded="false" />
+                <element signature="docComment;method#SqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#SqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#5098#5119#0" expanded="false" />
+                <element signature="docComment;method#tableBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#selectSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#6969#7713#0" expanded="false" />
+                <element signature="e#7783#8332#0" expanded="false" />
+                <element signature="docComment;method#selectBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#fieldAndTypeMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#fieldAndTypeMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#customField#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#customField#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#containAggFunc#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#14236#14254#0" expanded="false" />
+                <element signature="docComment;method#whereSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#whereSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#14527#14688#0" expanded="false" />
+                <element signature="docComment;method#whereBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#whereBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#18290#18310#0" expanded="false" />
+                <element signature="docComment;method#compareBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#compareBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#18479#18699#0" expanded="false" />
+                <element signature="e#18729#18749#0" expanded="false" />
+                <element signature="docComment;method#orderBySqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#orderBySqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#orderByBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#orderByBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#20964#20982#0" expanded="false" />
+                <element signature="docComment;method#sparkAggBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#sparkAggBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#21333#22697#0" expanded="false" />
+                <element signature="docComment;method#customFieldHandle#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#24900#24914#0" expanded="false" />
+                <element signature="docComment;method#getCompareFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#getCompareFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getCompareFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#getCompareFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getSelectFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#getSelectFieldList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getSelectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#getSelectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getGroupSqlList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getSparkConfig#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getWhereList#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="e#26488#26502#0" expanded="false" />
+                <element signature="docComment;method#fieldNameWithUdf#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#fieldNameWithUdf#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#fieldMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#fieldMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#dateFieldFormat#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#dateFieldFormat#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#getDateFormat#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#getDateFormat#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#timeConvert#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="method#timeConvert#0;class#SqlBuilder#0" expanded="false" />
+                <element signature="docComment;method#fieldAlias#0;class#SqlBuilder#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SearchBuilder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="232">
+              <caret line="260" column="29" lean-forward="false" selection-start-line="260" selection-start-column="29" selection-end-line="260" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -36,39 +250,45 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>schema</find>
-      <find>sort</find>
+      <find>sumBuilder</find>
+      <find>getGroupByList</find>
+      <find>getSparkConfig</find>
+      <find>getWhereList</find>
+      <find>SqlConditionBuilder</find>
+      <find>getSumList</find>
+      <find>selectFieldList</find>
+      <find>SelectList</find>
       <find>sumList</find>
-      <find>groupSparkBuilder</find>
-      <find>groupList</find>
-      <find>getSelectList</find>
-      <find>orderByBuilder</find>
-      <find>ascList</find>
-      <find>indexList</find>
-      <find>列名</find>
-      <find>sqlStr</find>
-      <find>dfs.permissions.enabled</find>
-      <find>fieldMap</find>
-      <find>限制</find>
-      <find>对比项统一别名</find>
-      <find>完整SQL</find>
-      <find>进入</find>
-      <find>对比标题反转</find>
-      <find>结果数据rows</find>
-      <find>结果遍历</find>
-      <find>datatime</find>
-      <find>AGGREGATION_PUSHDOWN_ENABLED</find>
-      <find>AGGREGATION</find>
-      <find>PUSHDOWN</find>
-      <find>对比列的值</find>
-      <find>对比列值得数量</find>
       <find>.show</find>
-      <find>.show()</find>
-      <find>limit</find>
-      <find>parseCompareSort</find>
+      <find>:%</find>
+      <find>aggColumnList结果</find>
+      <find>SqlBuilder</find>
+      <find>orderByMap</find>
+      <find>fieldAndDescMap</find>
+      <find>fieldMapBuilder</find>
+      <find>fieldAndTypeMap</find>
+      <find>fieldAndAliasMap</find>
+      <find>indexList</find>
+      <find>filterCustomFieldList</find>
+      <find>drop</find>
+      <find>whereSqlList</find>
+      <find>timeConvert</find>
+      <find>removeMonitorTask</find>
+      <find>lock</find>
+      <find>ALIAS_SPLIT_SUFFIX</find>
+      <find>groupList</find>
+      <find>ctl</find>
+      <find>holdsLock</find>
+      <find>groupSqlList</find>
     </findStrings>
+    <replaceStrings>
+      <replace>stream</replace>
+      <replace>SqlBuilder</replace>
+      <replace>SqlBuilder2</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -80,28 +300,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/scala/SparkHiveSelect2.scala" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SortConditionBean.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/spark/TestDemo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BiReportBuildInDTO.java" />
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/scala/SparkTest.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter2.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlConditionBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/scala/ResponseResult.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlBuilder2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/IndexConditionBean.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchBuilder2.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/Test.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/spark/scriptFile.scala" />
         <option value="$PROJECT_DIR$/src/main/java/com/spark/JsonUtils.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/spark/RSAUtils.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/spark/Test2.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/IndexConditionBean.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/IpMap.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/RoundRobin.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/Random.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/Hash.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/Hash.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRoundRobin.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRandom.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/RoundRobin.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/Random.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/RandomPoll.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRandomPoll.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/WeightRoundRobinPoll.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/HashPoll.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/polling/PollTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/TestDemo.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlCondition.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/DimensionConditionBean.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseConditionBean.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/CompareConditionBean.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/DateUtils.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorableThreadPoolExecutor.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/pool/TimeMonitorHandler.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/synchronizedThisDemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/SynchronizedThisDemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/UnSafeThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/SynchronizedThis.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/NonSynchronizedThis.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/NewPermission.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/ReflectDemo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/Person.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTask.java" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchBuilder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTaskTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/Constant.java" />
-        <option value="$PROJECT_DIR$/src/main/scala/ResponseResult.scala" />
-        <option value="$PROJECT_DIR$/src/main/scala/PivotResult.scala" />
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlConditionBuilder.java" />
-        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchSqlBuilder.java" />
-        <option value="$PROJECT_DIR$/src/main/scala/DemoPivot.scala" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/lkf/sync/Text.java" />
         <option value="$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala" />
+        <option value="$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlBuilder.java" />
       </list>
     </option>
   </component>
@@ -127,6 +376,20 @@
   </component>
   <component name="MavenProjectNavigator">
     <treeState>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="spark-learning" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Dependencies" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$DependenciesNode" />
+        </PATH_ELEMENT>
+      </PATH>
       <PATH>
         <PATH_ELEMENT>
           <option name="myItemId" value="" />
@@ -164,8 +427,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -176,6 +439,108 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scala" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="spark-learning" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pool" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -192,9 +557,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="ignore_missing_gitignore" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.apache.livy.client.ext.model" />
+      <recent name="com.spark" />
       <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
@@ -216,39 +584,14 @@
     </option>
   </component>
   <component name="RunManager" selected="Application.SQLExtInterpreter3">
-    <configuration default="false" name="SQLExtInterpreter" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="SQLExtInterpreter" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="spark-learning" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="TestMap" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="TestMap" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="spark-learning" />
-      <envs />
-      <method />
-    </configuration>
-    <configuration default="false" name="SQLExtInterpreter2" type="Application" factoryName="Application" temporary="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="SQLExtInterpreter2" />
+    <configuration default="false" name="NonSynchronizedThis" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lkf.sync.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lkf.sync.NonSynchronizedThis" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -276,14 +619,54 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="Test2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="ReflectDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lkf.sync.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lkf.sync.ReflectDemo" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="spark-learning" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="Text" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.lkf.sync.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="com.lkf.sync.Text" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="spark-learning" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="false" name="MutiFutureTaskTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
           <option name="PATTERN" value="com.spark.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="com.spark.Test2" />
+      <option name="MAIN_CLASS_NAME" value="com.spark.MutiFutureTaskTest" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -823,19 +1206,19 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.SQLExtInterpreter" />
-      <item index="1" class="java.lang.String" itemvalue="Application.TestMap" />
-      <item index="2" class="java.lang.String" itemvalue="Application.SQLExtInterpreter2" />
-      <item index="3" class="java.lang.String" itemvalue="Application.SQLExtInterpreter3" />
-      <item index="4" class="java.lang.String" itemvalue="Application.Test2" />
+      <item index="0" class="java.lang.String" itemvalue="Application.NonSynchronizedThis" />
+      <item index="1" class="java.lang.String" itemvalue="Application.SQLExtInterpreter3" />
+      <item index="2" class="java.lang.String" itemvalue="Application.ReflectDemo" />
+      <item index="3" class="java.lang.String" itemvalue="Application.Text" />
+      <item index="4" class="java.lang.String" itemvalue="Application.MutiFutureTaskTest" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.SQLExtInterpreter3" />
-        <item index="1" class="java.lang.String" itemvalue="Application.Test2" />
-        <item index="2" class="java.lang.String" itemvalue="Application.SQLExtInterpreter2" />
-        <item index="3" class="java.lang.String" itemvalue="Application.TestMap" />
-        <item index="4" class="java.lang.String" itemvalue="Application.SQLExtInterpreter" />
+        <item index="1" class="java.lang.String" itemvalue="Application.Text" />
+        <item index="2" class="java.lang.String" itemvalue="Application.MutiFutureTaskTest" />
+        <item index="3" class="java.lang.String" itemvalue="Application.ReflectDemo" />
+        <item index="4" class="java.lang.String" itemvalue="Application.NonSynchronizedThis" />
       </list>
     </recent_temporary>
   </component>
@@ -874,11 +1257,43 @@
       <workItem from="1527743460657" duration="29688000" />
       <workItem from="1527835822529" duration="2391000" />
       <workItem from="1527838952859" duration="10828000" />
+      <workItem from="1528096700387" duration="1310000" />
+      <workItem from="1528098136187" duration="40754000" />
+      <workItem from="1528252521291" duration="53590000" />
+      <workItem from="1528679432534" duration="988000" />
+      <workItem from="1528695538354" duration="6621000" />
+      <workItem from="1528708164073" duration="52066000" />
+      <workItem from="1528890108975" duration="13874000" />
+      <workItem from="1528968552549" duration="7967000" />
+      <workItem from="1529031805587" duration="17863000" />
+      <workItem from="1529369948953" duration="57000" />
+      <workItem from="1529370502535" duration="91087000" />
+      <workItem from="1529929951728" duration="14057000" />
+      <workItem from="1530070175145" duration="10792000" />
+      <workItem from="1530100501294" duration="5836000" />
+      <workItem from="1530156371646" duration="51690000" />
+      <workItem from="1530493635315" duration="46074000" />
+      <workItem from="1530621922803" duration="2938000" />
+      <workItem from="1530691186321" duration="1404000" />
+      <workItem from="1530694598477" duration="185000" />
+      <workItem from="1530704315489" duration="11688000" />
+      <workItem from="1530770573058" duration="9735000" />
+      <workItem from="1530842432329" duration="935000" />
+      <workItem from="1530856256796" duration="48000" />
+      <workItem from="1530856324411" duration="5401000" />
     </task>
+    <task id="LOCAL-00001" summary="使用spark sql 进行聚合、反转、筛选和排序">
+      <created>1528097621076</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1528097621076</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="310007000" />
+    <option name="totallyTimeSpent" value="756967000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -894,33 +1309,65 @@
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32462174" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45316803" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.71349865" sideWeight="0.5057307" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295129" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4077135" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292011" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3278237" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15759312" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25143266" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1991404" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5206612" sideWeight="0.49426934" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5240715" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295129" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292011" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.71349865" sideWeight="0.5057307" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295129" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1991404" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5206612" sideWeight="0.49426934" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.45316803" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292011" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4077135" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295129" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="CheckStyle" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3278237" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17550144" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3292011" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -932,10 +1379,21 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
+    <MESSAGE value="使用spark sql 进行聚合、反转、筛选和排序" />
+    <MESSAGE value="可监控的线程池实现测试" />
+    <option name="LAST_COMMIT_MESSAGE" value="可监控的线程池实现测试" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="212" />
+      <breakpoints>
+        <line-breakpoint enabled="true" type="scala-line">
+          <url>file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala</url>
+          <line>143</line>
+          <properties />
+          <option name="timeStamp" value="474" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="476" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -944,834 +1402,512 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/concurrent/BlockingQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="462">
+          <caret line="56" column="31" lean-forward="true" selection-start-line="56" selection-start-column="31" selection-end-line="56" selection-end-column="31" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.0/spark-sql_2.11-2.3.0-sources.jar!/org/apache/spark/sql/RelationalGroupedDataset.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lkf/sync/ReflectDemo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4725">
-          <caret line="225" column="6" lean-forward="false" selection-start-line="225" selection-start-column="6" selection-end-line="225" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#832#855#0" expanded="false" />
-            <element signature="e#2264#3282#0" expanded="false" />
-            <element signature="e#3892#4626#0" expanded="false" />
-            <element signature="e#4630#5622#0" expanded="false" />
-            <element signature="e#5626#6312#0" expanded="false" />
-            <element signature="e#11214#12956#0" expanded="false" />
-            <element signature="e#14429#15492#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="443">
+          <caret line="35" column="58" lean-forward="true" selection-start-line="35" selection-start-column="58" selection-end-line="35" selection-end-column="58" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/ResponseResult.scala">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/concurrent/ArrayBlockingQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1281">
-          <caret line="61" column="3" lean-forward="false" selection-start-line="61" selection-start-column="3" selection-end-line="61" selection-end-column="3" />
-          <folding>
-            <element signature="e#150#238#0" expanded="false" />
-            <element signature="e#242#330#0" expanded="false" />
-            <element signature="e#334#384#0" expanded="false" />
-            <element signature="e#388#438#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="349">
+          <caret line="1004" column="0" lean-forward="true" selection-start-line="1004" selection-start-column="0" selection-end-line="1004" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/PivotResult.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorableThreadPoolExecutor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding />
+        <state relative-caret-position="147">
+          <caret line="11" column="63" lean-forward="true" selection-start-line="11" selection-start-column="63" selection-end-line="11" selection-end-column="63" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/spark/Person.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="1386">
+          <caret line="66" column="5" lean-forward="false" selection-start-line="66" selection-start-column="5" selection-end-line="66" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.0/spark-sql_2.11-2.3.0-sources.jar!/org/apache/spark/sql/RelationalGroupedDataset.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/ListeningExecutorService.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2709">
-          <caret line="225" column="6" lean-forward="false" selection-start-line="225" selection-start-column="6" selection-end-line="225" selection-end-column="6" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-            <element signature="e#832#855#0" expanded="false" />
-            <element signature="e#2264#3282#0" expanded="false" />
-            <element signature="e#3892#4626#0" expanded="false" />
-            <element signature="e#4630#5622#0" expanded="false" />
-            <element signature="e#5626#6312#0" expanded="false" />
-            <element signature="e#11214#12956#0" expanded="false" />
-            <element signature="e#14429#15492#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="42">
+          <caret line="5" column="33" lean-forward="true" selection-start-line="5" selection-start-column="33" selection-end-line="5" selection-end-column="33" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/ResponseResult.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/AbstractCheckedFuture.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="61" column="3" lean-forward="false" selection-start-line="61" selection-start-column="3" selection-end-line="61" selection-end-column="3" />
-          <folding>
-            <element signature="e#150#238#0" expanded="false" />
-            <element signature="e#242#330#0" expanded="false" />
-            <element signature="e#334#384#0" expanded="false" />
-            <element signature="e#388#438#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="20" column="2" lean-forward="false" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/PivotResult.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/FutureFallback.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding />
+        <state relative-caret-position="168">
+          <caret line="11" column="27" lean-forward="false" selection-start-line="11" selection-start-column="27" selection-end-line="11" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/thirdparty/publicsuffix/PublicSuffixPatterns.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1113">
-          <caret line="66" column="76" lean-forward="false" selection-start-line="66" selection-start-column="76" selection-end-line="66" selection-end-column="76" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-9140">
+          <caret line="13" column="19" lean-forward="false" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/FutureCallback.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="55" column="35" lean-forward="false" selection-start-line="55" selection-start-column="35" selection-end-line="55" selection-end-column="35" />
-          <folding />
+        <state relative-caret-position="126">
+          <caret line="9" column="17" lean-forward="false" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlConditionBuilder.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/math/BigIntegerMath.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="945">
-          <caret line="72" column="0" lean-forward="false" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
+        <state relative-caret-position="-588">
+          <caret line="67" column="24" lean-forward="false" selection-start-line="67" selection-start-column="24" selection-end-line="67" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlCondition.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/hash/SipHashFunction.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1764">
-          <caret line="116" column="0" lean-forward="true" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="126">
+          <caret line="13" column="12" lean-forward="false" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/hash/HashCode.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="147">
+          <caret line="16" column="22" lean-forward="false" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/ResponseResult.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/hash/MessageDigestHashFunction.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="903">
-          <caret line="43" column="18" lean-forward="false" selection-start-line="43" selection-start-column="6" selection-end-line="43" selection-end-column="18" />
-          <folding>
-            <element signature="e#150#238#0" expanded="false" />
-            <element signature="e#242#330#0" expanded="false" />
-            <element signature="e#334#384#0" expanded="false" />
-            <element signature="e#388#438#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="126">
+          <caret line="13" column="12" lean-forward="false" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-catalyst_2.11/2.3.0/spark-catalyst_2.11-2.3.0-sources.jar!/org/apache/spark/sql/internal/SQLConf.scala">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/AbstractIdleService.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3029">
-          <caret line="350" column="29" lean-forward="false" selection-start-line="350" selection-start-column="21" selection-end-line="350" selection-end-column="29" />
+        <state relative-caret-position="168">
+          <caret line="18" column="4" lean-forward="false" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/ExecutionQueue.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-378">
+          <caret line="21" column="27" lean-forward="false" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/ServiceManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="165" column="0" lean-forward="true" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/Service.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="105" column="9" lean-forward="true" selection-start-line="105" selection-start-column="9" selection-end-line="105" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-collections/commons-collections/3.2.1/commons-collections-3.2.1-sources.jar!/org/apache/commons/collections/CollectionUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="978" column="23" lean-forward="false" selection-start-line="978" selection-start-column="23" selection-end-line="978" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/Futures.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="156" column="48" lean-forward="false" selection-start-line="156" selection-start-column="48" selection-end-line="156" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/google/guava/guava/16.0.1/guava-16.0.1.jar!/com/google/common/util/concurrent/MoreExecutors.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="78" column="74" lean-forward="false" selection-start-line="78" selection-start-column="74" selection-end-line="78" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/concurrent/ThreadFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="57" column="17" lean-forward="false" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/spark/TestDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="19" column="13" lean-forward="false" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/spark/MutiFutureTaskTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BaseConditionBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="62" column="16" lean-forward="false" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/Constant.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="16" column="40" lean-forward="false" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="40" />
+        <state relative-caret-position="149">
+          <caret line="159" column="28" lean-forward="true" selection-start-line="159" selection-start-column="28" selection-end-line="159" selection-end-column="28" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hs_err_pid1164.log">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/lang/Thread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="440" column="30" lean-forward="true" selection-start-line="440" selection-start-column="30" selection-end-line="440" selection-end-column="30" />
+        <state relative-caret-position="222">
+          <caret line="446" column="11" lean-forward="false" selection-start-line="446" selection-start-column="11" selection-end-line="446" selection-end-column="11" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/lang/Object.java">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/lang/Runnable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="62" column="33" lean-forward="false" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
-          <folding />
+        <state relative-caret-position="672">
+          <caret line="55" column="17" lean-forward="false" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/lang/Class.java">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/concurrent/ExecutorService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="1780" column="18" lean-forward="false" selection-start-line="1780" selection-start-column="18" selection-end-line="1780" selection-end-column="18" />
+        <state relative-caret-position="390">
+          <caret line="258" column="4" lean-forward="false" selection-start-line="258" selection-start-column="4" selection-end-line="258" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.0/spark-sql_2.11-2.3.0-sources.jar!/org/apache/spark/sql/package.scala">
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/concurrent/ConcurrentHashMap.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="17" column="21" lean-forward="false" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+        <state relative-caret-position="411">
+          <caret line="3959" column="16" lean-forward="false" selection-start-line="3959" selection-start-column="16" selection-end-line="3959" selection-end-column="16" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hs_err_pid6544.log">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lkf/pool/TimeMonitorHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="516">
-          <caret line="436" column="19" lean-forward="false" selection-start-line="436" selection-start-column="19" selection-end-line="436" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlCondition.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="196" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="196" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/PivotResult.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/scala/ResponseResult.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="61" column="3" lean-forward="false" selection-start-line="61" selection-start-column="3" selection-end-line="61" selection-end-column="3" />
-          <folding>
-            <element signature="e#150#238#0" expanded="false" />
-            <element signature="e#242#330#0" expanded="false" />
-            <element signature="e#334#384#0" expanded="false" />
-            <element signature="e#388#438#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.11.8/scala-library-2.11.8-sources.jar!/scala/package.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="56" column="6" lean-forward="false" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://JAVA/org.apache.spark.sql.Dataset">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>JAVA</ID>
-          <OriginalElement>org.apache.spark.sql.Dataset</OriginalElement>
-          <nodes>
-            <node x="" y="">org.apache.spark.sql.Dataset</node>
-            <node x="" y="">scala.Serializable</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="1.0" x="50.0" y="3936.5" />
-          <SelectedNodes />
-          <Categories>
-            <Category>Methods</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-          <VISIBILITY>private</VISIBILITY>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="546">
-          <caret line="113" column="45" lean-forward="false" selection-start-line="113" selection-start-column="45" selection-end-line="113" selection-end-column="45" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/BiReportBuildInDTO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="57" column="27" lean-forward="true" selection-start-line="51" selection-start-column="4" selection-end-line="57" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlConditionBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
-          <folding>
-            <element signature="docComment;class#SqlConditionBuilder#0" expanded="false" />
-            <element signature="docComment;field#queryType#0;class#SqlConditionBuilder#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/PivotResult.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="33" lean-forward="false" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/scala/DemoPivot.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="48" column="15" lean-forward="true" selection-start-line="48" selection-start-column="15" selection-end-line="48" selection-end-column="15" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchSqlBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
-          <folding>
-            <element signature="method#selectBuilder#0;class#SearchSqlBuilder#0" expanded="false" />
-            <element signature="method#whereBuilder#0;class#SearchSqlBuilder#0" expanded="false" />
-            <element signature="method#orderBuilder#0;class#SearchSqlBuilder#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.0/spark-sql_2.11-2.3.0-sources.jar!/org/apache/spark/sql/RelationalGroupedDataset.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="101">
-          <caret line="377" column="53" lean-forward="true" selection-start-line="377" selection-start-column="53" selection-end-line="377" selection-end-column="53" />
-          <folding>
-            <element signature="e#2264#3282#0" expanded="false" />
-            <element signature="e#3892#4626#0" expanded="false" />
-            <element signature="e#4630#5622#0" expanded="false" />
-            <element signature="e#5626#6312#0" expanded="false" />
-            <element signature="e#11214#12956#0" expanded="false" />
-            <element signature="e#14429#15492#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="530">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/apache/spark/spark-sql_2.11/2.3.0/spark-sql_2.11-2.3.0-sources.jar!/org/apache/spark/sql/Dataset.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="1519" column="35" lean-forward="false" selection-start-line="1519" selection-start-column="35" selection-end-line="1519" selection-end-column="35" />
-          <folding>
-            <element signature="e#2876#3493#1" expanded="false" />
-            <element signature="e#2880#3245#0" expanded="false" />
-            <element signature="e#3057#3137#0" expanded="false" />
-            <element signature="e#3249#3491#0" expanded="false" />
-            <element signature="e#3495#7725#0" expanded="false" />
-            <element signature="e#8013#8108#0" expanded="false" />
-            <element signature="e#8198#8373#0" expanded="false" />
-            <element signature="e#8377#8520#0" expanded="false" />
-            <element signature="e#8579#9128#0" expanded="false" />
-            <element signature="e#8585#8675#0" expanded="false" />
-            <element signature="e#8754#9124#0" expanded="false" />
-            <element signature="e#9303#9647#0" expanded="false" />
-            <element signature="e#10234#10560#0" expanded="false" />
-            <element signature="e#10410#10556#0" expanded="false" />
-            <element signature="e#10447#10548#0" expanded="false" />
-            <element signature="e#10564#10801#0" expanded="false" />
-            <element signature="e#10684#10797#0" expanded="false" />
-            <element signature="e#10805#11159#0" expanded="false" />
-            <element signature="e#10805#15378#0" expanded="false" />
-            <element signature="e#11398#11669#0" expanded="false" />
-            <element signature="e#11413#11494#0" expanded="false" />
-            <element signature="e#11582#11611#0" expanded="false" />
-            <element signature="e#11617#11663#0" expanded="false" />
-            <element signature="e#12076#12613#0" expanded="false" />
-            <element signature="e#12105#12594#0" expanded="false" />
-            <element signature="e#12133#12310#0" expanded="false" />
-            <element signature="e#12362#12555#0" expanded="false" />
-            <element signature="e#12561#12586#0" expanded="false" />
-            <element signature="e#12781#13860#0" expanded="false" />
-            <element signature="e#12973#13099#0" expanded="false" />
-            <element signature="e#13019#13091#0" expanded="false" />
-            <element signature="e#13275#13458#0" expanded="false" />
-            <element signature="e#13321#13382#0" expanded="false" />
-            <element signature="e#13388#13450#0" expanded="false" />
-            <element signature="e#13551#13832#0" expanded="false" />
-            <element signature="e#13580#13793#0" expanded="false" />
-            <element signature="e#13628#13702#0" expanded="false" />
-            <element signature="e#13708#13783#0" expanded="false" />
-            <element signature="e#13866#14993#0" expanded="false" />
-            <element signature="e#14097#14177#0" expanded="false" />
-            <element signature="e#14238#14418#0" expanded="false" />
-            <element signature="e#14278#14410#0" expanded="false" />
-            <element signature="e#14327#14396#0" expanded="false" />
-            <element signature="e#14456#14987#0" expanded="false" />
-            <element signature="e#14602#14671#0" expanded="false" />
-            <element signature="e#14743#14949#0" expanded="false" />
-            <element signature="e#15051#15151#0" expanded="false" />
-            <element signature="e#15174#15355#0" expanded="false" />
-            <element signature="e#15382#16022#0" expanded="false" />
-            <element signature="e#15502#15573#0" expanded="false" />
-            <element signature="e#15673#15876#0" expanded="false" />
-            <element signature="e#15721#15778#0" expanded="false" />
-            <element signature="e#15784#15868#0" expanded="false" />
-            <element signature="e#16026#16333#0" expanded="false" />
-            <element signature="e#16336#16416#0" expanded="false" />
-            <element signature="e#16597#17617#0" expanded="false" />
-            <element signature="e#17746#18273#0" expanded="false" />
-            <element signature="e#17746#18776#0" expanded="false" />
-            <element signature="e#18358#18612#0" expanded="false" />
-            <element signature="e#18669#18747#0" expanded="false" />
-            <element signature="e#18780#18871#0" expanded="false" />
-            <element signature="e#18933#19044#0" expanded="false" />
-            <element signature="e#19158#19292#0" expanded="false" />
-            <element signature="e#19158#19612#0" expanded="false" />
-            <element signature="e#19503#19608#0" expanded="false" />
-            <element signature="e#19616#19735#0" expanded="false" />
-            <element signature="e#19789#19903#0" expanded="false" />
-            <element signature="e#19789#20018#0" expanded="false" />
-            <element signature="e#19962#20018#0" expanded="false" />
-            <element signature="e#20022#20115#0" expanded="false" />
-            <element signature="e#20176#20335#0" expanded="false" />
-            <element signature="e#20404#20876#0" expanded="false" />
-            <element signature="e#20964#21353#0" expanded="false" />
-            <element signature="e#21489#21869#0" expanded="false" />
-            <element signature="e#22020#22454#0" expanded="false" />
-            <element signature="e#22596#23022#0" expanded="false" />
-            <element signature="e#22596#23187#0" expanded="false" />
-            <element signature="e#23132#23187#0" expanded="false" />
-            <element signature="e#23191#23570#0" expanded="false" />
-            <element signature="e#23191#24675#0" expanded="false" />
-            <element signature="e#23742#23780#0" expanded="false" />
-            <element signature="e#23786#23829#0" expanded="false" />
-            <element signature="e#23846#23879#0" expanded="false" />
-            <element signature="e#23937#24031#0" expanded="false" />
-            <element signature="e#23937#24364#0" expanded="false" />
-            <element signature="e#24224#24358#0" expanded="false" />
-            <element signature="e#24469#24665#0" expanded="false" />
-            <element signature="e#24507#24650#0" expanded="false" />
-            <element signature="e#24679#26078#0" expanded="false" />
-            <element signature="e#26112#26203#0" expanded="false" />
-            <element signature="e#24679#26824#0" expanded="false" />
-            <element signature="e#26369#26824#0" expanded="false" />
-            <element signature="e#26573#26699#0" expanded="false" />
-            <element signature="e#26731#26820#0" expanded="false" />
-            <element signature="e#26828#27367#0" expanded="false" />
-            <element signature="e#27435#27639#0" expanded="false" />
-            <element signature="e#27673#27957#0" expanded="false" />
-            <element signature="e#28018#28624#0" expanded="false" />
-            <element signature="e#28018#28830#0" expanded="false" />
-            <element signature="e#28719#28772#0" expanded="false" />
-            <element signature="e#28778#28830#0" expanded="false" />
-            <element signature="e#28834#29423#0" expanded="false" />
-            <element signature="e#29517#31110#0" expanded="false" />
-            <element signature="e#31289#31505#0" expanded="false" />
-            <element signature="e#31575#31824#0" expanded="false" />
-            <element signature="e#31900#32125#0" expanded="false" />
-            <element signature="e#31900#32256#0" expanded="false" />
-            <element signature="e#32178#32256#0" expanded="false" />
-            <element signature="e#32260#33061#0" expanded="false" />
-            <element signature="e#32260#33165#0" expanded="false" />
-            <element signature="e#33169#34011#0" expanded="false" />
-            <element signature="e#33169#34126#0" expanded="false" />
-            <element signature="e#34130#35213#0" expanded="false" />
-            <element signature="e#34130#35786#0" expanded="false" />
-            <element signature="e#35513#35603#0" expanded="false" />
-            <element signature="e#35653#35782#0" expanded="false" />
-            <element signature="e#35665#35776#0" expanded="false" />
-            <element signature="e#35790#36085#0" expanded="false" />
-            <element signature="e#36183#36993#0" expanded="false" />
-            <element signature="e#36183#39102#0" expanded="false" />
-            <element signature="e#37080#37172#0" expanded="false" />
-            <element signature="e#37842#37937#0" expanded="false" />
-            <element signature="e#38129#38164#0" expanded="false" />
-            <element signature="e#38456#38491#0" expanded="false" />
-            <element signature="e#38772#39042#0" expanded="false" />
-            <element signature="e#38786#39041#0" expanded="false" />
-            <element signature="e#38939#39035#0" expanded="false" />
-            <element signature="e#39057#39098#0" expanded="false" />
-            <element signature="e#39106#39373#0" expanded="false" />
-            <element signature="e#39106#39509#0" expanded="false" />
-            <element signature="e#39431#39509#0" expanded="false" />
-            <element signature="e#39513#40486#0" expanded="false" />
-            <element signature="e#39513#42961#0" expanded="false" />
-            <element signature="e#40796#40929#0" expanded="false" />
-            <element signature="e#40808#40928#0" expanded="false" />
-            <element signature="e#41027#41125#0" expanded="false" />
-            <element signature="e#41444#41714#0" expanded="false" />
-            <element signature="e#41490#41593#0" expanded="false" />
-            <element signature="e#41599#41664#0" expanded="false" />
-            <element signature="e#41732#42007#0" expanded="false" />
-            <element signature="e#41779#41884#0" expanded="false" />
-            <element signature="e#41890#41956#0" expanded="false" />
-            <element signature="e#42209#42771#0" expanded="false" />
-            <element signature="e#42306#42344#0" expanded="false" />
-            <element signature="e#42350#42485#0" expanded="false" />
-            <element signature="e#42583#42622#0" expanded="false" />
-            <element signature="e#42628#42765#0" expanded="false" />
-            <element signature="e#42965#43253#0" expanded="false" />
-            <element signature="e#42965#43421#0" expanded="false" />
-            <element signature="e#43425#43626#0" expanded="false" />
-            <element signature="e#43425#43805#0" expanded="false" />
-            <element signature="e#43809#44010#0" expanded="false" />
-            <element signature="e#43809#44149#0" expanded="false" />
-            <element signature="e#44153#44432#0" expanded="false" />
-            <element signature="e#44153#44579#0" expanded="false" />
-            <element signature="e#44583#44765#0" expanded="false" />
-            <element signature="e#44583#44887#0" expanded="false" />
-            <element signature="e#44891#45050#0" expanded="false" />
-            <element signature="e#45175#45334#0" expanded="false" />
-            <element signature="e#45435#45649#0" expanded="false" />
-            <element signature="e#45705#45956#0" expanded="false" />
-            <element signature="e#45705#46111#0" expanded="false" />
-            <element signature="e#46056#46111#0" expanded="false" />
-            <element signature="e#46115#46329#0" expanded="false" />
-            <element signature="e#46115#46639#0" expanded="false" />
-            <element signature="e#46367#46639#0" expanded="false" />
-            <element signature="e#46528#46563#0" expanded="false" />
-            <element signature="e#46569#46635#0" expanded="false" />
-            <element signature="e#46643#46789#0" expanded="false" />
-            <element signature="e#46643#47282#0" expanded="false" />
-            <element signature="e#46915#47278#0" expanded="false" />
-            <element signature="e#47286#47385#0" expanded="false" />
-            <element signature="e#47286#47485#0" expanded="false" />
-            <element signature="e#47438#47485#0" expanded="false" />
-            <element signature="e#47489#47605#0" expanded="false" />
-            <element signature="e#47662#47775#0" expanded="false" />
-            <element signature="e#47830#47960#0" expanded="false" />
-            <element signature="e#48015#48175#0" expanded="false" />
-            <element signature="e#48015#48307#0" expanded="false" />
-            <element signature="e#48254#48307#0" expanded="false" />
-            <element signature="e#48311#48661#0" expanded="false" />
-            <element signature="e#48789#49147#0" expanded="false" />
-            <element signature="e#48789#49341#0" expanded="false" />
-            <element signature="e#49234#49337#0" expanded="false" />
-            <element signature="e#49245#49332#0" expanded="false" />
-            <element signature="e#49345#49627#0" expanded="false" />
-            <element signature="e#49345#50119#0" expanded="false" />
-            <element signature="e#49796#49883#0" expanded="false" />
-            <element signature="e#49907#49968#0" expanded="false" />
-            <element signature="e#49974#50115#0" expanded="false" />
-            <element signature="e#50123#50382#0" expanded="false" />
-            <element signature="e#50123#50769#0" expanded="false" />
-            <element signature="e#50773#50941#0" expanded="false" />
-            <element signature="e#51140#51308#0" expanded="false" />
-            <element signature="e#51566#51734#0" expanded="false" />
-            <element signature="e#52038#52206#0" expanded="false" />
-            <element signature="e#52556#52783#0" expanded="false" />
-            <element signature="e#52556#52893#0" expanded="false" />
-            <element signature="e#52844#52893#0" expanded="false" />
-            <element signature="e#52897#53053#0" expanded="false" />
-            <element signature="e#52897#53196#0" expanded="false" />
-            <element signature="e#53200#53458#0" expanded="false" />
-            <element signature="e#53525#53680#0" expanded="false" />
-            <element signature="e#53525#53822#0" expanded="false" />
-            <element signature="e#53826#54393#0" expanded="false" />
-            <element signature="e#53826#54577#0" expanded="false" />
-            <element signature="e#54581#55212#0" expanded="false" />
-            <element signature="e#54581#55394#0" expanded="false" />
-            <element signature="e#55398#56017#0" expanded="false" />
-            <element signature="e#55398#56195#0" expanded="false" />
-            <element signature="e#56199#56905#0" expanded="false" />
-            <element signature="e#56199#57180#0" expanded="false" />
-            <element signature="e#57080#57176#0" expanded="false" />
-            <element signature="e#57184#57458#0" expanded="false" />
-            <element signature="e#57563#57836#0" expanded="false" />
-            <element signature="e#57954#58146#0" expanded="false" />
-            <element signature="e#57954#58590#0" expanded="false" />
-            <element signature="e#58469#58586#0" expanded="false" />
-            <element signature="e#58594#58785#0" expanded="false" />
-            <element signature="e#58972#59740#0" expanded="false" />
-            <element signature="e#58972#60013#0" expanded="false" />
-            <element signature="e#59914#60009#0" expanded="false" />
-            <element signature="e#60017#60766#0" expanded="false" />
-            <element signature="e#60017#61035#0" expanded="false" />
-            <element signature="e#60938#61031#0" expanded="false" />
-            <element signature="e#61039#61354#0" expanded="false" />
-            <element signature="e#61039#61481#0" expanded="false" />
-            <element signature="e#61485#61810#0" expanded="false" />
-            <element signature="e#61886#62210#0" expanded="false" />
-            <element signature="e#62296#62582#0" expanded="false" />
-            <element signature="e#62699#62985#0" expanded="false" />
-            <element signature="e#62699#63078#0" expanded="false" />
-            <element signature="e#63034#63078#0" expanded="false" />
-            <element signature="e#63082#63487#0" expanded="false" />
-            <element signature="e#63590#64697#0" expanded="false" />
-            <element signature="e#63590#64999#0" expanded="false" />
-            <element signature="e#64759#64999#0" expanded="false" />
-            <element signature="e#64765#64855#0" expanded="false" />
-            <element signature="e#65003#65837#0" expanded="false" />
-            <element signature="e#65003#67291#0" expanded="false" />
-            <element signature="e#65905#67291#0" expanded="false" />
-            <element signature="e#66147#66275#0" expanded="false" />
-            <element signature="e#66318#66448#0" expanded="false" />
-            <element signature="e#66574#66859#0" expanded="false" />
-            <element signature="e#66669#66853#0" expanded="false" />
-            <element signature="e#66706#66845#0" expanded="false" />
-            <element signature="e#67064#67154#0" expanded="false" />
-            <element signature="e#67295#67659#0" expanded="false" />
-            <element signature="e#67295#67784#0" expanded="false" />
-            <element signature="e#67725#67784#0" expanded="false" />
-            <element signature="e#67788#68155#0" expanded="false" />
-            <element signature="e#67788#68274#0" expanded="false" />
-            <element signature="e#68218#68274#0" expanded="false" />
-            <element signature="e#68278#68674#0" expanded="false" />
-            <element signature="e#68278#68807#0" expanded="false" />
-            <element signature="e#68811#69164#0" expanded="false" />
-            <element signature="e#68811#69272#0" expanded="false" />
-            <element signature="e#69276#69705#0" expanded="false" />
-            <element signature="e#69276#69888#0" expanded="false" />
-            <element signature="e#69809#69884#0" expanded="false" />
-            <element signature="e#69892#70284#0" expanded="false" />
-            <element signature="e#69892#70422#0" expanded="false" />
-            <element signature="e#70426#70715#0" expanded="false" />
-            <element signature="e#70426#72096#0" expanded="false" />
-            <element signature="e#70804#70910#0" expanded="false" />
-            <element signature="e#70922#71025#0" expanded="false" />
-            <element signature="e#71612#71674#0" expanded="false" />
-            <element signature="e#71680#71821#0" expanded="false" />
-            <element signature="e#71962#72084#0" expanded="false" />
-            <element signature="e#71989#72078#0" expanded="false" />
-            <element signature="e#72100#72366#0" expanded="false" />
-            <element signature="e#72100#72547#0" expanded="false" />
-            <element signature="e#72551#72748#0" expanded="false" />
-            <element signature="e#72551#72865#0" expanded="false" />
-            <element signature="e#72869#73092#0" expanded="false" />
-            <element signature="e#72869#73226#0" expanded="false" />
-            <element signature="e#73230#74212#0" expanded="false" />
-            <element signature="e#73230#74899#0" expanded="false" />
-            <element signature="e#74753#74895#0" expanded="false" />
-            <element signature="e#74769#74889#0" expanded="false" />
-            <element signature="e#74903#75537#0" expanded="false" />
-            <element signature="e#74903#76432#0" expanded="false" />
-            <element signature="e#75960#76170#0" expanded="false" />
-            <element signature="e#76286#76428#0" expanded="false" />
-            <element signature="e#76302#76422#0" expanded="false" />
-            <element signature="e#76436#76758#0" expanded="false" />
-            <element signature="e#76858#76976#0" expanded="false" />
-            <element signature="e#76858#78037#0" expanded="false" />
-            <element signature="e#77078#77222#0" expanded="false" />
-            <element signature="e#77265#77373#0" expanded="false" />
-            <element signature="e#77581#77804#0" expanded="false" />
-            <element signature="e#77613#77681#0" expanded="false" />
-            <element signature="e#77598#77798#1" expanded="false" />
-            <element signature="e#77844#77927#0" expanded="false" />
-            <element signature="e#78041#78110#0" expanded="false" />
-            <element signature="e#78041#78587#0" expanded="false" />
-            <element signature="e#78256#78418#0" expanded="false" />
-            <element signature="e#78474#78548#0" expanded="false" />
-            <element signature="e#78591#78661#0" expanded="false" />
-            <element signature="e#78815#78981#0" expanded="false" />
-            <element signature="e#78815#79510#0" expanded="false" />
-            <element signature="e#79267#79480#0" expanded="false" />
-            <element signature="e#79300#79447#0" expanded="false" />
-            <element signature="e#79355#79400#0" expanded="false" />
-            <element signature="e#79406#79439#0" expanded="false" />
-            <element signature="e#79486#79506#0" expanded="false" />
-            <element signature="e#79514#79822#0" expanded="false" />
-            <element signature="e#79514#79897#0" expanded="false" />
-            <element signature="e#79901#80211#0" expanded="false" />
-            <element signature="e#79901#80677#0" expanded="false" />
-            <element signature="e#80442#80519#0" expanded="false" />
-            <element signature="e#80603#80623#0" expanded="false" />
-            <element signature="e#80629#80673#0" expanded="false" />
-            <element signature="e#80681#80947#0" expanded="false" />
-            <element signature="e#80681#81420#0" expanded="false" />
-            <element signature="e#81008#81237#0" expanded="false" />
-            <element signature="e#81110#81174#0" expanded="false" />
-            <element signature="e#81319#81359#0" expanded="false" />
-            <element signature="e#81424#82025#0" expanded="false" />
-            <element signature="e#82095#82695#0" expanded="false" />
-            <element signature="e#82095#83383#0" expanded="false" />
-            <element signature="e#82768#83383#0" expanded="false" />
-            <element signature="e#82934#83335#0" expanded="false" />
-            <element signature="e#82963#83032#0" expanded="false" />
-            <element signature="e#83172#83318#0" expanded="false" />
-            <element signature="e#83209#83310#0" expanded="false" />
-            <element signature="e#83387#83970#0" expanded="false" />
-            <element signature="e#84065#84652#0" expanded="false" />
-            <element signature="e#84065#84824#0" expanded="false" />
-            <element signature="e#84828#85777#0" expanded="false" />
-            <element signature="e#84828#85996#0" expanded="false" />
-            <element signature="e#86000#87605#0" expanded="false" />
-            <element signature="e#87731#87968#0" expanded="false" />
-            <element signature="e#88064#88138#0" expanded="false" />
-            <element signature="e#88173#88265#0" expanded="false" />
-            <element signature="e#88295#88549#0" expanded="false" />
-            <element signature="e#88623#88806#0" expanded="false" />
-            <element signature="e#88623#88960#0" expanded="false" />
-            <element signature="e#88964#89146#0" expanded="false" />
-            <element signature="e#88964#89305#0" expanded="false" />
-            <element signature="e#89309#89496#0" expanded="false" />
-            <element signature="e#89309#89659#0" expanded="false" />
-            <element signature="e#89609#89659#0" expanded="false" />
-            <element signature="e#89663#89849#0" expanded="false" />
-            <element signature="e#89663#90067#0" expanded="false" />
-            <element signature="e#90071#90260#0" expanded="false" />
-            <element signature="e#90071#90514#0" expanded="false" />
-            <element signature="e#90409#90510#0" expanded="false" />
-            <element signature="e#90518#90703#0" expanded="false" />
-            <element signature="e#90518#90954#0" expanded="false" />
-            <element signature="e#90958#91090#0" expanded="false" />
-            <element signature="e#90958#91479#0" expanded="false" />
-            <element signature="e#91358#91475#0" expanded="false" />
-            <element signature="e#91483#91709#0" expanded="false" />
-            <element signature="e#91867#92092#0" expanded="false" />
-            <element signature="e#91867#92308#0" expanded="false" />
-            <element signature="e#92312#92404#0" expanded="false" />
-            <element signature="e#92312#92487#0" expanded="false" />
-            <element signature="e#92463#92487#0" expanded="false" />
-            <element signature="e#92491#92613#0" expanded="false" />
-            <element signature="e#92687#92801#0" expanded="false" />
-            <element signature="e#92687#92912#0" expanded="false" />
-            <element signature="e#92879#92912#0" expanded="false" />
-            <element signature="e#92916#93040#0" expanded="false" />
-            <element signature="e#92916#93176#0" expanded="false" />
-            <element signature="e#93180#93454#0" expanded="false" />
-            <element signature="e#93497#93781#0" expanded="false" />
-            <element signature="e#93869#94217#0" expanded="false" />
-            <element signature="e#94304#94608#0" expanded="false" />
-            <element signature="e#94304#94789#0" expanded="false" />
-            <element signature="e#94696#94789#0" expanded="false" />
-            <element signature="e#94793#95233#0" expanded="false" />
-            <element signature="e#94793#95922#0" expanded="false" />
-            <element signature="e#95335#95918#0" expanded="false" />
-            <element signature="e#95351#95443#0" expanded="false" />
-            <element signature="e#95667#95905#0" expanded="false" />
-            <element signature="e#95684#95774#0" expanded="false" />
-            <element signature="e#95926#96020#0" expanded="false" />
-            <element signature="e#95926#96152#0" expanded="false" />
-            <element signature="e#96097#96152#0" expanded="false" />
-            <element signature="e#96156#96281#0" expanded="false" />
-            <element signature="e#96156#96417#0" expanded="false" />
-            <element signature="e#96348#96417#0" expanded="false" />
-            <element signature="e#96421#96695#0" expanded="false" />
-            <element signature="e#96421#97468#0" expanded="false" />
-            <element signature="e#97197#97348#0" expanded="false" />
-            <element signature="e#97205#97335#0" expanded="false" />
-            <element signature="e#97367#97464#0" expanded="false" />
-            <element signature="e#97472#97792#0" expanded="false" />
-            <element signature="e#97472#97972#0" expanded="false" />
-            <element signature="e#97976#98405#0" expanded="false" />
-            <element signature="e#97976#98888#0" expanded="false" />
-            <element signature="e#98670#98785#0" expanded="false" />
-            <element signature="e#98671#98784#0" expanded="false" />
-            <element signature="e#98804#98884#0" expanded="false" />
-            <element signature="e#98892#99367#0" expanded="false" />
-            <element signature="e#98892#99561#0" expanded="false" />
-            <element signature="e#99565#100521#0" expanded="false" />
-            <element signature="e#99565#100655#0" expanded="false" />
-            <element signature="e#100585#100655#0" expanded="false" />
-            <element signature="e#100659#101011#0" expanded="false" />
-            <element signature="e#101063#101191#0" expanded="false" />
-            <element signature="e#101063#101294#0" expanded="false" />
-            <element signature="e#101298#101426#0" expanded="false" />
-            <element signature="e#101467#101776#0" expanded="false" />
-            <element signature="e#101467#101917#0" expanded="false" />
-            <element signature="e#101921#102056#0" expanded="false" />
-            <element signature="e#101921#102268#0" expanded="false" />
-            <element signature="e#102163#102235#0" expanded="false" />
-            <element signature="e#102272#102487#0" expanded="false" />
-            <element signature="e#102272#102621#0" expanded="false" />
-            <element signature="e#102625#102767#0" expanded="false" />
-            <element signature="e#102987#103117#0" expanded="false" />
-            <element signature="e#103121#103234#0" expanded="false" />
-            <element signature="e#103260#103427#0" expanded="false" />
-            <element signature="e#103355#103423#0" expanded="false" />
-            <element signature="e#103431#103540#0" expanded="false" />
-            <element signature="e#103590#103699#0" expanded="false" />
-            <element signature="e#103741#103974#0" expanded="false" />
-            <element signature="e#103741#104143#0" expanded="false" />
-            <element signature="e#104147#104735#0" expanded="false" />
-            <element signature="e#104147#104895#0" expanded="false" />
-            <element signature="e#104821#104895#0" expanded="false" />
-            <element signature="e#104901#105120#0" expanded="false" />
-            <element signature="e#104901#105259#0" expanded="false" />
-            <element signature="e#105186#105259#0" expanded="false" />
-            <element signature="e#105263#105881#0" expanded="false" />
-            <element signature="e#105263#106046#0" expanded="false" />
-            <element signature="e#105973#106046#0" expanded="false" />
-            <element signature="e#106050#106598#0" expanded="false" />
-            <element signature="e#106050#106742#0" expanded="false" />
-            <element signature="e#106670#106742#0" expanded="false" />
-            <element signature="e#106746#107440#0" expanded="false" />
-            <element signature="e#107180#107436#0" expanded="false" />
-            <element signature="e#107444#107588#0" expanded="false" />
-            <element signature="e#107444#107790#0" expanded="false" />
-            <element signature="e#107646#107753#0" expanded="false" />
-            <element signature="e#107678#107747#0" expanded="false" />
-            <element signature="e#107794#107934#0" expanded="false" />
-            <element signature="e#107794#108183#0" expanded="false" />
-            <element signature="e#108031#108145#0" expanded="false" />
-            <element signature="e#108063#108139#0" expanded="false" />
-            <element signature="e#108188#108285#0" expanded="false" />
-            <element signature="e#108188#109108#0" expanded="false" />
-            <element signature="e#108453#109086#0" expanded="false" />
-            <element signature="e#108615#108708#0" expanded="false" />
-            <element signature="e#108737#109080#0" expanded="false" />
-            <element signature="e#108800#109072#0" expanded="false" />
-            <element signature="e#108963#109003#0" expanded="false" />
-            <element signature="e#109009#109046#0" expanded="false" />
-            <element signature="e#109112#109457#0" expanded="false" />
-            <element signature="e#109112#109860#0" expanded="false" />
-            <element signature="e#109560#109824#0" expanded="false" />
-            <element signature="e#109864#109940#0" expanded="false" />
-            <element signature="e#110043#110092#0" expanded="false" />
-            <element signature="e#110043#110323#0" expanded="false" />
-            <element signature="e#110327#110690#0" expanded="false" />
-            <element signature="e#110432#110686#0" expanded="false" />
-            <element signature="e#110549#110625#0" expanded="false" />
-            <element signature="e#110694#110776#0" expanded="false" />
-            <element signature="e#110694#110994#0" expanded="false" />
-            <element signature="e#110853#110990#0" expanded="false" />
-            <element signature="e#110998#111135#0" expanded="false" />
-            <element signature="e#111066#111131#0" expanded="false" />
-            <element signature="e#111139#111215#0" expanded="false" />
-            <element signature="e#111319#111443#0" expanded="false" />
-            <element signature="e#111319#111574#0" expanded="false" />
-            <element signature="e#111578#111799#0" expanded="false" />
-            <element signature="e#111578#112040#0" expanded="false" />
-            <element signature="e#111927#112036#0" expanded="false" />
-            <element signature="e#111974#112019#0" expanded="false" />
-            <element signature="e#112044#112183#0" expanded="false" />
-            <element signature="e#112044#112748#0" expanded="false" />
-            <element signature="e#112314#112359#0" expanded="false" />
-            <element signature="e#112465#112506#0" expanded="false" />
-            <element signature="e#112752#112806#0" expanded="false" />
-            <element signature="e#112752#113404#0" expanded="false" />
-            <element signature="e#113170#113400#0" expanded="false" />
-            <element signature="e#113185#113275#0" expanded="false" />
-            <element signature="e#113408#113788#0" expanded="false" />
-            <element signature="e#113540#113702#0" expanded="false" />
-            <element signature="e#113555#113696#1" expanded="false" />
-            <element signature="e#113721#113784#0" expanded="false" />
-            <element signature="e#113792#113990#0" expanded="false" />
-            <element signature="e#113994#114202#0" expanded="false" />
-            <element signature="e#114206#114676#0" expanded="false" />
-            <element signature="e#114446#114618#0" expanded="false" />
-            <element signature="e#114624#114672#0" expanded="false" />
-            <element signature="e#114680#115200#0" expanded="false" />
-            <element signature="e#115031#115196#0" expanded="false" />
-            <element signature="e#115118#115190#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="274">
+          <caret line="2290" column="15" lean-forward="true" selection-start-line="2290" selection-start-column="15" selection-end-line="2290" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lkf/pool/MonitorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/EventListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="31" column="17" lean-forward="false" selection-start-line="31" selection-start-column="17" selection-end-line="31" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/javax/servlet/ServletContextListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="81" column="53" lean-forward="false" selection-start-line="81" selection-start-column="53" selection-end-line="81" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/javax/servlet/LocalStrings.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-819">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="ResourceBundle">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/javax/servlet/LocalStrings_fr.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-845">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="ResourceBundle">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar!/javax/servlet/LocalStrings_ja.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-756">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="ResourceBundle">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/javax/servlet/Registration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-83">
+          <caret line="64" column="17" lean-forward="false" selection-start-line="64" selection-start-column="17" selection-end-line="64" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/javax/servlet/ReadListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20">
+          <caret line="54" column="17" lean-forward="false" selection-start-line="54" selection-start-column="17" selection-end-line="54" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/javax/servlet/Servlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2252">
+          <caret line="100" column="17" lean-forward="false" selection-start-line="100" selection-start-column="17" selection-end-line="100" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0-sources.jar!/javax/servlet/WriteListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="142">
+          <caret line="53" column="17" lean-forward="false" selection-start-line="53" selection-start-column="17" selection-end-line="53" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-231">
+          <caret line="22" column="47" lean-forward="true" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/Enumeration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="60" column="28" lean-forward="false" selection-start-line="60" selection-start-column="17" selection-end-line="60" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/Java/jdk1.8.0_161/src.zip!/java/util/StringTokenizer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="64" column="8" lean-forward="true" selection-start-line="61" selection-start-column="6" selection-end-line="64" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/lkf/sync/Text.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="24" column="47" lean-forward="true" selection-start-line="24" selection-start-column="47" selection-end-line="24" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/SQLExtInterpreter3.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+        <state relative-caret-position="222">
+          <caret line="55" column="71" lean-forward="true" selection-start-line="55" selection-start-column="71" selection-end-line="55" selection-end-column="71" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#5538#5723#0" expanded="false" />
+            <element signature="e#5608#5715#0" expanded="false" />
+            <element signature="e#6392#6504#0" expanded="false" />
+            <element signature="e#6423#6498#0" expanded="false" />
+            <element signature="e#7040#7654#0" expanded="false" />
+            <element signature="e#7277#7623#0" expanded="false" />
+            <element signature="e#7316#7617#0" expanded="false" />
+            <element signature="e#7418#7485#0" expanded="false" />
+            <element signature="e#7541#7609#0" expanded="false" />
+            <element signature="e#11186#11228#0" expanded="false" />
+            <element signature="e#11392#12797#0" expanded="false" />
+            <element signature="e#12138#12783#0" expanded="false" />
+            <element signature="e#12196#12254#0" expanded="false" />
+            <element signature="e#12365#12644#0" expanded="false" />
+            <element signature="e#12421#12636#0" expanded="false" />
+            <element signature="e#12456#12626#0" expanded="false" />
+            <element signature="e#12522#12614#0" expanded="false" />
+            <element signature="e#12656#12777#0" expanded="false" />
+            <element signature="e#12689#12769#0" expanded="false" />
+            <element signature="e#14297#14463#0" expanded="false" />
+            <element signature="e#14475#14607#0" expanded="false" />
+            <element signature="e#14653#14769#0" expanded="false" />
+            <element signature="e#14791#15396#0" expanded="false" />
+            <element signature="e#14980#15367#0" expanded="false" />
+            <element signature="e#15097#15270#0" expanded="false" />
+            <element signature="e#15188#15262#0" expanded="false" />
+            <element signature="e#15400#16716#0" expanded="false" />
+            <element signature="e#15531#15565#0" expanded="true" />
+            <element signature="e#16075#16099#0" expanded="false" />
+            <element signature="e#16307#16353#0" expanded="false" />
+            <element signature="e#16395#16450#0" expanded="false" />
+            <element signature="e#16495#16590#0" expanded="false" />
+            <element signature="e#16596#16663#0" expanded="false" />
+            <element signature="e#16994#17041#0" expanded="false" />
+            <element signature="e#17126#17285#0" expanded="false" />
+            <element signature="e#17224#17260#0" expanded="false" />
+            <element signature="e#17328#17626#0" expanded="false" />
+            <element signature="e#17435#17510#0" expanded="false" />
+            <element signature="e#17522#17601#0" expanded="false" />
+            <element signature="e#17668#18144#0" expanded="false" />
+            <element signature="e#17703#18138#0" expanded="false" />
+            <element signature="e#17829#18130#0" expanded="false" />
+            <element signature="e#17935#18027#0" expanded="false" />
+            <element signature="e#18033#18120#0" expanded="false" />
+            <element signature="e#18233#18492#0" expanded="false" />
+            <element signature="e#18287#18413#0" expanded="false" />
+            <element signature="e#18517#19007#0" expanded="false" />
+            <element signature="e#18740#18980#0" expanded="false" />
+            <element signature="e#19011#19262#0" expanded="false" />
+            <element signature="e#19266#19960#0" expanded="false" />
+            <element signature="e#19617#19721#0" expanded="false" />
+            <element signature="e#19731#19940#0" expanded="false" />
+            <element signature="e#19964#21020#0" expanded="false" />
+            <element signature="e#20538#20789#0" expanded="false" />
+            <element signature="e#20893#20986#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SearchBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="260" column="29" lean-forward="false" selection-start-line="260" selection-start-column="29" selection-end-line="260" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SparkSqlBuild.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="547">
+          <caret line="51" column="40" lean-forward="true" selection-start-line="51" selection-start-column="40" selection-end-line="51" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/org/apache/livy/client/ext/model/SqlBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="203" column="0" lean-forward="true" selection-start-line="203" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
+          <folding>
+            <element signature="docComment;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#1703#1719#0" expanded="false" />
+            <element signature="docComment;field#selectSqlList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#whereSqlList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#filterCustomFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#filterFormulaList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#groupSqlList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#groupList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#indexList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#selectFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#selectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#compareFieldMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#sparkConfigMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#sparkAggMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#fieldAndDescMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#fieldAndAliasMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#fieldAndFormulaTypeMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#fieldAndTypeMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#orderByMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#crosstabByMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#aggFieldAliasMap#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#tableName#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;field#delFilterField#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#3948#3961#0" expanded="false" />
+            <element signature="docComment;method#SqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#SqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#5098#5119#0" expanded="false" />
+            <element signature="docComment;method#tableBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#selectSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#6969#7713#0" expanded="false" />
+            <element signature="e#7783#8332#0" expanded="false" />
+            <element signature="docComment;method#selectBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#fieldAndTypeMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#fieldAndTypeMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#customField#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#customField#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#containAggFunc#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#14236#14254#0" expanded="false" />
+            <element signature="docComment;method#whereSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#whereSqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#14527#14688#0" expanded="false" />
+            <element signature="docComment;method#whereBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#whereBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#18290#18310#0" expanded="false" />
+            <element signature="docComment;method#compareBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#compareBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#18479#18699#0" expanded="false" />
+            <element signature="e#18729#18749#0" expanded="false" />
+            <element signature="docComment;method#orderBySqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#orderBySqlBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#orderByBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#orderByBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#20964#20982#0" expanded="false" />
+            <element signature="docComment;method#sparkAggBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#sparkAggBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#21333#22697#0" expanded="false" />
+            <element signature="docComment;method#customFieldHandle#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#24900#24914#0" expanded="false" />
+            <element signature="docComment;method#getCompareFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#getCompareFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getCompareFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#getCompareFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getSelectFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#getSelectFieldList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getSelectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#getSelectFieldAliasList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getGroupSqlList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getSparkConfig#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getWhereList#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="e#26488#26502#0" expanded="false" />
+            <element signature="docComment;method#fieldNameWithUdf#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#fieldNameWithUdf#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#fieldMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#fieldMapBuilder#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#dateFieldFormat#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#dateFieldFormat#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#getDateFormat#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#getDateFormat#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#timeConvert#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="method#timeConvert#0;class#SqlBuilder#0" expanded="false" />
+            <element signature="docComment;method#fieldAlias#0;class#SqlBuilder#0" expanded="false" />
           </folding>
         </state>
       </provider>

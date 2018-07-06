@@ -16,6 +16,8 @@
  */
 package org.apache.livy.client.ext.model;
 
+import com.google.common.collect.Maps;
+
 import java.util.List;
 import java.util.Map;
 
@@ -26,23 +28,28 @@ import java.util.Map;
  * @author: Created by 刘凯峰
  * @create-datetime: 2018-04-14 13-19
  */
-public class SparkSqlCondition {
+public class SparkSqlCondition extends BaseBuilder {
     /**
      * sql语句
      */
     private String selectSql;
+
+
+    /**
+     * 结果集中是否清除自定义字段列
+     */
+    private Boolean delFilterField;
+
     /**
      * 查询字段
      */
     private List<String> selectList;
+
     /**
      * 查询指标项字段
      */
     private List<String> indexList;
-    /**
-     * 求和字段
-     */
-    private List<String> sumList;
+
     /**
      * 分组字段
      */
@@ -54,70 +61,60 @@ public class SparkSqlCondition {
     private List<String> compareList;
 
     /**
+     * 自定义组合字段作为筛选项
+     */
+    private List<String> filterCustomFieldList;
+
+    /**
+     * 自定义字段筛选表达式
+     */
+    private String filterFormula;
+
+    /**
      * 排序字段
      */
-    private List<Map<String, String>> orderList;
-
+    private Map<String, String> orderByMap;
     /**
      * spark配置参数
      */
     private Map<String, String> sparkConfig;
 
+    /**
+     * 聚合信息
+     */
+    private Map<String, List<String>> sparkAggMap;
+
+    /**
+     * 字段名与中文名对应关系
+     */
+    private Map<String, String> fieldAndDescMap = Maps.newLinkedHashMap();
+
+    /**
+     * 字段与别名对应关系
+     */
+    private Map<String, String> fieldAndAliasMap = Maps.newLinkedHashMap();
+
+    /**
+     * 交叉表排序
+     */
+    private Map<String, String> crosstabByMap = Maps.newLinkedHashMap();
+
+    public List<String> getFilterCustomFieldList() {
+        return filterCustomFieldList;
+    }
+
+    public void setFilterCustomFieldList( List<String> filterCustomFieldList ) {
+        this.filterCustomFieldList = filterCustomFieldList;
+    }
 
     public String getSelectSql() {
         return selectSql;
     }
 
-    public void setSelectSql(String selectSql) {
+    public void setSelectSql( String selectSql ) {
         this.selectSql = selectSql;
     }
 
-    public List<String> getSumList() {
-        return sumList;
-    }
-
-    public void setSumList(List<String> sumList) {
-        this.sumList = sumList;
-    }
-
-    public List<String> getGroupList() {
-        return groupList;
-    }
-
-    public void setGroupList(List<String> groupList) {
-        this.groupList = groupList;
-    }
-
-    public List<String> getCompareList() {
-        return compareList;
-    }
-
-    public void setCompareList(List<String> compareList) {
-        this.compareList = compareList;
-    }
-
-    public List<Map<String, String>> getOrderList() {
-        return orderList;
-    }
-
-    public void setOrderList(List<Map<String, String>> orderList) {
-        this.orderList = orderList;
-    }
-
-    private SparkSqlCondition() {
-    }
-
-    public static SparkSqlCondition build() {
-        return new SparkSqlCondition();
-    }
-
-    public Map<String, String> getSparkConfig() {
-        return sparkConfig;
-    }
-
-    public void setSparkConfig(Map<String, String> sparkConfig) {
-        this.sparkConfig = sparkConfig;
-    }
     public List<String> getSelectList() {
         return selectList;
     }
@@ -126,12 +123,92 @@ public class SparkSqlCondition {
         this.selectList = selectList;
     }
 
-
     public List<String> getIndexList() {
         return indexList;
     }
 
     public void setIndexList( List<String> indexList ) {
         this.indexList = indexList;
+    }
+
+    public List<String> getGroupList() {
+        return groupList;
+    }
+
+    public void setGroupList( List<String> groupList ) {
+        this.groupList = groupList;
+    }
+
+    public List<String> getCompareList() {
+        return compareList;
+    }
+
+    public void setCompareList( List<String> compareList ) {
+        this.compareList = compareList;
+    }
+
+    public Map<String, String> getOrderByMap() {
+        return orderByMap;
+    }
+
+    public void setOrderByMap( Map<String, String> orderByMap ) {
+        this.orderByMap = orderByMap;
+    }
+
+    public Map<String, String> getSparkConfig() {
+        return sparkConfig;
+    }
+
+    public void setSparkConfig( Map<String, String> sparkConfig ) {
+        this.sparkConfig = sparkConfig;
+    }
+
+    public Map<String, List<String>> getSparkAggMap() {
+        return sparkAggMap;
+    }
+
+    public void setSparkAggMap( Map<String, List<String>> sparkAggMap ) {
+        this.sparkAggMap = sparkAggMap;
+    }
+
+    public Map<String, String> getFieldAndDescMap() {
+        return fieldAndDescMap;
+    }
+
+    public void setFieldAndDescMap( Map<String, String> fieldAndDescMap ) {
+        this.fieldAndDescMap = fieldAndDescMap;
+    }
+
+    public Map<String, String> getFieldAndAliasMap() {
+        return fieldAndAliasMap;
+    }
+
+    public void setFieldAndAliasMap( Map<String, String> fieldAndAliasMap ) {
+        this.fieldAndAliasMap = fieldAndAliasMap;
+    }
+
+    public Map<String, String> getCrosstabByMap() {
+        return crosstabByMap;
+    }
+
+    public void setCrosstabByMap( Map<String, String> crosstabByMap ) {
+        this.crosstabByMap = crosstabByMap;
+    }
+
+    public Boolean getDelFilterField() {
+        return delFilterField;
+    }
+
+    public void setDelFilterField( Boolean delFilterField ) {
+        this.delFilterField = delFilterField;
+    }
+
+
+    public String getFilterFormula() {
+        return filterFormula;
+    }
+
+    public void setFilterFormula( String filterFormula ) {
+        this.filterFormula = filterFormula;
     }
 }

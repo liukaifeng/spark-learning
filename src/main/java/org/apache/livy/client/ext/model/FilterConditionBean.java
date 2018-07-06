@@ -37,4 +37,24 @@ public class FilterConditionBean extends BaseConditionBean {
      * 字段值
      */
     private List<String> fieldValue;
+
+    /**
+     * 序号值
+     */
+    private List<Integer> index;
+
+    /**
+     * 条件名称
+     */
+    private String aggregator;
+
+    /**
+     * 条件中文名称
+     */
+    private String aggregatorName;
+
+    /**
+     * 年季月周标识
+     */
+    private String granularity;
 }
