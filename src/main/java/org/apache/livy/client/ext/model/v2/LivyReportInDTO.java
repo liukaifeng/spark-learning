@@ -14,21 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v2;
 
 import lombok.Data;
 
 /**
- * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
+ * @package: cn.com.tcsl.loongboss.livy.api.model.report
  * @project-name: tcsl-loongboss-parent
- * @description: 报表查询参数构建基类
+ * @description: Livy报表查询入参
  * @author: Created by 刘凯峰
- * @create-datetime: 2018-03-29 10-08
+ * @create-datetime: 2018-03-27 14-22
  */
 @Data
-public class BiReportBuildBaseBean{
+public class LivyReportInDTO {
     /**
-     * 字段ID
+     * 报表编号
      */
-    private String fieldId;
+    private String reportCode;
+    /**
+     * 用户令牌
+     */
+    private String acessToken;
+    /**
+     * SQL语句
+     */
+    private String sqlStatement;
+
+
 }

@@ -14,31 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v1;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
- * @class-name: IndexConditionBean
- * @description: 指标条件
- * @author: 刘凯峰
- * @date: 2018/3/29 15:17
+ * @package: cn.com.tcsl.loongboss.livy.api.model.report
+ * @project-name: tcsl-loongboss-parent
+ * @description: Livy报表查询入参
+ * @author: Created by 刘凯峰
+ * @create-datetime: 2018-03-27 14-22
  */
-
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class IndexConditionBean extends BaseConditionBean {
+public class LivyReportInDTO {
+    /**
+     * 报表编号
+     */
+    private String reportCode;
+    /**
+     * 用户令牌
+     */
+    private String acessToken;
+    /**
+     * SQL语句
+     */
+    private String sqlStatement;
 
-    /**
-     * 聚合代码，eg：SUM
-     */
-    private String aggregator;
-    /**
-     * 聚合名称，eg：求和
-     */
-    private String aggregatorName;
 
 }
-

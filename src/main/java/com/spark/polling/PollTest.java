@@ -1,6 +1,7 @@
 package com.spark.polling;
 
 import com.google.common.collect.Lists;
+import org.apache.hadoop.metrics.util.MBeanUtil;
 
 import java.util.List;
 
@@ -16,6 +17,16 @@ public class PollTest {
         String reportCode = "180620145114000010";
         List<String> list = Lists.newArrayList("0", "1", "2");
         int hashCode = reportCode.hashCode();
+
+        //获取线程数
+        ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
+        while(threadGroup.getParent() != null){
+            threadGroup = threadGroup.getParent();
+        }
+        int totalThread = threadGroup.activeCount();
+
+        System.out.println(totalThread);
         System.out.println(Math.abs(hashCode) % list.size());
+
     }
 }

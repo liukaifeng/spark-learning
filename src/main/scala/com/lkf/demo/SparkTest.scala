@@ -2,8 +2,8 @@ import java.io.StringWriter
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.lkf.demo.XAxis
 
-import scala.collection.JavaConverters._
 import scala.collection.immutable.TreeMap
 
 /**
@@ -106,7 +106,8 @@ object TestMap {
 
 object TestStringSort {
   def main(args: Array[String]): Unit = {
-
+    println(sys.env("SPARK_HOME"))
+    println(System.getenv("SPARK_HOME"))
 
   }
 }

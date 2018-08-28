@@ -14,30 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v1;
 
 import lombok.Data;
 
 /**
  * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
- * @class-name: SortConditionBean
- * @description: 排序条件
- * @author: 刘凯峰
- * @date: 2018/3/29 15:19
+ * @project-name: tcsl-loongboss-parent
+ * @description: 报表查询参数构建基类
+ * @author: Created by 刘凯峰
+ * @create-datetime: 2018-03-29 10-08
  */
 @Data
-public class SortConditionBean extends BaseConditionBean {
+public class BiReportBuildBaseBean{
     /**
      * 字段ID
      */
     private String fieldId;
-    /**
-     * 排序标识：desc-降序；asc-升序
-     */
-    private String sortFlag;
-
-    /**
-     * 排序类型 0-默认；1-交叉表排序
-     */
-    private int sortType;
 }

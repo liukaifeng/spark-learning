@@ -14,16 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v1;
 
 /**
- * @package: org.apache.livy.client.ext.model
- * @project-name: spark-learning
- * @description: sql拼接基类
- * @author: Created by 刘凯峰
- * @create-datetime: 2018-06-22 13-49
+ * sql拼接基类
+ *
+ * @author Created by 刘凯峰
+ * @date 2018-06-22 13-49
  */
-
 public class BaseBuilder {
     /**
      * 查询类型
@@ -40,15 +38,51 @@ public class BaseBuilder {
     private int queryPoint;
 
     /**
-     * 结果数量限制
+     * 当前页
      */
-    private int limit;
+    private Integer page;
+
+    /**
+     * 返回条数
+     */
+    private Integer limit;
+
+    /**
+     * 数据源类型(0-默认；1-cassandra)
+     */
+    private int dataSourceType;
+
+    /**
+     * 数据表
+     */
+    private String table;
+    /**
+     * 建空间
+     */
+    private String keyspace;
+
+
+    public String getTable() {
+        return table;
+    }
+
+    public void setTable(String table) {
+        this.table = table;
+    }
+
+    public String getKeyspace() {
+        return keyspace;
+    }
+
+    public void setKeyspace(String keyspace) {
+        this.keyspace = keyspace;
+    }
 
     public int getQueryType() {
         return queryType;
     }
 
-    public void setQueryType( int queryType ) {
+    public void setQueryType(int queryType) {
         this.queryType = queryType;
     }
 
@@ -56,7 +90,7 @@ public class BaseBuilder {
         return queryPoint;
     }
 
-    public void setQueryPoint( int queryPoint ) {
+    public void setQueryPoint(int queryPoint) {
         this.queryPoint = queryPoint;
     }
 
@@ -64,7 +98,23 @@ public class BaseBuilder {
         return limit;
     }
 
-    public void setLimit( int limit ) {
+    public void setLimit(int limit) {
         this.limit = limit;
+    }
+
+    public int getDataSourceType() {
+        return dataSourceType;
+    }
+
+    public void setDataSourceType(int dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
     }
 }

@@ -14,8 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v1;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.List;
@@ -34,6 +35,10 @@ public class SparkSqlCondition extends BaseBuilder {
      */
     private String selectSql;
 
+    /**
+     * 同环比sql语句
+     */
+    private String selectQoqSql;
 
     /**
      * 结果集中是否清除自定义字段列
@@ -70,6 +75,12 @@ public class SparkSqlCondition extends BaseBuilder {
      */
     private String filterFormula;
 
+
+    /**
+     * Cassandra 过滤条件
+     */
+    private String cassandraFilter;
+
     /**
      * 排序字段
      */
@@ -98,6 +109,11 @@ public class SparkSqlCondition extends BaseBuilder {
      * 交叉表排序
      */
     private Map<String, String> crosstabByMap = Maps.newLinkedHashMap();
+
+    /**
+     * 同环比条件
+     */
+    private List<QoqDTO> qoqList = Lists.newArrayList();
 
     public List<String> getFilterCustomFieldList() {
         return filterCustomFieldList;
@@ -210,5 +226,30 @@ public class SparkSqlCondition extends BaseBuilder {
 
     public void setFilterFormula( String filterFormula ) {
         this.filterFormula = filterFormula;
+    }
+
+    public String getCassandraFilter() {
+        return cassandraFilter;
+    }
+
+    public void setCassandraFilter( String cassandraFilter ) {
+        this.cassandraFilter = cassandraFilter;
+    }
+
+
+    public List<QoqDTO> getQoqList() {
+        return qoqList;
+    }
+
+    public void setQoqList( List<QoqDTO> qoqList ) {
+        this.qoqList = qoqList;
+    }
+
+    public String getSelectQoqSql() {
+        return selectQoqSql;
+    }
+
+    public void setSelectQoqSql( String selectQoqSql ) {
+        this.selectQoqSql = selectQoqSql;
     }
 }

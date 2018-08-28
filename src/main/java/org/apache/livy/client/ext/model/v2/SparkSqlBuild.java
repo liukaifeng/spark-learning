@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v2;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
@@ -25,16 +25,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @package: org.apache.livy.repl.ext.model;
- * @project-name: spark-learning
- * @description: 根据条件组装sparksql
- * @author: Created by 刘凯峰
- * @create-datetime: 2018-04-14 11-11
+ * 根据条件组装sparksql
+ *
+ * @author Created by 刘凯峰
+ * @date 2018-04-14 11-11
  */
 public class SparkSqlBuild {
     private final Logger logger = LoggerFactory.getLogger(SparkSqlBuild.class);
 
-    public SparkSqlCondition buildSqlStatement( String param ) {
+    public SparkSqlCondition buildSqlStatement( String param) {
         logger.info("【SparkSqlBuild::buildSqlStatement】-入参param {}", param);
         BiReportBuildInDTO biReportBuildInDTO = JSONObject.parseObject(param, BiReportBuildInDTO.class);
         //维度条件

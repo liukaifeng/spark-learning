@@ -14,31 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v2;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * @package: cn.com.tcsl.loongboss.livy.api.model.report
+ * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
  * @project-name: tcsl-loongboss-parent
- * @description: Livy报表查询入参
+ * @description: 对比条件实体
  * @author: Created by 刘凯峰
- * @create-datetime: 2018-03-27 14-22
+ * @create-datetime: 2018-04-04 16-01
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LivyReportInDTO {
-    /**
-     * 报表编号
-     */
-    private String reportCode;
-    /**
-     * 用户令牌
-     */
-    private String acessToken;
-    /**
-     * SQL语句
-     */
-    private String sqlStatement;
-
+public class CompareConditionBean extends BaseConditionBean {
 
 }

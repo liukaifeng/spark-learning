@@ -320,7 +320,7 @@ public class RSAUtils {
 	 *            密钥对
 	 */
 	public static String getPublicKey(Map<String, Key> keyMap) {
-		Key key = (Key) keyMap.get(PUBLIC_KEY);
+		Key key = keyMap.get(PUBLIC_KEY);
 		
 		System.out.println("转换前长度" + key.getEncoded().length);
 		

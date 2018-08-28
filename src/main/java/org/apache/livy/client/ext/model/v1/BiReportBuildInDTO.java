@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v1;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,11 +23,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
- * @project-name: tcsl-loongboss-parent
- * @description: 报表统计参数入参
- * @author: Created by 刘凯峰
- * @create-datetime: 2018-03-29 10-06
+ * 报表统计参数入参
+ *
+ * @author Created by 刘凯峰
+ * @date 2018-03-29 10-06
  */
 @EqualsAndHashCode()
 @Data
@@ -35,11 +34,11 @@ public class BiReportBuildInDTO {
     /**
      * 默认当前页
      */
-    private int page = 1;
+    private Integer page;
     /**
      * 默认返回条数
      */
-    private int limit = 1000;
+    private Integer limit;
     /**
      * 默认返回条数
      */
@@ -55,13 +54,19 @@ public class BiReportBuildInDTO {
      * 1-前几条
      * 2-后几条
      */
-    private int queryPoint;
+    private Integer queryPoint;
     /**
      * 查询类型
      * 0-默认值（普通查询）
      * 1-筛选项数据查询
      */
-    private int queryType;
+    private Integer queryType;
+
+    /**
+     * 数据源类型(0-默认；1-cassandra)
+     */
+    private Integer dataSourceType;
+
     /**
      * 过滤条件
      */
@@ -87,5 +92,13 @@ public class BiReportBuildInDTO {
      * spark配置参数
      */
     private Map<String, String> sparkConfig;
+
+    public BiReportBuildInDTO() {
+        this.page = 1;
+        this.limit = 0;
+        this.queryPoint = 0;
+        this.queryType = 0;
+        this.dataSourceType = 0;
+    }
 
 }

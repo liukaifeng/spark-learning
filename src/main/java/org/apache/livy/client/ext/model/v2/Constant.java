@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v2;
 
 
 import com.google.common.collect.Lists;
@@ -138,11 +138,14 @@ public class Constant {
 
         DateType( String code ) {
             this.code = code;
+
         }
 
         public String getCode() {
             return code;
         }
+
+
     }
 
     /**
@@ -157,7 +160,8 @@ public class Constant {
         FUNC_COMPARE("compare"),
         FUNC_MIN("min"),
         FUNC_MAX("max"),
-        FUNC_GROUP("group");
+        FUNC_GROUP("group"),
+        FUNC_QOQ("qoq");
 
         private String code;
 
@@ -181,7 +185,11 @@ public class Constant {
         LOGICAL_LT("lt"),
         LOGICAL_GT("gt"),
         LOGICAL_LTE("lte"),
-        LOGICAL_GTE("gte");
+        LOGICAL_GTE("gte"),
+        LOGICAL_IS_NULL("is_null"),
+        LOGICAL_IS_NOT_NULL("is_not_null"),
+        LOGICAL_LIKE("like");
+
 
         private String code;
 

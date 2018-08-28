@@ -14,47 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
-
+package org.apache.livy.client.ext.model.v2;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.util.List;
 
 /**
  * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
- * @class-name: FilterConditionBean
- * @description: 筛选条件
+ * @class-name: SortConditionBean
+ * @description: 排序条件
  * @author: 刘凯峰
- * @date: 2018/3/29 15:16
+ * @date: 2018/3/29 15:19
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class FilterConditionBean extends BaseConditionBean {
+public class SortConditionBean extends BaseConditionBean {
+    /**
+     * 字段ID
+     */
+    private String fieldId;
+    /**
+     * 排序标识：desc-降序；asc-升序
+     */
+    private String sortFlag;
 
     /**
-     * 字段值
+     * 排序类型 0-默认；1-交叉表排序
      */
-    private List<String> fieldValue;
-
-    /**
-     * 序号值
-     */
-    private List<Integer> index;
-
-    /**
-     * 条件名称
-     */
-    private String aggregator;
-
-    /**
-     * 条件中文名称
-     */
-    private String aggregatorName;
-
-    /**
-     * 年季月周标识
-     */
-    private String granularity;
+    private int sortType;
 }

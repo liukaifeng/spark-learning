@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.livy.client.ext.model;
+package org.apache.livy.client.ext.model.v2;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -26,16 +27,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static org.apache.livy.client.ext.model.Constant.COMPARE_SPLIT_CHAR;
-import static org.apache.livy.client.ext.model.Constant.DataFieldType.STRING_TYPE;
+import static org.apache.livy.client.ext.model.v1.Constant.COMPARE_SPLIT_CHAR;
 
 
 /**
- * @package: cn.com.tcsl.loongboss.bigscreen.biz.corp.service.impl
- * @project-name: tcsl-loongboss-parent
- * @description: 查询sql构造
- * @author: Created by 刘凯峰
- * @create-datetime: 2018-03-30 09-30
+ * 查询sql构造
+ *
+ * @author Created by 刘凯峰
+ * @date 2018-03-30 09-30
  */
 public class SearchBuilder {
 
@@ -49,17 +48,26 @@ public class SearchBuilder {
     /**
      * select 语句拼接
      */
-    private String selectBuilder( SqlBuilder sqlbuilder ) {
+    private String selectBuilder( SqlBuilder sqlbuilder, SqlType sqlType ) {
         StringBuilder stringBuilder = new StringBuilder(SELECT);
-        List<String> selectSqlList = sqlbuilder.getSelectSqlList();
+        List<String> selectSqlList = Lists.newArrayList();
+        //主体SQL查询项
+        if (sqlType == SqlType.SQL_MAIN) {
+            selectSqlList = sqlbuilder.getSelectSqlList();
+        }
+        //同环比SQL查询项
+        if (sqlType == SqlType.SQL_QOQ) {
+            selectSqlList = sqlbuilder.getSelectQoqSqlList();
+        }
         int size = selectSqlList.size();
 
         if (size > 0) {
             selectSqlList.stream().distinct().forEach(select -> {
                 stringBuilder.append(select).append(",");
             });
+            return stringBuilder.substring(0, stringBuilder.length() - 1);
         }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
+        return "";
     }
 
     /**
@@ -72,39 +80,23 @@ public class SearchBuilder {
     /**
      * where语句拼接
      */
-    private String whereBuilder( SqlBuilder sqlbuilder ) {
+    private String whereBuilder( SqlBuilder sqlbuilder, SqlType sqlType ) {
         StringBuilder stringBuilder = new StringBuilder(WHERE);
-        List<String> whereList = sqlbuilder.getWhereList();
-        List<String> selectList = sqlbuilder.getSelectFieldList();
-        Map<String, Integer> fieldAndFormulaTypeMap = sqlbuilder.getFieldAndFormulaTypeMap();
-        Map<String, String> fieldAndTypeMap = sqlbuilder.getFieldAndTypeMap();
+        List<String> whereList = Lists.newArrayList();
+        if (sqlType == SqlType.SQL_MAIN) {
+            whereList = sqlbuilder.getWhereSqlList();
+        }
+        if (sqlType == SqlType.SQL_QOQ) {
+            whereList = sqlbuilder.getWhereQoqSqlList();
+        }
         int size = whereList.size();
         String and = " and ";
-        String notNull = " IS NOT NULL ";
-        String notEmpty = "!=''";
 
+        //过滤项and分割
         if (size > 0) {
             stringBuilder.append(whereList.stream().distinct().collect(Collectors.joining(and)));
         }
-        if (!selectList.isEmpty()) {
-            List<String> list = Lists.newArrayList();
-            selectList.stream().distinct().forEach(s -> {
-                if (fieldAndFormulaTypeMap.get(s) == 0) {
-                    list.add(s.concat(notNull));
-                    if (STRING_TYPE.getType().equals(fieldAndTypeMap.get(s))) {
-                        list.add(s.concat(notEmpty));
-                    }
-                }
-            });
-            if (!list.isEmpty()) {
-                String selectItem = list.stream().collect(Collectors.joining(and));
-                if (stringBuilder.toString().equals(WHERE)) {
-                    stringBuilder.append(selectItem);
-                } else {
-                    stringBuilder.append(and).append(selectItem);
-                }
-            }
-        }
+
         if (!stringBuilder.toString().equals(WHERE)) {
             return stringBuilder.toString();
         }
@@ -114,10 +106,16 @@ public class SearchBuilder {
     /**
      * 构造sql的分组条件
      */
-    private String groupBuilder( SqlBuilder sqlBuilder ) {
-        List<String> groupSqlList = sqlBuilder.getGroupSqlList();
+    private String groupBuilder( SqlBuilder sqlBuilder, SqlType sqlType ) {
+        List<String> groupSqlList = Lists.newArrayList();
+        if (sqlType == SqlType.SQL_MAIN) {
+            groupSqlList = sqlBuilder.getGroupSqlList();
+        }
+        if (sqlType == SqlType.SQL_QOQ) {
+            groupSqlList = sqlBuilder.getGroupQoqSqlList();
+        }
         if (Objects.nonNull(groupSqlList) && !groupSqlList.isEmpty()) {
-            return GROUP_BY + groupSqlList.stream().collect(Collectors.joining(","));
+            return GROUP_BY + groupSqlList.stream().map(s -> "`".concat(s).concat("`")).collect(Collectors.joining(","));
         }
         return "";
     }
@@ -126,7 +124,7 @@ public class SearchBuilder {
      * 对比条件别名
      */
     private List<String> compareBuilder( SqlBuilder sqlbuilder ) {
-        return sqlbuilder.getCompareFieldAliasList();
+        return sqlbuilder.getCompareFieldList();
     }
 
     /**
@@ -144,8 +142,6 @@ public class SearchBuilder {
         StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
         //排序字段与升降序对应关系
         Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
-        //字段与别名对应关系
-        Map<String, String> fieldAndAliasMap = sqlbuilder.getFieldAndAliasMap();
 
         if (orderByMap != null && !orderByMap.isEmpty()) {
             for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
@@ -155,23 +151,22 @@ public class SearchBuilder {
                 } else {
                     sort = entry.getValue();
                 }
-                stringBuilder.append(entry.getKey()).append(" ").append(sort).append(dotStr);
+                stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(dotStr);
             }
         } else {
+            sort = Constant.SORT_DESC;
             //指标字段
             List<String> indexList = sqlbuilder.getIndexList();
-            String fieldName = "";
             String fieldAliasName = "";
 
             if (indexList != null && !indexList.isEmpty()) {
-                fieldName = indexList.get(0);
                 //字段别名
-                fieldAliasName = fieldAndAliasMap.get(fieldName);
+                fieldAliasName = indexList.get(0);
             }
             if (!Strings.isNullOrEmpty(fieldAliasName)) {
-                fieldName = fieldAliasName;
-                stringBuilder.append(fieldName).append(" ").append(sort).append(dotStr);
-                orderByAliasMap.put(fieldName, sort);
+
+                stringBuilder.append("`").append(fieldAliasName).append("` ").append(sort).append(dotStr);
+                orderByAliasMap.put(fieldAliasName, sort);
             }
         }
         if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
@@ -189,9 +184,8 @@ public class SearchBuilder {
         //指标项
         List<String> indexList = sqlbuilder.getIndexList();
         //字段与描述对应关系
-        Map<String, String> fieldAndDescMap = sqlbuilder.getFieldAndDescMap();
-        //字段与别名对应关系
-        Map<String, String> fieldAndAliasMap = sqlbuilder.getFieldAndAliasMap();
+        Map<String, String> fieldAndDescMap = sqlbuilder.getFieldAliasAndDescMap();
+
         //交叉表排序条件
         Map<String, String> crosstabMap = sqlbuilder.getCrosstabByMap();
 
@@ -209,23 +203,24 @@ public class SearchBuilder {
                         String firstField = fieldList.get(0);
                         fieldList.remove(firstField);
                         String field = fieldList.stream().collect(Collectors.joining(COMPARE_SPLIT_CHAR));
+                        //多个指标条件
                         if (indexSize > 1) {
-                            String fieldName = findKeyByValue(firstField, fieldAndDescMap);
-                            if (!Strings.isNullOrEmpty(fieldName)) {
-                                String fieldAlias = fieldAndAliasMap.get(fieldName);
+                            String fieldAlias = findKeyByValue(firstField, fieldAndDescMap);
+                            if (!Strings.isNullOrEmpty(fieldAlias)) {
                                 resultMap.put(field.concat("_").concat(fieldAlias), entry.getValue());
                             }
                         }
+                        //一个指标条件
                         if (indexSize == 1) {
                             resultMap.put(field, entry.getValue());
                         }
                     }
                 } else {
+                    //字段别名
                     String fieldName = findKeyByValue(key, fieldAndDescMap);
-                    resultMap.put(fieldAndAliasMap.get(fieldName), entry.getValue());
+                    resultMap.put(fieldName, entry.getValue());
                 }
             }
-
         }
         return resultMap;
     }
@@ -241,6 +236,8 @@ public class SearchBuilder {
         }
         return "";
     }
+
+
 
     /**
      * 自定义字段表达式
@@ -260,44 +257,25 @@ public class SearchBuilder {
      */
     public SparkSqlCondition toSparkSql( SqlBuilder sqlbuilder ) {
         SparkSqlCondition sparkSqlCondition = new SparkSqlCondition();
-        StringBuilder sqlBuilder = new StringBuilder();
-        //select
-        sqlBuilder.append(selectBuilder(sqlbuilder));
-        sqlBuilder.append(tableBuilder(sqlbuilder));
-        //where
-        String where = whereBuilder(sqlbuilder);
-        //group
-        String group = groupBuilder(sqlbuilder);
-        //compare
+        //对比条件
         List<String> compare = compareBuilder(sqlbuilder);
-        //order by
-        String orderBy = orderBuilder(sqlbuilder);
+
         //交叉表排序项
         Map<String, String> crosstabMap = crosstabOrderBuiler(sqlbuilder);
 
-        if (!Strings.isNullOrEmpty(where)) {
-            sqlBuilder.append(where);
-        }
-        if (!Strings.isNullOrEmpty(group)) {
-            sqlBuilder.append(group);
-        }
-        if (!Strings.isNullOrEmpty(orderBy)) {
-            sqlBuilder.append(orderBy);
-        }
-
-        if (compare != null && !compare.isEmpty()) {
-            sparkSqlCondition.setCompareList(compare);
-        }
+        //order by
+        String orderBy = orderBuilder(sqlbuilder);
 
         sparkSqlCondition.setIndexList(sqlbuilder.getIndexList());
         sparkSqlCondition.setSelectList(sqlbuilder.getSelectFieldAliasList());
-        sparkSqlCondition.setSelectSql(sqlBuilder.toString());
+        sparkSqlCondition.setSelectSql(toSql(sqlbuilder, SqlType.SQL_MAIN));
+        sparkSqlCondition.setSelectQoqSql(toSql(sqlbuilder, SqlType.SQL_QOQ));
         //spark配置信息
-        sparkSqlCondition.setSparkConfig(sqlbuilder.getSparkConfig());
+        sparkSqlCondition.setSparkConfig(sqlbuilder.getSparkConfigMap());
         //分组字段
         sparkSqlCondition.setGroupList(sqlbuilder.getGroupList());
-        sparkSqlCondition.setFieldAndDescMap(sqlbuilder.getFieldAndDescMap());
-        sparkSqlCondition.setFieldAndAliasMap(sqlbuilder.getFieldAndAliasMap());
+        sparkSqlCondition.setFieldAliasAndDescMap(sqlbuilder.getFieldAliasAndDescMap());
+
         sparkSqlCondition.setQueryType(sqlbuilder.getQueryType());
         sparkSqlCondition.setSparkAggMap(sqlbuilder.getSparkAggMap());
         sparkSqlCondition.setLimit(sqlbuilder.getLimit());
@@ -307,6 +285,55 @@ public class SearchBuilder {
         sparkSqlCondition.setFilterCustomFieldList(sqlbuilder.getFilterCustomFieldList());
         sparkSqlCondition.setDelFilterField(sqlbuilder.getDelFilterField());
         sparkSqlCondition.setFilterFormula(customFieldFilter(sqlbuilder));
+        sparkSqlCondition.setDataSourceType(sqlbuilder.getDataSourceType());
+        sparkSqlCondition.setKeyspace(sqlbuilder.getKeyspace());
+        sparkSqlCondition.setTable(sqlbuilder.getTable());
+        sparkSqlCondition.setPage(sqlbuilder.getPage());
+        sparkSqlCondition.setQoqList(sqlbuilder.getQoqList());
+        if (compare != null && !compare.isEmpty()) {
+            sparkSqlCondition.setCompareList(compare);
+        }
+//        if (Strings.isNullOrEmpty(where)) {
+//            sparkSqlCondition.setCassandraFilter("1=1");
+//
+//        } else {
+//            sparkSqlCondition.setCassandraFilter(where.replace(WHERE, ""));
+//        }
         return sparkSqlCondition;
+    }
+
+    private String toSql( SqlBuilder sqlbuilder, SqlType sqlType ) {
+        //主体SQL
+        StringBuilder sqlBuilder = new StringBuilder();
+        //select
+        String select = selectBuilder(sqlbuilder, sqlType);
+        if (Strings.isNullOrEmpty(select)) {
+            return select;
+        }
+        sqlBuilder.append(select);
+        sqlBuilder.append(tableBuilder(sqlbuilder));
+        //Where
+        String where = whereBuilder(sqlbuilder, sqlType);
+        //group
+        String group = groupBuilder(sqlbuilder,sqlType);
+
+        if (!Strings.isNullOrEmpty(where)) {
+            sqlBuilder.append(where);
+        }
+        if (!Strings.isNullOrEmpty(group)) {
+            sqlBuilder.append(group);
+        }
+        return sqlBuilder.toString();
+    }
+
+    private enum SqlType {
+        /**
+         * 主体SQL
+         */
+        SQL_MAIN,
+        /**
+         * 同环比SQL
+         */
+        SQL_QOQ
     }
 }
