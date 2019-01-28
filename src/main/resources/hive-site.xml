@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?xml-stylesheet type="text/xsl" href="configuration.xsl"?><!--
    Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
+/   contributor license agreements.  See the NOTICE file distributed with
    this work for additional information regarding copyright ownership.
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
@@ -16,6 +16,58 @@
    limitations under the License.
 -->
 <configuration>
+
+<property>
+   <name>fs.defaultFS</name>
+   <value>hdfs://ns1/</value>
+</property>
+<!--
+
+<property>
+   <name>fs.defaultFS</name>
+   <value>alluxio://hadoop-master:19998</value>
+</property>
+-->
+ <property>
+    <name>alluxio.zookeeper.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>alluxio.zookeeper.address</name>
+    <value>192.168.12.201:2181,192.168.12.203:2181,192.168.12.204:2181</value>
+  </property>
+  <property>
+    <name>alluxio.user.file.writetype.default</name>
+    <value>CACHE_THROUGH</value>
+ </property>
+
+<!--<property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://ns1/</value>
+    </property>-->
+
+ <property>
+      <name>hive.metastore.local</name>
+      <value>false</value>
+  </property>
+  <property>
+      <name>hive.metastore.uris</name>
+      <value>thrift://hadoop-slave4:9083</value>
+    </property>
+
+ <property>
+      <name>spark.executor.instances</name>
+      <value>5</value>
+    </property>
+  <property>
+      <name>hive.exec.dynamic.partition.mode</name>
+      <value>nonstrict</value>
+    </property>
+  <property>
+      <name>hive.exec.dynamic.partition</name>
+      <value>true</value>
+    </property>
+
 <!--
   <property>
     <name>spark.dynamicAllocation.executorIdleTimeout</name>
@@ -302,7 +354,7 @@
     <description>Maximum number of dynamic partitions allowed to be created in total.</description>
   </property>
   <property>
-    <name>hive.exec.max.dynamic.partitions.pernode</name>
+    <name>hive.exec.max.dynamic.partitions.pernode</name>i
     <value>1000000</value>
     <description>Maximum number of dynamic partitions allowed to be created in each mapper/reducer node.</description>
   </property>
@@ -408,11 +460,13 @@
     <value>/user/hive/warehouse</value>
     <description>location of default database for the warehouse</description>
   </property>
+<!--
   <property>
     <name>hive.metastore.uris</name>
-    <value/>
+    <value>thrift://192.168.12.201:9083</value>
     <description>Thrift URI for the remote metastore. Used by metastore client to connect to remote metastore.</description>
   </property>
+-->
   <property>
     <name>hive.metastore.client.capability.check</name>
     <value>true</value>
@@ -420,7 +474,7 @@
   </property>
   <property>
     <name>hive.metastore.fastpath</name>
-    <value>true</value>
+    <value>false</value>
     <description>Used to avoid all of the proxies and object copies in the metastore.  Note, if this is set, you MUST use a local metastore (hive.metastore.uris must be empty) otherwise undefined and most likely undesired behavior will result</description>
   </property>
   <property>
@@ -780,7 +834,7 @@
   </property>
   <property>
     <name>datanucleus.schema.autoCreateAll</name>
-    <value>false</value>
+    <value>true</value>
     <description>Auto creates necessary schema on a startup if one doesn't exist. Set this to false, after creating it once.To enable auto create also set hive.metastore.schema.verification=false. Auto creation is not recommended for production use cases, run schematool command instead.</description>
   </property>
   <property>
@@ -3011,7 +3065,10 @@
       transactions, see hive.txn.manager.
     </description>
   </property>
- 
+  <property>
+    <name>hive.enforce.bucketing</name>
+    <value>true</value>
+  </property>
   <property>
     <name>hive.compactor.worker.threads</name>
     <value>1</value>
@@ -3507,7 +3564,7 @@
   </property>
   <property>
     <name>hive.security.authorization.sqlstd.confwhitelist.append</name>
-    <value>spark.*|mapred.*|parquet.*</value>
+    <value>spark.*</value>
     <description>
       List of comma separated Java regexes, to be appended to list set in
       hive.security.authorization.sqlstd.confwhitelist. Using this list instead
@@ -3734,7 +3791,7 @@
   </property>
   <property>
     <name>hive.warehouse.subdir.inherit.perms</name>
-    <value>true</value>
+    <value>false</value>
     <description>
       Set this to false if the table directories should be created
       with the permissions derived from dfs umask instead of
@@ -4113,15 +4170,9 @@
   </property>
   <property>
     <name>hive.server2.thrift.port</name>
-    <value>10000</value>
+    <value>10100</value>
     <description>Port number of HiveServer2 Thrift interface when hive.server2.transport.mode is 'binary'.</description>
   </property>
-<property>
-    <name>hive.server2.thrift.host</name>
-    <value>192.168.12.201</value>
-    <description>Port number of HiveServer2 Thrift interface when hive.server2.transport.mode is 'binary'.</description>
-  </property>
-
   <property>
     <name>hive.server2.thrift.sasl.qop</name>
     <value>auth</value>
@@ -4668,7 +4719,7 @@
   </property>
   <property>
     <name>hive.execution.engine</name>
-    <value>mr</value>
+    <value>spark</value>
     <description>
       Expects one of [mr, tez, spark].
       Chooses execution engine. Options are: mr (Map reduce, default), tez, spark. While MR
@@ -4676,6 +4727,10 @@
       and is deprecated in Hive 2 line. It may be removed without further warning.
     </description>
   </property>
+<property>
+    <name>hive.enable.spark.execution.engine</name>
+    <value>true</value>
+</property>
 <!--sparkcontext -->
 <property>
     <name>spark.master</name>
@@ -4687,7 +4742,7 @@
     </property>
 <property>
         <name>spark.home</name>
-        <value>/data/spark-2.3.0-bin-hadoop2.7</value>
+        <value>/data/spark-2.2.1-bin-hadoop2.7</value>
     </property>
 <property>
     <name>spark.serializer</name>
@@ -4707,7 +4762,7 @@
 </property>
 <property>
   <name>spark.default.parallelism</name>
-  <value>500</value>
+  <value>4</value>
 </property>
 <property>
   <name>spark.driver.memory</name>
@@ -4719,7 +4774,7 @@
 </property>
 <property>
   <name>spark.yarn.jars</name>
-  <value>hdfs://hadoop-master:9000/spark_jars/*</value>
+  <value>hdfs://ns1/spark_jars/*</value>
 </property>
 <property>
   <name>spark.eventLog.enabled</name>
@@ -4727,11 +4782,11 @@
 </property>
 <property>
   <name>spark.eventLog.dir</name>
-  <value>hdfs://hadoop-master:9000/spark/logs</value>
+  <value>hdfs://ns1/spark/logs</value>
 </property>
 <property>
   <name>spark.yarn.historyServer.address</name>
-  <value>http://hadoop-master:18080</value>
+  <value>http://hadoop-slave5:18080</value>
 </property>
 <property>
   <name>spark.history.ui.port</name>
@@ -4739,7 +4794,7 @@
 </property>
 <property>
   <name>spark.history.fs.logDirectory</name>
-  <value>hdfs://hadoop-master:9000/spark/logs</value>
+  <value>hdfs://ns1/spark/logs</value>
 </property>
 <!--spark-default.conf -->
 

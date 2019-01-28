@@ -7,10 +7,9 @@ import java.util.Objects
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
-import com.lkf.demo.{ResponseResult, XAxis, YAxis}
-import org.apache.livy.client.ext.model.v1.Constant.PIVOT_ALIAS
+import com.lkf.demo.YAxis
+import org.apache.livy.client.ext.model.Constant.PIVOT_ALIAS
 import org.apache.livy.client.ext.model._
-import org.apache.livy.client.ext.model.v1.{Constant, QoqDTO, SparkSqlBuild, SparkSqlCondition}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.hive.HiveContext
@@ -44,7 +43,7 @@ object SQLExtInterpreter3 {
 
     System.setProperty("hadoop.home.dir", "D:\\Java\\hadoop-3.0")
     //同环比
-    val param = "{\"compareCondition\":[{\"aliasName\":\"集团名称\",\"dataType\":\"str\",\"fieldDescription\":\"集团名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000825\",\"fieldName\":\"group_name\",\"isBuildAggregated\":0,\"udfType\":0,\"uniqId\":\"1535362247000\"}],\"dataSourceType\":0,\"dbName\":\"cy7_2\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000824\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"udfType\":0,\"uniqId\":\"1535099588000\"}],\"filterCondition\":[{\"dataType\":\"str\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"udfType\":0}],\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"就餐人数(求和)\",\"dataType\":\"int\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140417000705\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1535081456000\"}],\"limit\":1000,\"page\":0,\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"180824113248004200\",\"sessionId\":\"3\",\"sortCondition\":[],\"sparkConfig\":{\"spark.executor.memory\":\"7273m\",\"spark.driver.memory\":\"7273m\",\"spark.driver.cores\":\"2\",\"spark.cassandra.connection.host\":\"192.168.12.33,192.168.12.203,192.168.12.204\",\"spark.custom.coalesce\":\"4\",\"spark.executor.cores\":\"2\",\"spark.sql.shuffle.partitions\":\"5\",\"spark.cassandra.connection.port\":\"9042\",\"spark.default.parallelism\":\"8\",\"spark.scheduler.mode\":\"FAIR\",\"spark.executor.instances\":\"3\"},\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group\",\"tracId\":\"1535362248000\"}"
+    val param = "{\"compareCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000824\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"udfType\":0,\"uniqId\":\"1535529064000\"}],\"dataSourceType\":0,\"dbName\":\"cy7_2\",\"dimensionCondition\":[{\"aliasName\":\"地址\",\"dataType\":\"str\",\"fieldDescription\":\"地址\",\"fieldGroup\":0,\"fieldId\":\"180620140418000833\",\"fieldName\":\"address\",\"isBuildAggregated\":0,\"udfType\":0,\"uniqId\":\"1535529489000\"}],\"filterCondition\":[{\"dataType\":\"str\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"udfType\":0}],\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"就餐人数(求和)\",\"dataType\":\"int\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140417000705\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1535081456000\"}],\"limit\":10,\"page\":0,\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"180824113248004200\",\"sessionId\":\"3\",\"sortCondition\":[{\"dataType\":\"int\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140417000705\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"sortFlag\":\"desc\",\"sortType\":0,\"udfType\":0}],\"sparkConfig\":{\"spark.executor.memory\":\"7273m\",\"spark.driver.memory\":\"7273m\",\"spark.driver.cores\":\"2\",\"spark.cassandra.connection.host\":\"192.168.12.33,192.168.12.203,192.168.12.204\",\"spark.custom.coalesce\":\"4\",\"spark.executor.cores\":\"2\",\"spark.sql.shuffle.partitions\":\"5\",\"spark.cassandra.connection.port\":\"9042\",\"spark.default.parallelism\":\"8\",\"spark.scheduler.mode\":\"FAIR\",\"spark.executor.instances\":\"3\"},\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group\",\"tracId\":\"1535529699000\"}"
 
     try {
       //组装spark sql
@@ -62,7 +61,7 @@ object SQLExtInterpreter3 {
 
       //同环比
       df = handleQoqSql(df, sparkSqlCondition, spark)
-      df.show()
+
       //自定义字段作为筛选项处理
       df = handleCustomField(df, sparkSqlCondition)
 
@@ -79,8 +78,7 @@ object SQLExtInterpreter3 {
       df = handleLimitResult(df, sparkSqlCondition)
       df.show()
       // 结果集解析
-      val result: ResponseResult = parseResult(df, sparkSqlCondition, totalNum)
-
+      //      val result: ResponseResult = parseResult(df, sparkSqlCondition, totalNum)
 
       //      import org.json4s._
       //      import org.json4s.JsonDSL._
@@ -315,83 +313,6 @@ object SQLExtInterpreter3 {
     orderColumnList
   }
 
-  //结果解析
-  private[this] def parseResult(result: DataFrame, sparkSqlCondition: SparkSqlCondition, totalNum: Long): ResponseResult = {
-    //分组项
-    val groupList: List[String] = if (sparkSqlCondition.getGroupList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getGroupList).toList else Nil
-
-    //指标项
-    val indexList: List[String] = if (sparkSqlCondition.getIndexList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getIndexList).toList else Nil
-
-    //对比项
-    val compareList: List[String] = if (sparkSqlCondition.getCompareList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getCompareList).toList else Nil
-
-    //查询项字段与中文名对应关系
-    val fieldMap: util.Map[String, String] = sparkSqlCondition.getFieldAndDescMap
-
-    //结果标题
-    val arrayNames = result.columns
-    logger.info(s"【SQLExtInterpreter-日志】-【parseResult】-列名: ${objectToJson(arrayNames)}")
-
-    if (sparkSqlCondition.getLimit > 0) {
-      defaultLimit = sparkSqlCondition.getLimit
-    }
-    //结果数据
-    val rows = result.take(defaultLimit)
-
-    //x轴数据集
-    var xAxisList: List[XAxis] = List()
-
-    //y轴数据集
-    var yAxisList: List[YAxis] = List()
-
-    //龙决策首字母使用&隔开作为分隔符
-    val splitDot = "L&J&C"
-    for (nameIndex <- arrayNames.indices) {
-      var stringBuilder = new StringBuilder
-      for (row <- rows.indices) {
-        val rowArray = rows.apply(row)
-        if (rowArray.apply(nameIndex) == null) {
-          stringBuilder ++= "null".concat(splitDot)
-        }
-        else {
-          stringBuilder ++= rowArray.apply(nameIndex).toString.concat(splitDot)
-        }
-      }
-      var data: List[String] = Nil
-      if (stringBuilder.nonEmpty) {
-        data = stringBuilder.substring(0, stringBuilder.length - splitDot.length).split(splitDot).toList
-      }
-      //数据集列名
-      val columnName = arrayNames.apply(nameIndex)
-      if (groupList != null && groupList.nonEmpty && groupList.contains(columnName)) {
-        val xAxis: XAxis = new XAxis
-        //列名的中文名称
-        val key = parseCompareTitle(columnName, indexList, fieldMap, true, compareList)
-        xAxis.name = key
-        xAxis.data = formatDouble(data, "x", sparkSqlCondition.getQueryType)
-        val temp = xAxisList :+ xAxis
-        xAxisList = temp
-      }
-      else if (indexList.nonEmpty) {
-        //列名的中文名称
-        val key = parseCompareTitle(columnName, indexList, fieldMap, false, compareList)
-        val yAxis: YAxis = new YAxis
-        yAxis.name = key
-        yAxis.data = formatDouble(data, "y", sparkSqlCondition.getQueryType)
-        val temp = yAxisList :+ yAxis
-        yAxisList = temp
-      }
-    }
-    //对比结果分组
-    val yAxisValues = parseCompareTitleGroup(yAxisList, fieldMap.values(), sparkSqlCondition)
-    val response = new ResponseResult
-    response.setXAxis(xAxisList).setYAxis(yAxisValues).setTotal(totalNum)
-    logger.debug(s"【SQLExtInterpreter-日志】-【parseResult】-xAxisList结果: ${objectToJson(xAxisList)}")
-    logger.debug(s"【SQLExtInterpreter-日志】-【parseResult】-yAxisList结果: ${objectToJson(yAxisValues)}")
-    logger.debug(s"【SQLExtInterpreter-日志】-【parseResult】-response结果: ${objectToJson(response)}")
-    response
-  }
 
   /**
     * 结果集分页
@@ -514,9 +435,11 @@ object SQLExtInterpreter3 {
     df1 = combineCompareColumn(df1, sparkSqlCondition)
     //对比列的值
     compareValues = df1.coalesce(1).select(pivotsAlias).distinct().limit(compareLimit).rdd.map(r => r.get(0).toString).collect().toList
+    logger.info(s"【SQLExtInterpreter-日志】-【sparkSqlPivot】-对比列的值: ${objectToJson(compareValues)}")
+
     //对比列为数字时，保留两位小数
     compareValues = formatDouble(compareValues, "z", sparkSqlCondition.getQueryType)
-    logger.debug(s"【SQLExtInterpreter-日志】-【sparkSqlPivot】-对比列的值：${objectToJson(compareValues)}")
+    logger.info(s"【SQLExtInterpreter-日志】-【sparkSqlPivot】-对比列的值：${objectToJson(compareValues)}")
     //聚合字段
     val aggList: List[Column] = sparkAgg(sparkAggMap)
     if (aggList != null && aggList.nonEmpty) {

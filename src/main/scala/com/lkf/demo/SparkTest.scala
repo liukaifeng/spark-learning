@@ -106,8 +106,8 @@ object TestMap {
 
 object TestStringSort {
   def main(args: Array[String]): Unit = {
-    println(sys.env("SPARK_HOME"))
-    println(System.getenv("SPARK_HOME"))
+    val letters = List('a','b','c','d','e')
+    println(letters.slice(1,5))
 
   }
 }

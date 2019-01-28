@@ -42,6 +42,7 @@ public class TestDemo {
     }
 
     public static void main( String[] args ) {
+        System.out.println(Long.MIN_VALUE);
 //        System.out.println("COUNT_BITS = Integer.SIZE - 3值:" + COUNT_BITS);
 //        System.out.println("CAPACITY = (1 << COUNT_BITS) - 1值:" + CAPACITY);
 //        System.out.println("RUNNING = -1 << COUNT_BITS:" + RUNNING);
@@ -50,29 +51,29 @@ public class TestDemo {
 //        System.out.println("TIDYING = 2 << COUNT_BITS值 :" + TIDYING);
 //        System.out.println("TERMINATED = 3 << COUNT_BITS :" + TERMINATED);
 
-        String key="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ5awIIe+3e1y1Q5l1MZUT5HcawcbO9XcenEcwDKCp0K6bEyTks0bUxKYKvyxCTld++yaTywtZ8zRr9ICph0yQDiNya9dIzQuuDSvOF4gWvJLqfGba48+ODebxTkM5TfrBfDyj1NfH1xc/GFzYV5+wETSfLPLFfzj/Ff8n16nR/QIDAQAB";
-
-        String data="XH1mt+A4LGc0LmOlxnOVdT5zTBFSBOtGGi48s4bmvCc0DtAkOj6x2taDxIQeQIZGcY4pVH7Pp01Gi6pIS8Wiyfo+NT5wuWxgk5WpNR7kzehdxJb5CKtaQaUaIbThpN8Lre+za04l8QV1Cjw/DXMGkzlD+YIc4hrJsXG3zHkReHo=";
-        try {
-            Map<String, Object> dataMap;
-            data = RSAUtils.decryptByPublicKey(data, key);
-            dataMap = (Map) JsonUtils.getInstance().getDTO(data, Map.class);
-            System.out.println(dataMap);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        String key="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZ5awIIe+3e1y1Q5l1MZUT5HcawcbO9XcenEcwDKCp0K6bEyTks0bUxKYKvyxCTld++yaTywtZ8zRr9ICph0yQDiNya9dIzQuuDSvOF4gWvJLqfGba48+ODebxTkM5TfrBfDyj1NfH1xc/GFzYV5+wETSfLPLFfzj/Ff8n16nR/QIDAQAB";
+//
+//        String data="XH1mt+A4LGc0LmOlxnOVdT5zTBFSBOtGGi48s4bmvCc0DtAkOj6x2taDxIQeQIZGcY4pVH7Pp01Gi6pIS8Wiyfo+NT5wuWxgk5WpNR7kzehdxJb5CKtaQaUaIbThpN8Lre+za04l8QV1Cjw/DXMGkzlD+YIc4hrJsXG3zHkReHo=";
+//        try {
+//            Map<String, Object> dataMap;
+//            data = RSAUtils.decryptByPublicKey(data, key);
+//            dataMap = (Map) JsonUtils.getInstance().getDTO(data, Map.class);
+//            System.out.println(dataMap);
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (InvalidKeySpecException e) {
+//            e.printStackTrace();
+//        } catch (NoSuchPaddingException e) {
+//            e.printStackTrace();
+//        } catch (InvalidKeyException e) {
+//            e.printStackTrace();
+//        } catch (IllegalBlockSizeException e) {
+//            e.printStackTrace();
+//        } catch (BadPaddingException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }
