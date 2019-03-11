@@ -142,6 +142,7 @@ public class SearchBuilder {
         String dotStr = ",";
         //默认升序
         String sort = Constant.SORT_ASC;
+
         //sql 排序语句拼接
         StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
         //排序字段与升降序对应关系
@@ -336,6 +337,18 @@ public class SearchBuilder {
         } else {
             sparkSqlCondition.setCassandraFilter("1=1");
         }
+        //交叉表排序条件非空，但是无对比项的情况，需要二次计算
+        boolean crossOrderByNonNull = Objects.nonNull(sparkSqlCondition.getCrosstabByMap()) && sparkSqlCondition.getCrosstabByMap().size() > 0;
+        boolean compareIsNull = Objects.isNull(sparkSqlCondition.getCompareList()) || sparkSqlCondition.getCompareList().size() <= 0;
+        //同环比条件非空
+        boolean qoqNonNull = sparkSqlCondition.getQoqList() != null && sparkSqlCondition.getQoqList().size() > 0;
+        //自定义字段作为筛选项
+        boolean customFieldNonNull = Objects.nonNull(sparkSqlCondition.getFilterCustomFieldList()) && sparkSqlCondition.getFilterCustomFieldList().size() > 0;
+        //对比条件非空
+        boolean compareNonNull = Objects.nonNull(sparkSqlCondition.getCompareList()) && sparkSqlCondition.getCompareList().size() > 0;
+        if ((crossOrderByNonNull && compareIsNull) || qoqNonNull || customFieldNonNull || compareNonNull) {
+            sparkSqlCondition.setSecondaryFlag(true);
+        }
         return sparkSqlCondition;
     }
 
@@ -407,6 +420,12 @@ public class SearchBuilder {
         //筛选项查询条数限制
         if (sqlbuilder.isFliterItem()) {
             limit = Constant.FILTER_ITEM_LIMIE;
+        }
+        //数据导出条数限制,请求条数小于等于0或大于10000条时，限制条数10000条
+        if (sqlbuilder.getQueryType() == 2) {
+            if (sqlbuilder.getLimit() <= 0 || sqlbuilder.getLimit() > Constant.EXPORT_LIMIE || sqlbuilder.getLimit() == 1500) {
+                limit = Constant.EXPORT_LIMIE;
+            }
         }
         if (!compareFlag) {
             sqlbuilder.setLimit(Math.toIntExact(limit));

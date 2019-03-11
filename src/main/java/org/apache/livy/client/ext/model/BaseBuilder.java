@@ -29,6 +29,7 @@ public class BaseBuilder {
      * 查询类型
      * 0-默认值（普通查询）
      * 1-筛选项数据查询
+     * 2-导出数据查询
      */
     private int queryType;
     /**
@@ -96,10 +97,29 @@ public class BaseBuilder {
      * */
     private Map<String, String> hiveJdbcConfig;
 
+
+    /**
+     * 是否需要二次计算标识
+     */
+    private Boolean secondaryFlag = false;
+
     /**
      * 是否有维度条件
      */
-    private Boolean dimensionIsEmpty=true;
+    private Boolean dimensionIsEmpty = true;
+
+    public void setLimit( Integer limit ) {
+        this.limit = limit;
+    }
+
+    public Boolean getSecondaryFlag() {
+        return secondaryFlag;
+    }
+
+    public void setSecondaryFlag( Boolean secondaryFlag ) {
+        this.secondaryFlag = secondaryFlag;
+    }
+
 
     public String getTable() {
         return table;

@@ -23,7 +23,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.beanutils.BeanUtils;
 
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -316,9 +315,9 @@ public class SqlBuilder extends BaseBuilder {
      * @date 2019/1/21 10:42
      */
     private SelectOptionDTO convert2SelectOptionDTO( BaseConditionBean baseConditionBean ) {
-        SelectOptionDTO selectOptionDTO=new SelectOptionDTO();
+        SelectOptionDTO selectOptionDTO = new SelectOptionDTO();
         try {
-            BeanUtils.copyProperties(selectOptionDTO,baseConditionBean);
+            BeanUtils.copyProperties(selectOptionDTO, baseConditionBean);
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
@@ -359,7 +358,7 @@ public class SqlBuilder extends BaseBuilder {
             //求和
             aggregatorType = aggregatorType.toLowerCase();
             if (FUNC_SUM.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
 
                 if (containAggFunc(formula, customAggFlag)) {
                     sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
@@ -369,7 +368,7 @@ public class SqlBuilder extends BaseBuilder {
             }
             //求数量
             if (FUNC_COUNT.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 if (containAggFunc(formula, customAggFlag)) {
                     sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
                 } else {
@@ -378,7 +377,7 @@ public class SqlBuilder extends BaseBuilder {
             }
             //求平均值
             if (FUNC_AVG.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 if (containAggFunc(formula, customAggFlag)) {
                     sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
                 } else {
@@ -387,7 +386,7 @@ public class SqlBuilder extends BaseBuilder {
             }
             //去重计数
             if (FUNC_DISTINCT_COUNT.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 if (containAggFunc(formula, customAggFlag)) {
                     sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
                 } else {
@@ -396,16 +395,14 @@ public class SqlBuilder extends BaseBuilder {
             }
             //对比字段
             if (FUNC_COMPARE.getCode().equals(aggregatorType)) {
-                fieldName = dateFieldFormat(fieldName, targetDataType, selectOptionDTO.getGranularity());
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 sqlExpression = String.format(" cast(%s as String) as `%s` ", fieldName, fieldAliasName);
                 compareFieldList.add(fieldAliasName);
                 selectQoqCondition.append(sqlExpression);
             }
             //维度字段
             if (FUNC_GROUP.getCode().equals(aggregatorType)) {
-                fieldName = dateFieldFormat(fieldName, targetDataType, selectOptionDTO.getGranularity());
-                fieldName = customField(fieldName, formula, customAggFlag);
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 //数字类型做维度条件，将其转换为字符串类型
                 if (originDataType.equals(DECIMAL_TYPE.getType())) {
                     fieldName = String.format(" cast(%s as String)", fieldName);
@@ -418,10 +415,16 @@ public class SqlBuilder extends BaseBuilder {
             if (Objects.equals(targetDataType, DATETIME_TYPE.getType())) {
                 sqlExpression = String.format(" from_timestamp(%s,'yyyy-MM-dd') as `%s`", fieldName, fieldAliasName);
             } else {
-                fieldName = customField(fieldName, formula, customAggFlag);
-                //筛选值查询去重
+                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
+                //筛选值查询去重并做空值过滤
                 if (selectOptionDTO.getQueryType() == 1) {
                     sqlExpression = String.format(" DISTINCT(%s) as `%s`", fieldName, fieldAliasName);
+                    if (customAggFlag > 0) {
+                        whereSqlList.add(String.format(" %s is not null", formula));
+                    } else {
+                        whereSqlList.add(String.format(" %s is not null", fieldName));
+                    }
+
                 } else {
                     sqlExpression = String.format(" %s as `%s`", fieldName, fieldAliasName);
                 }
@@ -443,7 +446,6 @@ public class SqlBuilder extends BaseBuilder {
         return fieldAliasName;
     }
 
-
     /**
      * 收集字段与数据类型关系
      *
@@ -464,10 +466,23 @@ public class SqlBuilder extends BaseBuilder {
      * @param formula       表达式
      * @param customAggFlag 自定义组合字段标识
      */
-    private String customField( String fieldName, String formula, int customAggFlag ) {
-        //自定义字段
-        if (customAggFlag != 0) {
+    private String customField( String fieldName, String formula, int customAggFlag, String granularity, String targetDataType ) {
+        if (customAggFlag == 0) {
+            if (!Strings.isNullOrEmpty(targetDataType) && Objects.equals(targetDataType, DATETIME_TYPE.getType())) {
+                fieldName = getDateFormula(granularity, fieldName);
+            }
+        }
+        //自定义组合字段
+        if (customAggFlag == 1) {
             fieldName = formula;
+        }
+        //对自定义日期计算字段和普通字段，按照指定格式进行格式化
+        if (customAggFlag == 2) {
+            if (!Strings.isNullOrEmpty(targetDataType) && Objects.equals(targetDataType, DATETIME_TYPE.getType())) {
+                fieldName = getDateFormula(granularity, formula);
+            } else {
+                fieldName = formula;
+            }
         }
         return fieldName;
     }
@@ -541,7 +556,8 @@ public class SqlBuilder extends BaseBuilder {
         String aggregator = filterCondition.getAggregator();
         //筛选值数量
         int valuesSize = Objects.isNull(filterCondition.getFieldValue()) ? 0 : filterCondition.getFieldValue().size();
-
+        //是否是自定义表达式
+        boolean isAgg = filterCondition.getIsBuildAggregated() > 0;
         //字符串
         if (Objects.equals(dataType, STRING_TYPE.getType())) {
             //算子为空，单个值用等于(=)，多个值用包含（in）
@@ -570,13 +586,11 @@ public class SqlBuilder extends BaseBuilder {
         }
         //日期类型
         if (Objects.equals(dataType, DATETIME_TYPE.getType())) {
-            //日期格式
-            String dateFormat = DATE_TYPE_FORMAT_MAP.get(granularity);
             //将时间戳解析为对应的时间格式
             List<String> times = timeConvert(values, granularity);
             int timesSize = times.size();
             //日期字段格式化表达式
-            String dateExpression = String.format("from_timestamp(`%s`,'%s')", fieldName, dateFormat);
+            String dateExpression;
             //等于表达式
             String equalExpression = " %s ='%s'";
             //范围前包括表达式
@@ -584,13 +598,9 @@ public class SqlBuilder extends BaseBuilder {
             //范围后表达式
             String backExpression = " and %s <'%s'";
 
-            //如果是每周的话，使用dayofweek表达式
+            dateExpression = getDateFormula(granularity, fieldName);
+            //按每周n筛选，表达式的类型是整形
             if (Objects.equals(granularity, DateType.DATE_EVERY_WEEK.getCode())) {
-                dateExpression = String.format("IF(\n" +
-                        "    DAYOFWEEK(%s) = 1,\n" +
-                        "    DAYOFWEEK(%s) + 6,\n" +
-                        "    DAYOFWEEK(%s) - 1\n" +
-                        "  )", fieldName, fieldName, fieldName);
                 //等于表达式
                 equalExpression = " %s=%s";
                 //范围前包括表达式
@@ -609,10 +619,13 @@ public class SqlBuilder extends BaseBuilder {
                 }
             }
         }
-        if ((Objects.equals(dataType, DECIMAL_TYPE.getType()) ||
-                Objects.equals(dataType, INT_TYPE.getType())) &&
-                Objects.nonNull(values) && (values.size() > 0)) {
-            if (!fieldName.toUpperCase().equals("GROUP_CODE")) {
+        //数字类型
+        boolean isNumber = (Objects.equals(dataType, DECIMAL_TYPE.getType()) || Objects.equals(dataType, INT_TYPE.getType()));
+        //值不为空
+        boolean valueNotEmpty = Objects.nonNull(values) && values.size() > 0;
+
+        if (isNumber && valueNotEmpty) {
+            if (!"GROUP_CODE".equals(fieldName.toUpperCase())) {
                 fieldName = String.format("CAST(%s AS DOUBLE)", fieldName);
             }
             //字段类型为数字,算子为空,默认使用范围条件或等于条件
@@ -833,7 +846,7 @@ public class SqlBuilder extends BaseBuilder {
 
                     if (!DATE_WEEK.getCode().equals(qoq.getGranularity())) {
                         //对应日期格式化
-                        qoqFieldName = dateFieldFormat(qoqFieldName, DATETIME_TYPE.getType(), qoq.getGranularity());
+                        qoqFieldName = getDateFormula(qoq.getGranularity(), qoqFieldName);
                         //添加到查询项
                         selectQoqSqlList.add(String.format(" %s as `%s` ", qoqFieldName, qoqFieldAliasName));
                         //添加到where条件中
@@ -962,34 +975,11 @@ public class SqlBuilder extends BaseBuilder {
         }
     }
 
-    /**
-     * 日期类型字段转换成相应的表达式
-     *
-     * @param fieldName     字段名
-     * @param fieldDataType 字段类型
-     * @param granularity   日期粒度（日周月年）
-     */
-    private String dateFieldFormat( String fieldName, String fieldDataType, String granularity ) {
-        String dateFieldFormula = fieldName;
-        if (!Strings.isNullOrEmpty(fieldDataType) && fieldDataType.equals(DATETIME_TYPE.getType())) {
-            String dateFormat = getDateFormat(granularity);
-            if (!Strings.isNullOrEmpty(dateFormat)) {
-                dateFieldFormula = String.format("from_timestamp(`%s`,'%s')", fieldName, dateFormat);
-            }
-            if (DATE_WEEK.getCode().equals(granularity)) {
-                dateFieldFormula = weekFormula.replace("%s", fieldName);
-            }
-            if (DATE_SEASON.getCode().equals(granularity)) {
-                dateFieldFormula = seasonFormula.replace("%s", fieldName);
-            }
-        }
-        return dateFieldFormula;
-    }
 
     /**
      * 获取日期格式
      *
-     * @param granularity 日期粒度
+     * @param granularity 日期精度
      */
     private String getDateFormat( String granularity ) {
         String dateFormat = DATE_TYPE_FORMAT_MAP.get(granularity);
@@ -1002,6 +992,39 @@ public class SqlBuilder extends BaseBuilder {
 
 
     /**
+     * 获取日期表达式
+     *
+     * @param granularity 日期精度
+     * @param fieldName   字段名
+     * @return java.lang.String 返回日期表达式
+     * @author 刘凯峰
+     * @date 2019/2/28 16:57
+     */
+    private String getDateFormula( String granularity, String fieldName ) {
+        String dateFormula = fieldName;
+        String dateFormat = getDateFormat(granularity);
+        if (!Strings.isNullOrEmpty(fieldName)) {
+            if (!Strings.isNullOrEmpty(dateFormat)) {
+                dateFormula = String.format("from_timestamp(%s,'%s')", fieldName, dateFormat);
+            }
+            //按周的维度进行筛选，使用dayofweek表达式，筛选值需要转换才能使用
+            if (Objects.equals(granularity, DATE_WEEK.getCode()) || Objects.equals(granularity, DateType.DATE_MAP_WEEK.getCode())) {
+                dateFormula = weekFormula2.replace("%s", fieldName);
+            }
+            //按季度的维度进行筛选，使用dayofweek表达式，筛选值需要转换才能使用
+            if (Objects.equals(granularity, DATE_SEASON.getCode()) || Objects.equals(granularity, DateType.DATE_MAP_SEASON.getCode())) {
+                dateFormula = seasonFormula3.replace("%s", fieldName);
+            }
+            //按每周n筛选，使用everyWeekFormula 表达式
+            if (Objects.equals(granularity, DateType.DATE_EVERY_WEEK.getCode())) {
+                dateFormula = everyWeekFormula.replace("%s", fieldName);
+            }
+        }
+        return dateFormula;
+    }
+
+
+    /**
      * 根据日周月年对时间做不同处理
      */
     private List<String> timeConvert( List<String> values, String granularity ) {
@@ -1009,9 +1032,10 @@ public class SqlBuilder extends BaseBuilder {
         if (Strings.isNullOrEmpty(granularity)) {
             return timeConvertResult;
         }
-        boolean isMatch = compile("^every_").matcher(granularity.toLowerCase()).find();
+        //每周或月或年等匹配
+        boolean everyIsMatch = compile("^every_").matcher(granularity.toLowerCase()).find();
         //以every_开头的标识不做日期转换
-        if (isMatch) {
+        if (everyIsMatch) {
             return values;
         }
         String dateFormat = getDateFormat(granularity);
@@ -1020,7 +1044,12 @@ public class SqlBuilder extends BaseBuilder {
                 if (!Strings.isNullOrEmpty(value)) {
                     if (!Strings.isNullOrEmpty(dateFormat)) {
                         String time = DateUtils.convertTimeToString(value, dateFormat);
-                        timeConvertResult.add(time);
+                        //如果格式化后的日期为1970，则使用格式化前的值
+                        if (!time.equals(DateUtils.DEFAULT_TIME)) {
+                            timeConvertResult.add(time);
+                        } else {
+                            timeConvertResult.add(value);
+                        }
                     } else {
                         timeConvertResult.add(value);
                     }

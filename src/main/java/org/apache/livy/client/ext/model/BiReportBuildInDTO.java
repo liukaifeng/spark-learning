@@ -68,6 +68,7 @@ public class BiReportBuildInDTO {
      * 查询类型
      * 0-默认值（普通查询）
      * 1-筛选项数据查询
+     * 2-导出数据查询
      */
     private Integer queryType;
 
@@ -75,6 +76,11 @@ public class BiReportBuildInDTO {
      * 数据源类型(0-默认；1-cassandra)
      */
     private Integer dataSourceType;
+
+    /**
+     * sql 语句
+     */
+    private String sql;
 
     /**
      * 过滤条件

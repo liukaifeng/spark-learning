@@ -39,6 +39,12 @@ public class Constant {
      * 默认返回结果集条数
      */
     public static Long DEFAULT_LIMIE = 1500L;
+
+    /**
+     * 导出数据条数限制
+     */
+    public static int EXPORT_LIMIE = 10000;
+
     /**
      * 筛选项条数限制
      */
@@ -55,7 +61,7 @@ public class Constant {
     /**
      * 用户自定义函数集合
      */
-    public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newLinkedHashMap();
+    public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newHashMap();
     /**
      * 聚合函数集合
      */
@@ -64,23 +70,35 @@ public class Constant {
     /**
      * 日期类型与表达式对应关系
      */
-    public static final Map<String, String> DATE_TYPE_FORMAT_MAP = Maps.newLinkedHashMap();
+    public static final Map<String, String> DATE_TYPE_FORMAT_MAP = Maps.newHashMap();
 
-    public static String weekFormula = "CASE \n" +
-            "WHEN dayofweek(`%s`) = 1 THEN '周一'\n" +
-            "WHEN dayofweek(`%s`) = 2 THEN '周二'\n" +
-            "WHEN dayofweek(`%s`) = 3 THEN '周三'\n" +
-            "WHEN dayofweek(`%s`) = 4 THEN '周四'\n" +
-            "WHEN dayofweek(`%s`) = 5 THEN '周五'\n" +
-            "WHEN dayofweek(`%s`) = 6 THEN '周六'\n" +
-            "WHEN dayofweek(`%s`) = 7 THEN '周日'\n" +
-            "END";
-    public static String seasonFormula = "CASE\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 1 and 3) THEN '第1季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 4 and 6) THEN '第2季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 7 and 9) THEN '第3季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 10 and 12) THEN '第4季度'\n" +
-            "END ";
+    /**
+     * 周逻辑值与中文映射关系
+     */
+    public static final Map<String, String> WEEK_CN_MAP = Maps.newHashMap();
+
+    /**
+     * 季度逻辑值与中文映射关系
+     */
+    public static final Map<String, String> SEASON_CN_MAP = Maps.newHashMap();
+
+
+    public static String weekFormula2 = "CONCAT(from_timestamp (%s, 'yyyy'),'年第',CAST(WEEKOFYEAR(%s) AS STRING  ),'周')";
+
+    public static String everyWeekFormula = "IF(\n" +
+            "    DAYOFWEEK(%s) = 1,\n" +
+            "    DAYOFWEEK(%s) + 6,\n" +
+            "    DAYOFWEEK(%s) - 1\n" +
+            "  )";
+
+    public static String seasonFormula3 = "CONCAT(from_timestamp(%s,'yyyy'),'年', " +
+            "CAST(" +
+            "CASE WHEN( MONTH(%s) BETWEEN 1 AND 3)THEN'第1季度'" +
+            "WHEN(MONTH(%s) BETWEEN 4 AND 6) THEN '第2季度' " +
+            "WHEN(MONTH(%s) BETWEEN 7 AND 9) THEN '第3季度' " +
+            "WHEN(MONTH(%s) BETWEEN 10 AND 12) THEN'第4季度'" +
+            "END " +
+            "AS STRING))";
 
     static {
         for (SparkUdf sparkUdf : SparkUdf.values()) {
@@ -94,6 +112,18 @@ public class Constant {
         for (DateType dateType : DateType.values()) {
             DATE_TYPE_FORMAT_MAP.put(dateType.getCode(), dateType.getFormat());
         }
+        WEEK_CN_MAP.put("周一", "2");
+        WEEK_CN_MAP.put("周二", "3");
+        WEEK_CN_MAP.put("周三", "4");
+        WEEK_CN_MAP.put("周四", "5");
+        WEEK_CN_MAP.put("周五", "6");
+        WEEK_CN_MAP.put("周六", "7");
+        WEEK_CN_MAP.put("周日", "1");
+
+        SEASON_CN_MAP.put("第1季度", "1");
+        SEASON_CN_MAP.put("第2季度", "2");
+        SEASON_CN_MAP.put("第3季度", "3");
+        SEASON_CN_MAP.put("第4季度", "4");
     }
 
     public enum DataFieldType {
@@ -116,6 +146,9 @@ public class Constant {
 
     /**
      * 日期类型
+     * DATE_EVERY_*：权限设置时的条件，筛选值不需要进行日期格式化直接使用
+     * <p>
+     * DATE_MAP_*：日期钻取时的条件标识，筛选值需要转换才能使用（季度、周）
      */
     public enum DateType {
         DATE_YEAR("year", "yyyy"),
@@ -128,7 +161,9 @@ public class Constant {
         DATE_EVERY_YEAR("every_year", "MM-dd"),
         DATE_EVERY_MONTH("every_month", "dd"),
         DATE_EVERY_WEEK("every_week", "d"),
-        DATE_EVERY_DAY("every_day", "HH:mm:ss");
+        DATE_EVERY_DAY("every_day", "HH:mm:ss"),
+        DATE_MAP_SEASON("map_season", "d"),
+        DATE_MAP_WEEK("map_week", "d");
 
         private String code;
 
@@ -146,8 +181,6 @@ public class Constant {
         public String getCode() {
             return code;
         }
-
-
     }
 
     /**

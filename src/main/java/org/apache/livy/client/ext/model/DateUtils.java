@@ -53,32 +53,41 @@ public class DateUtils {
      * 时间格式 年月
      */
     public final static String YEAR_OF_DATE_FRM = "yyyy";
+    /**
+     * 默认时间
+     */
+    public final static String DEFAULT_TIME = "1970";
 
     /**
      * 转换指定Long型时间戳为指定格式时间
      */
-    public static String convertTimeToString(Long time, String format) {
+    public static String convertTimeToString( Long time, String format ) {
         return dateTimeFormatter(format).format(LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()));
     }
 
     /**
      * 转换指定字符串时间戳为指定格式时间
      */
-    public static String convertTimeToString(String time, String format) {
-        return convertTimeToString(Long.valueOf(time), format);
+    public static String convertTimeToString( String time, String format ) {
+        String result = DEFAULT_TIME;
+        try {
+            result = convertTimeToString(Long.valueOf(time), format);
+        } catch (Exception ignored) {
+        }
+        return result;
     }
 
     /**
      * 转换指定字符串时间戳为年月日格式（yyyy-MM-dd）
      */
-    public static String convertTimeToString(String time) {
+    public static String convertTimeToString( String time ) {
         return convertTimeToString(Long.valueOf(time), DAY_OF_DATE_FRM);
     }
 
     /**
      * 格式化指定时间格式
      */
-    private static DateTimeFormatter dateTimeFormatter(String format) {
+    private static DateTimeFormatter dateTimeFormatter( String format ) {
         return DateTimeFormatter.ofPattern(format);
     }
 

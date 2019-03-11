@@ -3,11 +3,12 @@ package com.lkf.v3
 import java.sql.{Connection, Statement}
 
 import org.apache.spark.sql.jdbc.JdbcDialect
+import org.apache.spark.sql.types.{DataType, MetadataBuilder}
 
 /**
   * hive jdbc 方言
   **/
-private object HiveDialect extends JdbcDialect {
+object HiveDialect extends JdbcDialect {
 
   override def canHandle(url: String): Boolean = url.startsWith("jdbc:hive2")
 
@@ -27,5 +28,7 @@ private object HiveDialect extends JdbcDialect {
     st.execute("set mem_limit=1G")
   }
 
-
+  override def getCatalystType(sqlType: Int, typeName: String, size: Int, md: MetadataBuilder): Option[DataType] = {
+    None
+  }
 }
