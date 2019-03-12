@@ -20,6 +20,7 @@ package org.apache.livy.client.ext.model;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
@@ -261,6 +262,32 @@ public class Constant {
         }
 
         public int getCode() {
+            return this.code;
+        }
+    }
+
+    /**
+     * 符号枚举
+     *
+     * @author 刘凯峰
+     * @date 2019/3/11 15:08
+     */
+    public enum SymbolType {
+        SYMBOL_DOT(".", "点"),
+        SYMBOL_POUND_KEY("#", "井号键");
+        private String code;
+        private String desc;
+
+        SymbolType( String code, String desc ) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public String getDesc() {
+            return this.desc;
+        }
+
+        public String getCode() {
             return this.code;
         }
     }

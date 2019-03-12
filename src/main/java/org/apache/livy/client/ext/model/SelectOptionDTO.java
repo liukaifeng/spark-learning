@@ -44,6 +44,10 @@ public class SelectOptionDTO extends BaseConditionBean {
      * 1-筛选项数据查询
      */
     private Integer queryType;
+    /**
+     * 表别名
+     */
+    private String tableAlias;
 
     public SelectOptionDTO() {
         this.qoqFlag = false;

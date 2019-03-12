@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.apache.livy.client.ext.model.Constant.COMPARE_SPLIT_CHAR;
+import static org.apache.livy.client.ext.model.Constant.SymbolType.SYMBOL_POUND_KEY;
 
 
 /**
@@ -42,26 +43,15 @@ public class SearchBuilder {
     private final String WHERE = " where ";
     private final String GROUP_BY = " group by ";
     private final String ORDER_BY = " order by ";
-    private final String KEY = "key";
-    private final String VALUE = "value";
-//    private final Map<String, String> orderByAliasMap = Maps.newLinkedHashMap();
 
     /**
      * select 语句拼接
      */
-    private String selectBuilder( SqlBuilder sqlbuilder, SqlType sqlType ) {
+    private String selectBuilder( SqlBuilder sqlbuilder ) {
         StringBuilder stringBuilder = new StringBuilder(SELECT);
         List<String> selectSqlList = Lists.newArrayList();
-        //主体SQL查询项
-        if (sqlType == SqlType.SQL_MAIN) {
-            selectSqlList = sqlbuilder.getSelectSqlList();
-        }
-        //同环比SQL查询项
-        if (sqlType == SqlType.SQL_QOQ) {
-            selectSqlList = sqlbuilder.getSelectQoqSqlList();
-        }
+        selectSqlList = sqlbuilder.getSelectSqlList();
         int size = selectSqlList.size();
-
         if (size > 0) {
             selectSqlList.stream().distinct().forEach(select -> {
                 stringBuilder.append(select).append(",");
@@ -81,15 +71,9 @@ public class SearchBuilder {
     /**
      * where语句拼接
      */
-    private String whereBuilder( SqlBuilder sqlbuilder, SqlType sqlType ) {
+    private String whereBuilder( SqlBuilder sqlbuilder ) {
         StringBuilder stringBuilder = new StringBuilder(WHERE);
-        List<String> whereList = Lists.newArrayList();
-        if (sqlType == SqlType.SQL_MAIN) {
-            whereList = sqlbuilder.getWhereSqlList();
-        }
-        if (sqlType == SqlType.SQL_QOQ) {
-            whereList = sqlbuilder.getWhereQoqSqlList();
-        }
+        List<String> whereList = sqlbuilder.getWhereSqlList();
         int size = whereList.size();
         String and = " and ";
 
@@ -107,14 +91,8 @@ public class SearchBuilder {
     /**
      * 构造sql的分组条件
      */
-    private String groupBuilder( SqlBuilder sqlBuilder, SqlType sqlType ) {
-        List<String> groupSqlList = Lists.newArrayList();
-        if (sqlType == SqlType.SQL_MAIN) {
-            groupSqlList = sqlBuilder.getGroupSqlList();
-        }
-        if (sqlType == SqlType.SQL_QOQ) {
-            groupSqlList = sqlBuilder.getGroupQoqSqlList();
-        }
+    private String groupBuilder( SqlBuilder sqlBuilder ) {
+        List<String> groupSqlList = sqlBuilder.getGroupSqlList();
         if (Objects.nonNull(groupSqlList) && !groupSqlList.isEmpty()) {
             return GROUP_BY + groupSqlList.stream().map(s -> "`".concat(s).concat("`")).collect(Collectors.joining(","));
         }
@@ -291,25 +269,20 @@ public class SearchBuilder {
      */
     public SparkSqlCondition toSparkSql( SqlBuilder sqlbuilder ) {
         SparkSqlCondition sparkSqlCondition = new SparkSqlCondition();
-
         //对比条件
         List<String> compare = compareBuilder(sqlbuilder);
         //交叉表排序项
         Map<String, String> crosstabMap = crosstabOrderBuiler(sqlbuilder);
         //主SQL的where条件
-        String mainSqlWhere = whereBuilder(sqlbuilder, SqlType.SQL_MAIN);
-        //同环比SQL的where条件
-        String qoqSqlWhere = whereBuilder(sqlbuilder, SqlType.SQL_QOQ);
+        String mainSqlWhere = whereBuilder(sqlbuilder);
         sparkSqlCondition.setKuduMaster(sqlbuilder.getKuduMaster());
         sparkSqlCondition.setIndexList(sqlbuilder.getIndexList());
         sparkSqlCondition.setSelectList(sqlbuilder.getSelectFieldAliasList());
-        sparkSqlCondition.setSelectSql(toSql(sqlbuilder, mainSqlWhere, SqlType.SQL_MAIN));
-        sparkSqlCondition.setSelectQoqSql(toSql(sqlbuilder, qoqSqlWhere, SqlType.SQL_QOQ));
+        sparkSqlCondition.setSelectSql(toSql(sqlbuilder, mainSqlWhere));
         //spark配置信息
         sparkSqlCondition.setSparkConfig(sqlbuilder.getSparkConfigMap());
         //分组字段
         sparkSqlCondition.setGroupList(sqlbuilder.getGroupList());
-        sparkSqlCondition.setFieldAliasAndDescMap(sqlbuilder.getFieldAliasAndDescMap());
         sparkSqlCondition.setLimit(sqlbuilder.getLimit());
         sparkSqlCondition.setQueryType(sqlbuilder.getQueryType());
         sparkSqlCondition.setSparkAggMap(sqlbuilder.getSparkAggMap());
@@ -352,20 +325,21 @@ public class SearchBuilder {
         return sparkSqlCondition;
     }
 
-    private String toSql( SqlBuilder sqlbuilder, String where, SqlType sqlType ) {
+    private String toSql( SqlBuilder sqlbuilder, String where ) {
         //sql 拼接对象
         StringBuilder sqlBuilder = new StringBuilder();
         //查询项
-        String select = selectBuilder(sqlbuilder, sqlType);
+        String select = selectBuilder(sqlbuilder);
         //排序项
         SqlSortBean sqlOrderBean = orderBuilder(sqlbuilder);
         if (Strings.isNullOrEmpty(select)) {
             return select;
         }
         sqlBuilder.append(select);
-        sqlBuilder.append(tableBuilder(sqlbuilder));
+        sqlBuilder.append(tableBuilder(sqlbuilder)).append(" as tb_1");
+        sqlBuilder.append(" left join ").append(sqlbuilder.getQoqSqlList().stream().collect(Collectors.joining(",")));
         //分组项
-        String group = groupBuilder(sqlbuilder, sqlType);
+        String group = groupBuilder(sqlbuilder);
         //拼接where条件
         if (!Strings.isNullOrEmpty(where)) {
             sqlBuilder.append(where);
@@ -382,7 +356,6 @@ public class SearchBuilder {
         if (!Strings.isNullOrEmpty(sqlBuilder.toString())
                 && Objects.nonNull(sqlOrderBean)
                 && sqlbuilder.getCrosstabByMap().isEmpty()
-                && sqlType != SqlType.SQL_QOQ
                 && !sqlbuilder.isFliterItem()) {
             //排序表达式
             String orderBy = sqlOrderBean.getSortExpression();
@@ -394,7 +367,7 @@ public class SearchBuilder {
                 sql = String.format("select * from (%s) as tb %s limit %s", sql, orderBy, Constant.DEFAULT_LIMIE);
             }
         }
-        return sql;
+        return sql.replace(SYMBOL_POUND_KEY.getCode(),"");
     }
 
     /**

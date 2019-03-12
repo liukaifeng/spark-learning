@@ -18,6 +18,7 @@ package org.apache.livy.client.ext.model;
 
 import lombok.Data;
 
+
 /**
  * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
  * @project-name: tcsl-loongboss-parent
@@ -35,6 +36,8 @@ public class BaseConditionBean {
      * 数据表字段名
      */
     private String fieldName;
+
+
 
     /**
      * 数据表字段别名

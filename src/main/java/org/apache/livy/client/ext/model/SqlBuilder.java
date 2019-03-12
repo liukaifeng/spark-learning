@@ -120,11 +120,6 @@ public class SqlBuilder extends BaseBuilder {
      */
     private final Map<String, List<String>> sparkAggMap = Maps.newLinkedHashMap();
 
-    /**
-     * 别名与中文名称对应关系
-     */
-    private final Map<String, String> fieldAliasAndDescMap = Maps.newLinkedHashMap();
-
 
     /**
      * 别名与字段对应关系(解决相同字段问题)
@@ -156,6 +151,15 @@ public class SqlBuilder extends BaseBuilder {
     private final Map<String, String> aggFieldAliasMap = Maps.newLinkedHashMap();
 
     /**
+     * 别名与中文名称对应关系
+     */
+    private final Map<String, String> fieldAliasAndDescMap = Maps.newLinkedHashMap();
+    /**
+     * 同环比字段别名与表达式的映射关系
+     */
+    private final Map<String, String> fieldAliasAndFormulaMap = Maps.newLinkedHashMap();
+
+    /**
      * 数据表名
      */
     private String tableName;
@@ -177,6 +181,19 @@ public class SqlBuilder extends BaseBuilder {
      * 集团编号
      */
     private String groupCode = "group_code";
+
+    //表别名前缀
+    private final String tableAliasPrefix = "tb_";
+    //默认表别名
+    private final String tableAliasDefault = "tb_1";
+    //表别名初始值
+    private int tableAliasInitValue = 1;
+    //默认占位符
+    private final String DEFAULT_PLACEHOLDER = SymbolType.SYMBOL_POUND_KEY.getCode();
+    private final String SYMBOL_DOT = SymbolType.SYMBOL_DOT.getCode();
+
+    private List<String> qoqSqlList = Lists.newArrayList();
+
     //endregion
 
     //region 构造函数
@@ -204,19 +221,21 @@ public class SqlBuilder extends BaseBuilder {
         }
         this.setMongoConfigMap(biReportBuildInDTO.getMongoConfig());
 
-        //数据库与表名
-        tableBuilder(biReportBuildInDTO.getDbName(), biReportBuildInDTO.getTbName());
-        //select
-        selectSqlBuilder(biReportBuildInDTO);
-        //where
-        whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
-        //index
-        sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
-        //orderBy
-        orderBySqlBuilder(biReportBuildInDTO);
-        //自定义字段作为筛选项
-        customFieldHandle(biReportBuildInDTO.getFilterCondition());
 
+        //数据库与表名
+        tableBuilder(biReportBuildInDTO);
+
+
+        selectSqlBuilder(biReportBuildInDTO);
+//        //where
+        whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
+//        //index
+//        sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
+//        //orderBy
+//        orderBySqlBuilder(biReportBuildInDTO);
+//        //自定义字段作为筛选项
+//        customFieldHandle(biReportBuildInDTO.getFilterCondition());
+//
         qoqHandle(biReportBuildInDTO.getIndexCondition());
     }
     //endregion
@@ -226,15 +245,15 @@ public class SqlBuilder extends BaseBuilder {
     /**
      * 数据库及表名拼接
      */
-    private void tableBuilder( String dbName, String tbName ) {
-        this.tableName = dbName.concat(".").concat(tbName);
+    private void tableBuilder( BiReportBuildInDTO biReportBuildInDTO ) {
+        this.tableName = biReportBuildInDTO.getDbName().replace("impala::", "").concat(".").concat(biReportBuildInDTO.getTbName());
     }
     //endregion
 
     //region sql_select
 
     /**
-     * 查询项拼接
+     * 遍历维度条件、对比条件、指标条件
      */
     private void selectSqlBuilder( BiReportBuildInDTO biReportBuildInDTO ) {
         //维度条件-拼成group条件
@@ -306,6 +325,12 @@ public class SqlBuilder extends BaseBuilder {
         });
     }
 
+
+    private String generateTableAlias() {
+        return tableAliasPrefix.concat(String.valueOf(++tableAliasInitValue));
+    }
+
+
     /**
      * 查询项对象转换
      *
@@ -321,6 +346,7 @@ public class SqlBuilder extends BaseBuilder {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        selectOptionDTO.setFieldName(DEFAULT_PLACEHOLDER + selectOptionDTO.getFieldName());
         return selectOptionDTO;
     }
 
@@ -333,8 +359,6 @@ public class SqlBuilder extends BaseBuilder {
     private String selectBuilder( SelectOptionDTO selectOptionDTO ) {
         //非同环比查询项
         StringBuilder selectCondition = new StringBuilder();
-        //同环比查询项
-        StringBuilder selectQoqCondition = new StringBuilder();
         //字段名
         String fieldName = selectOptionDTO.getFieldName();
         //原始字段名
@@ -398,7 +422,9 @@ public class SqlBuilder extends BaseBuilder {
                 fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
                 sqlExpression = String.format(" cast(%s as String) as `%s` ", fieldName, fieldAliasName);
                 compareFieldList.add(fieldAliasName);
-                selectQoqCondition.append(sqlExpression);
+                if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType())) {
+                    selectQoqSqlList.add(sqlExpression);
+                }
             }
             //维度字段
             if (FUNC_GROUP.getCode().equals(aggregatorType)) {
@@ -408,7 +434,9 @@ public class SqlBuilder extends BaseBuilder {
                     fieldName = String.format(" cast(%s as String)", fieldName);
                 }
                 sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
-                selectQoqCondition.append(sqlExpression);
+                if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType())) {
+                    selectQoqSqlList.add(sqlExpression);
+                }
             }
         }
         if (Strings.isNullOrEmpty(aggregatorType)) {
@@ -432,16 +460,13 @@ public class SqlBuilder extends BaseBuilder {
         }
         if (!Strings.isNullOrEmpty(sqlExpression) && !selectOptionDTO.getQoqFlag()) {
             selectCondition.append(sqlExpression);
-        } else if (!Strings.isNullOrEmpty(sqlExpression)) {
-            selectQoqCondition.append(sqlExpression);
+        } else if (selectOptionDTO.getQoqFlag()) {
+            fieldAliasAndFormulaMap.put(fieldAliasName, sqlExpression);
         }
         aliasAndFieldMap.put(fieldAliasName, originFieldName);
         fieldAndFormulaTypeMap.put(originFieldName, customAggFlag);
         if (!Strings.isNullOrEmpty(selectCondition.toString())) {
             selectSqlList.add(selectCondition.toString());
-        }
-        if (!Strings.isNullOrEmpty(selectQoqCondition.toString())) {
-            selectQoqSqlList.add(selectQoqCondition.toString());
         }
         return fieldAliasName;
     }
@@ -456,6 +481,26 @@ public class SqlBuilder extends BaseBuilder {
     private void fieldAndTypeMapBuilder( String fieldName, String dataType, int customAggFlag ) {
         if (customAggFlag == 0) {
             fieldAndTypeMap.put(fieldName, dataType);
+        }
+    }
+
+    /**
+     * 字段别名与中文对应关系
+     *
+     * @param fieldAliasName 字段别名
+     * @param fieldDesc      字段描述（中文描述）
+     * @param fieldAlias     自定义字段描述（中文别名）
+     */
+    private void fieldAliasAndDescMapBuilder( String fieldAliasName, String fieldDesc, String fieldAlias ) {
+        //优先取别名
+        if (!Strings.isNullOrEmpty(fieldAliasName)) {
+            if (!Strings.isNullOrEmpty(fieldAlias)) {
+                fieldAliasAndDescMap.put(fieldAliasName, fieldAlias);
+            } else if (!Strings.isNullOrEmpty(fieldDesc)) {
+                fieldAliasAndDescMap.put(fieldAliasName, fieldDesc);
+            } else {
+                fieldAliasAndDescMap.put(fieldAliasName, fieldAliasName);
+            }
         }
     }
 
@@ -535,6 +580,14 @@ public class SqlBuilder extends BaseBuilder {
                         cassandraFilter = String.format(groupCode.concat(" in (%s)"), filter.getFieldValue().stream().collect(Collectors.joining(",")));
                     }
                 }
+            });
+        }
+    }
+
+    private void whereSqlBean( List<FilterConditionBean> filterList ) {
+        if (Objects.nonNull(filterList)) {
+            filterList.forEach(filter -> {
+
             });
         }
     }
@@ -832,60 +885,85 @@ public class SqlBuilder extends BaseBuilder {
 
     //region 同环比条件处理
 
-    /**
-     * 同环比条件处理
-     */
     private void qoqHandle( List<IndexConditionBean> indexCondition ) {
         if (Objects.nonNull(indexCondition)) {
-            List<String> whereList = Lists.newArrayList();
-            for (IndexConditionBean index : indexCondition) {
+            //同环比指标遍历
+            List<IndexConditionBean> qoqIndexList = indexCondition.stream().filter(index -> index.getQoqType() > 0).collect(Collectors.toList());
+            for (IndexConditionBean index : qoqIndexList) {
                 if (index.getQoqType() > 0) {
-                    QoqDTO qoq = convert2QoqDTO(index.getQoqConditionBean());
-                    String qoqFieldName = qoq.getFieldName();
-                    String qoqFieldAliasName = qoq.getFieldAliasName();
-
-                    if (!DATE_WEEK.getCode().equals(qoq.getGranularity())) {
-                        //对应日期格式化
-                        qoqFieldName = getDateFormula(qoq.getGranularity(), qoqFieldName);
-                        //添加到查询项
-                        selectQoqSqlList.add(String.format(" %s as `%s` ", qoqFieldName, qoqFieldAliasName));
-                        //添加到where条件中
-                        whereList.add(String.format(" %s IN ('%s', '%s')", qoqFieldName, qoq.getQoqRadixTime(), qoq.getQoqReducedTime()));
-                    } else {
-                        String radixTimeYear = qoq.getQoqRadixTime().split("-")[0];
-                        String radixTimeWeek = qoq.getQoqRadixTime().split("-")[1];
-                        String reducedTimeYear = qoq.getQoqReducedTime().split("-")[0];
-                        String reducedTimeWeek = qoq.getQoqReducedTime().split("-")[1];
-
-                        qoq.setQoqRadixTime(radixTimeYear.concat("-").concat(String.valueOf(Integer.valueOf(radixTimeWeek))));
-                        qoq.setQoqReducedTime(reducedTimeYear.concat("-").concat(String.valueOf(Integer.valueOf(reducedTimeWeek))));
-
-                        String inWhere = String.format("'%s','%s'", qoq.getQoqRadixTime(), qoq.getQoqReducedTime());
-                        String expression = "CONCAT_WS('-',from_timestamp(`%s`, 'yyyy'),CAST(WEEKOFYEAR(%s) AS STRING))";
-                        String where = String.format(expression.concat(" in (%s)"), qoqFieldName, qoqFieldName, inWhere);
-                        //添加到查询项
-                        selectQoqSqlList.add(String.format(expression.concat(" AS `%s`"), qoqFieldName, qoqFieldName, qoqFieldAliasName));
-                        //添加到where条件中
-                        whereList.add(where);
-                    }
-
-                    qoq.setDelQoqField(true);
-                    qoq.setQoqTimeAliasName(qoqFieldAliasName);
-                    qoq.setQoqIndexAliasName(index.getFieldAliasName());
-                    qoqList.add(qoq);
-                    //分组字段不为空，将筛选字段添加到分组中
-                    groupQoqSqlList.addAll(groupSqlList);
-                    if (!groupQoqSqlList.contains(qoqFieldAliasName)) {
-                        groupQoqSqlList.add(qoqFieldAliasName);
-                    }
+                    qoqSqlList.add(generateQoqSql(index));
                 }
             }
-            groupQoqSqlList = groupQoqSqlList.stream().distinct().collect(Collectors.toList());
-            if (whereList.size() > 0) {
-                String whereStr = whereList.stream().collect(Collectors.joining(" or "));
-                whereQoqSqlList.add(String.format("(%s)", whereStr));
+        }
+    }
+
+    /**
+     * 生成同环比SQL
+     *
+     * @param index 指标条件
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/12 15:42
+     */
+    private String generateQoqSql( IndexConditionBean index ) {
+        //同环比计算指标转换成同环比对象
+        QoqDTO qoq = convert2QoqDTO(index.getQoqConditionBean());
+        qoq.setQoqType(index.getQoqType());
+        //根据同环比计算字段别名获取对应的计算表达式
+        String fieldFormula = fieldAliasAndFormulaMap.get(index.getFieldAliasName());
+        //生成同环比日期表达式
+        String qoqDateFormula = generateQoqDateFormula(qoq);
+        selectQoqSqlList.add(qoqDateFormula);
+        if (!Strings.isNullOrEmpty(fieldFormula)) {
+            selectQoqSqlList.add(fieldFormula);
+        }
+        //同环比sql拼接，包括on条件
+        String qoqSelect = selectQoqSqlList.stream().map(s -> s.replace(DEFAULT_PLACEHOLDER, "")).collect(Collectors.joining(","));
+        String qoqGroup = groupSqlList.stream().collect(Collectors.joining(","));
+        //生成表别名
+        String tableAlias = generateTableAlias();
+        //表别名前缀
+        String tableAliasPrefix = tableAliasDefault + SYMBOL_DOT;
+        //同环比where条件
+        String qoqWhere = whereSqlList.stream().collect(Collectors.joining(" and "));
+        //同环比主干SQL
+        String qoqSelectMainSql = String.format("(SELECT %s FROM %s where %s GROUP BY %s) AS %s ", qoqSelect, this.tableName, qoqWhere, qoqGroup, tableAlias);
+        //同环比on条件
+        String qoqJoinOn = String.format(" ON from_timestamp (%s, 'yyyy-MM-dd') = %s", tableAliasPrefix.concat(qoq.getFieldName()), tableAlias.concat(SYMBOL_DOT).concat(qoq.getFieldAliasName()));
+        //同环比计算字段拆分出表达式和对应的别名
+        String[] formulas = fieldFormula.split("as");
+        //同环比计算字段表达式
+        String calculateFieldFormula = formulas[0].replace(DEFAULT_PLACEHOLDER, tableAliasPrefix);
+        //同环比计算表达式，增长值
+        String qoqCalculateFormula = String.format("%s - min(COALESCE(%s,0)) as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT).concat(formulas[1]), formulas[1]);
+        selectSqlList.add(qoqCalculateFormula);
+        return qoqSelectMainSql + qoqJoinOn;
+    }
+
+    /**
+     * 生成同环比日期表达式
+     *
+     * @param qoq 同环比日期信息
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/12 13:49
+     */
+    private String generateQoqDateFormula( QoqDTO qoq ) {
+        String formula = "";
+        String alias = findKeyByValue(DEFAULT_PLACEHOLDER + qoq.getFieldName(), aliasAndFieldMap);
+        qoq.setFieldAliasName(alias);
+        //按天同环比
+        if (qoq.getGranularity().equals(DateType.DATE_DAY.getCode())) {
+            //同比
+            if (qoq.getQoqType() == 1) {
+                formula = String.format("years_add(from_timestamp(%s,'yyyy-MM-dd'),-1) as %s", qoq.getFieldName(), alias);
+            }
+            //环比
+            if (qoq.getQoqType() == 2) {
+                formula = String.format("days_add(from_timestamp(%s,'yyyy-MM-dd'),-1) as %s", qoq.getFieldName(), alias);
             }
         }
+        return formula;
     }
 
     /**
@@ -953,26 +1031,6 @@ public class SqlBuilder extends BaseBuilder {
             }
         }
         return "";
-    }
-
-    /**
-     * 字段别名与中文对应关系
-     *
-     * @param fieldAliasName 字段别名
-     * @param fieldDesc      字段描述（中文描述）
-     * @param fieldAlias     自定义字段描述（中文别名）
-     */
-    private void fieldAliasAndDescMapBuilder( String fieldAliasName, String fieldDesc, String fieldAlias ) {
-        //优先取别名
-        if (!Strings.isNullOrEmpty(fieldAliasName)) {
-            if (!Strings.isNullOrEmpty(fieldAlias)) {
-                fieldAliasAndDescMap.put(fieldAliasName, fieldAlias);
-            } else if (!Strings.isNullOrEmpty(fieldDesc)) {
-                fieldAliasAndDescMap.put(fieldAliasName, fieldDesc);
-            } else {
-                fieldAliasAndDescMap.put(fieldAliasName, fieldAliasName);
-            }
-        }
     }
 
 
