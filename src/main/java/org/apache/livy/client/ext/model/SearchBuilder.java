@@ -115,61 +115,61 @@ public class SearchBuilder {
      * 降序排序取前10条：sql降序，结果降序
      * </p>
      */
-    private SqlSortBean orderBuilder( SqlBuilder sqlbuilder ) {
-        //排序条件分隔符
-        String dotStr = ",";
-        //默认升序
-        String sort = Constant.SORT_ASC;
-
-        //sql 排序语句拼接
-        StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
-        //排序字段与升降序对应关系
-        Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
-        SqlSortBean sqlSortBean = new SqlSortBean();
-        //排序字段不为空
-        if (orderByMap != null && !orderByMap.isEmpty()) {
-            //遍历排序项
-            for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
-                if (!sqlbuilder.isQoqField(entry.getKey())) {
-                    sqlSortBean.setSortFieldAliasName(entry.getKey());
-                    //0-全部 1-前几条 2-后几条
-                    if (sqlbuilder.getQueryPoint() == 2) {
-                        sort = Constant.SORT_DESC.equals(entry.getValue().toUpperCase()) ? Constant.SORT_ASC : Constant.SORT_DESC;
-                        String resultSort = String.format(" %s `%s` %s", ORDER_BY, entry.getKey(), entry.getValue()).concat(getSortNull(entry.getValue()));
-                        sqlSortBean.setSortAfterExpression(resultSort);
-                        sqlSortBean.setAfterFlag(true);
-                    } else {
-                        sort = entry.getValue();
-                    }
-                    stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
-                }
-            }
-        } else {
-            sort = Constant.SORT_DESC;
-            //指标字段
-            List<String> indexList = sqlbuilder.getIndexList();
-            String fieldAliasName = "";
-            //同环比字段不参与排序
-            if (Objects.nonNull(indexList) && !indexList.isEmpty()) {
-                indexList = indexList.parallelStream().filter(index -> !sqlbuilder.isQoqField(index)).collect(Collectors.toList());
-                if (Objects.nonNull(indexList) && indexList.size() > 0) {
-                    //字段别名
-                    fieldAliasName = indexList.get(0);
-                }
-            }
-            if (!Strings.isNullOrEmpty(fieldAliasName)) {
-                sqlSortBean.setSortFieldAliasName(fieldAliasName);
-                stringBuilder.append("`").append(fieldAliasName).append("` ").append(getSortNull(sort)).append(dotStr);
-            }
-        }
-        if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
-            return null;
-        }
-        //sql 排序语句
-        String sqlOrderBy = stringBuilder.substring(0, stringBuilder.length() - dotStr.length());
-        sqlSortBean.setSortExpression(sqlOrderBy);
-        return sqlSortBean;
-    }
+//    private SqlSortBean orderBuilder( SqlBuilder sqlbuilder ) {
+//        //排序条件分隔符
+//        String dotStr = ",";
+//        //默认升序
+//        String sort = Constant.SORT_ASC;
+//
+//        //sql 排序语句拼接
+//        StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
+//        //排序字段与升降序对应关系
+//        Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
+//        SqlSortBean sqlSortBean = new SqlSortBean();
+//        //排序字段不为空
+//        if (orderByMap != null && !orderByMap.isEmpty()) {
+//            //遍历排序项
+//            for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
+//                if (!sqlbuilder.isQoqField(entry.getKey())) {
+//                    sqlSortBean.setSortFieldAliasName(entry.getKey());
+//                    //0-全部 1-前几条 2-后几条
+//                    if (sqlbuilder.getQueryPoint() == 2) {
+//                        sort = Constant.SORT_DESC.equals(entry.getValue().toUpperCase()) ? Constant.SORT_ASC : Constant.SORT_DESC;
+//                        String resultSort = String.format(" %s `%s` %s", ORDER_BY, entry.getKey(), entry.getValue()).concat(getSortNull(entry.getValue()));
+//                        sqlSortBean.setSortAfterExpression(resultSort);
+//                        sqlSortBean.setAfterFlag(true);
+//                    } else {
+//                        sort = entry.getValue();
+//                    }
+//                    stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
+//                }
+//            }
+//        } else {
+//            sort = Constant.SORT_DESC;
+//            //指标字段
+//            List<String> indexList = sqlbuilder.getIndexList();
+//            String fieldAliasName = "";
+//            //同环比字段不参与排序
+//            if (Objects.nonNull(indexList) && !indexList.isEmpty()) {
+//                indexList = indexList.parallelStream().filter(index -> !sqlbuilder.isQoqField(index)).collect(Collectors.toList());
+//                if (Objects.nonNull(indexList) && indexList.size() > 0) {
+//                    //字段别名
+//                    fieldAliasName = indexList.get(0);
+//                }
+//            }
+//            if (!Strings.isNullOrEmpty(fieldAliasName)) {
+//                sqlSortBean.setSortFieldAliasName(fieldAliasName);
+//                stringBuilder.append("`").append(fieldAliasName).append("` ").append(getSortNull(sort)).append(dotStr);
+//            }
+//        }
+//        if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
+//            return null;
+//        }
+//        //sql 排序语句
+//        String sqlOrderBy = stringBuilder.substring(0, stringBuilder.length() - dotStr.length());
+//        sqlSortBean.setSortExpression(sqlOrderBy);
+//        return sqlSortBean;
+//    }
 
 
     /**
@@ -295,7 +295,7 @@ public class SearchBuilder {
         sparkSqlCondition.setKeyspace(sqlbuilder.getKeyspace());
         sparkSqlCondition.setTable(sqlbuilder.getTable());
         sparkSqlCondition.setPage(sqlbuilder.getPage());
-        sparkSqlCondition.setQoqList(sqlbuilder.getQoqList());
+//        sparkSqlCondition.setQoqList(sqlbuilder.getQoqList());
         sparkSqlCondition.setSessionId(sqlbuilder.getSessionId());
         sparkSqlCondition.setTracId(sqlbuilder.getTracId());
         sparkSqlCondition.setCompareSortFlag(sqlbuilder.getCompareSortFlag());
@@ -330,14 +330,30 @@ public class SearchBuilder {
         StringBuilder sqlBuilder = new StringBuilder();
         //查询项
         String select = selectBuilder(sqlbuilder);
+        //表名
+        String tableName = tableBuilder(sqlbuilder);
         //排序项
-        SqlSortBean sqlOrderBean = orderBuilder(sqlbuilder);
+        SqlSortBean sqlOrderBean = null;//orderBuilder(sqlbuilder);
+        //join sql
+        String joinSql = "";
+
         if (Strings.isNullOrEmpty(select)) {
             return select;
         }
+        //如果存在join子句，主干sql需要起别名
+        if (Objects.nonNull(sqlbuilder.getSelectJoinSqlList())) {
+            select = select.replace(SYMBOL_POUND_KEY.getCode(), "tb_1.");
+            tableName = tableName + " as tb_1";
+            joinSql = " left join " + sqlbuilder.getSelectJoinSqlList().stream().collect(Collectors.joining(" left join "));
+        }
+        //拼接查询项
         sqlBuilder.append(select);
-        sqlBuilder.append(tableBuilder(sqlbuilder)).append(" as tb_1");
-        sqlBuilder.append(" left join ").append(sqlbuilder.getQoqSqlList().stream().collect(Collectors.joining(",")));
+        //拼接表名
+        sqlBuilder.append(tableName);
+        if (!Strings.isNullOrEmpty(joinSql)) {
+            //拼接join查询
+            sqlBuilder.append(joinSql);
+        }
         //分组项
         String group = groupBuilder(sqlbuilder);
         //拼接where条件
@@ -367,7 +383,7 @@ public class SearchBuilder {
                 sql = String.format("select * from (%s) as tb %s limit %s", sql, orderBy, Constant.DEFAULT_LIMIE);
             }
         }
-        return sql.replace(SYMBOL_POUND_KEY.getCode(),"");
+        return sql.replace(SYMBOL_POUND_KEY.getCode(), "");
     }
 
     /**
@@ -406,14 +422,4 @@ public class SearchBuilder {
         return String.valueOf(limit);
     }
 
-    private enum SqlType {
-        /**
-         * 主体SQL
-         */
-        SQL_MAIN,
-        /**
-         * 同环比SQL
-         */
-        SQL_QOQ
-    }
 }

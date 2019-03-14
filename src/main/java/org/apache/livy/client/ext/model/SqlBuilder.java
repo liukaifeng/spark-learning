@@ -37,6 +37,8 @@ import static org.apache.livy.client.ext.model.Constant.DateType.DATE_SEASON;
 import static org.apache.livy.client.ext.model.Constant.DateType.DATE_WEEK;
 import static org.apache.livy.client.ext.model.Constant.FunctionType.*;
 import static org.apache.livy.client.ext.model.Constant.LogicalOperator.*;
+import static org.apache.livy.client.ext.model.Constant.SymbolType.SYMBOL_DOT;
+import static org.apache.livy.client.ext.model.Constant.SymbolType.SYMBOL_POUND_KEY;
 
 
 /**
@@ -86,11 +88,6 @@ public class SqlBuilder extends BaseBuilder {
     private final List<String> groupSqlList = Lists.newArrayList();
 
     /**
-     * 同环比SQL分组字段
-     */
-    private List<String> groupQoqSqlList = Lists.newArrayList();
-
-    /**
      * 收集维度字段
      */
     private List<String> groupList = Lists.newArrayList();
@@ -119,7 +116,6 @@ public class SqlBuilder extends BaseBuilder {
      * 聚合信息
      */
     private final Map<String, List<String>> sparkAggMap = Maps.newLinkedHashMap();
-
 
     /**
      * 别名与字段对应关系(解决相同字段问题)
@@ -169,9 +165,9 @@ public class SqlBuilder extends BaseBuilder {
      */
     private Boolean delFilterField = false;
     /**
-     * 同环比条件
+     * 子查询SQL
      */
-    private List<QoqDTO> qoqList = Lists.newArrayList();
+    private List<String> selectJoinSqlList = Lists.newArrayList();
 
     /**
      * cassandra 过滤条件
@@ -186,13 +182,11 @@ public class SqlBuilder extends BaseBuilder {
     private final String tableAliasPrefix = "tb_";
     //默认表别名
     private final String tableAliasDefault = "tb_1";
+    //数据库前缀
+    private final String dbPrefix = "impala::";
     //表别名初始值
     private int tableAliasInitValue = 1;
-    //默认占位符
-    private final String DEFAULT_PLACEHOLDER = SymbolType.SYMBOL_POUND_KEY.getCode();
-    private final String SYMBOL_DOT = SymbolType.SYMBOL_DOT.getCode();
 
-    private List<String> qoqSqlList = Lists.newArrayList();
 
     //endregion
 
@@ -221,14 +215,13 @@ public class SqlBuilder extends BaseBuilder {
         }
         this.setMongoConfigMap(biReportBuildInDTO.getMongoConfig());
 
-
         //数据库与表名
         tableBuilder(biReportBuildInDTO);
-
+        //where
+        whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
 
         selectSqlBuilder(biReportBuildInDTO);
-//        //where
-        whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
+
 //        //index
 //        sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
 //        //orderBy
@@ -246,7 +239,7 @@ public class SqlBuilder extends BaseBuilder {
      * 数据库及表名拼接
      */
     private void tableBuilder( BiReportBuildInDTO biReportBuildInDTO ) {
-        this.tableName = biReportBuildInDTO.getDbName().replace("impala::", "").concat(".").concat(biReportBuildInDTO.getTbName());
+        this.tableName = biReportBuildInDTO.getDbName().replace(dbPrefix, "").concat(".").concat(biReportBuildInDTO.getTbName());
     }
     //endregion
 
@@ -256,16 +249,17 @@ public class SqlBuilder extends BaseBuilder {
      * 遍历维度条件、对比条件、指标条件
      */
     private void selectSqlBuilder( BiReportBuildInDTO biReportBuildInDTO ) {
-        //维度条件-拼成group条件
-        List<DimensionConditionBean> dimensionConditionBeanList = biReportBuildInDTO.getDimensionCondition();
+        //维度条件
+        List<DimensionConditionBean> dimensionList = biReportBuildInDTO.getDimensionCondition();
         //对比条件
-        List<CompareConditionBean> compareConditionList = biReportBuildInDTO.getCompareCondition();
-        //指标条件-拼成select条件
-        List<IndexConditionBean> indexConditionBeanList = biReportBuildInDTO.getIndexCondition();
+        List<CompareConditionBean> compareList = biReportBuildInDTO.getCompareCondition();
+        //指标条件
+        List<IndexConditionBean> indexBeanList = biReportBuildInDTO.getIndexCondition();
+        //查询类型
         int queryType = biReportBuildInDTO.getQueryType();
         //遍历维度条件
-        if (Objects.nonNull(dimensionConditionBeanList) && !dimensionConditionBeanList.isEmpty()) {
-            dimensionConditionBeanList.forEach(dimension -> {
+        if (Objects.nonNull(dimensionList) && !dimensionList.isEmpty()) {
+            dimensionList.forEach(dimension -> {
                 //收集字段与数据类型关系
                 fieldAndTypeMapBuilder(dimension.getFieldName(), dimension.getDataType(), dimension.getIsBuildAggregated());
                 //待处理查询项
@@ -285,10 +279,9 @@ public class SqlBuilder extends BaseBuilder {
                 groupList.add(fieldAlias);
             });
         }
-
         //遍历对比条件
-        if (Objects.nonNull(compareConditionList) && !compareConditionList.isEmpty()) {
-            compareConditionList.forEach(compare -> {
+        if (Objects.nonNull(compareList) && !compareList.isEmpty()) {
+            compareList.forEach(compare -> {
                 //收集字段与数据类型关系
                 fieldAndTypeMapBuilder(compare.getFieldName(), compare.getDataType(), compare.getIsBuildAggregated());
                 //待处理查询项
@@ -306,16 +299,14 @@ public class SqlBuilder extends BaseBuilder {
                 }
             });
         }
-
         //遍历指标条件
-        indexConditionBeanList.forEach(index -> {
+        indexBeanList.forEach(index -> {
             //收集字段与数据类型关系
             fieldAndTypeMapBuilder(index.getFieldName(), index.getDataType(), index.getIsBuildAggregated());
             //待处理查询项
             SelectOptionDTO selectOptionDTO = convert2SelectOptionDTO(index);
             selectOptionDTO.setAggregator(index.getAggregator());
             selectOptionDTO.setQueryType(queryType);
-            selectOptionDTO.setQoqFlag(index.getQoqType() > 0);
             //查询项SQL拼接
             String fieldAlias = selectBuilder(selectOptionDTO);
             //指标项收集
@@ -325,11 +316,16 @@ public class SqlBuilder extends BaseBuilder {
         });
     }
 
-
+    /**
+     * 生成表别名
+     *
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/13 10:57
+     */
     private String generateTableAlias() {
         return tableAliasPrefix.concat(String.valueOf(++tableAliasInitValue));
     }
-
 
     /**
      * 查询项对象转换
@@ -346,7 +342,7 @@ public class SqlBuilder extends BaseBuilder {
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
-        selectOptionDTO.setFieldName(DEFAULT_PLACEHOLDER + selectOptionDTO.getFieldName());
+        selectOptionDTO.setFieldName(SYMBOL_POUND_KEY.getCode() + selectOptionDTO.getFieldName());
         return selectOptionDTO;
     }
 
@@ -375,51 +371,45 @@ public class SqlBuilder extends BaseBuilder {
         String originDataType = selectOptionDTO.getOriginDataType();
         //转换数据类型
         String targetDataType = selectOptionDTO.getDataType();
+        //日期粒度
+        String granularity = selectOptionDTO.getGranularity();
+        //查询类型
+        int queryType = selectOptionDTO.getQueryType();
+        //同环比标识
+        boolean qoqFlag = QOQ_LIST.contains(selectOptionDTO.getQoqType());
         //sql 表达式
         String sqlExpression = "";
 
         if (!Strings.isNullOrEmpty(aggregatorType)) {
-            //求和
+            //算子类型
             aggregatorType = aggregatorType.toLowerCase();
-            if (FUNC_SUM.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
-
+            String basic = AGG_FUNCTION_MAP.get(aggregatorType);
+            //如果是自定义聚合函数，直接使用表达式
+            if (Objects.nonNull(basic)) {
                 if (containAggFunc(formula, customAggFlag)) {
                     sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
                 } else {
-                    sqlExpression = String.format(" sum(CAST(%s AS DOUBLE)) as `%s` ", fieldName, fieldAliasName);
+                    //否则根据算子组装对应的计算表达式
+                    sqlExpression = String.format(AGG_FUNCTION_MAP.get(aggregatorType), fieldName, fieldAliasName);
                 }
             }
-            //求数量
-            if (FUNC_COUNT.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
-                if (containAggFunc(formula, customAggFlag)) {
-                    sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
-                } else {
-                    sqlExpression = String.format(" count(%s) as `%s` ", fieldName, fieldAliasName);
-                }
-            }
-            //求平均值
-            if (FUNC_AVG.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
-                if (containAggFunc(formula, customAggFlag)) {
-                    sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
-                } else {
-                    sqlExpression = String.format(" avg(CAST(%s AS DOUBLE)) as `%s` ", fieldName, fieldAliasName);
-                }
-            }
-            //去重计数
-            if (FUNC_DISTINCT_COUNT.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
-                if (containAggFunc(formula, customAggFlag)) {
-                    sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
-                } else {
-                    sqlExpression = String.format(" count(distinct(%s)) as `%s` ", fieldName, fieldAliasName);
-                }
+            //百分比计算
+            if (selectOptionDTO.getQoqType() == AdvancedCmpType.ADVANCED_PCT.getCode()) {
+                //百分比where条件
+                String pctWhere = Objects.nonNull(whereSqlList) && whereSqlList.size() > 0 ? whereSqlList.stream().collect(Collectors.joining(",")) : " 1=1";
+                String pctJoinTableAlias = generateTableAlias();
+                //百分比分母SQL
+                String pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s) AS %s ON 1 = 1", sqlExpression, this.tableName, pctWhere, pctJoinTableAlias);
+                //聚合表达式拆分，分别取出表达式和别名
+                String[] formula2 = sqlExpression.split("as");
+                //百分比计算表达式
+                sqlExpression = String.format("%s / MIN(%s) AS %s", formula2[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + "."), pctJoinTableAlias.concat(".").concat(formula2[1]), formula2[1]);
+                //将百分比计算子sql添加到子sql集合
+                selectJoinSqlList.add(pctJoinSql);
             }
             //对比字段
             if (FUNC_COMPARE.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
+                fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
                 sqlExpression = String.format(" cast(%s as String) as `%s` ", fieldName, fieldAliasName);
                 compareFieldList.add(fieldAliasName);
                 if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType())) {
@@ -428,7 +418,7 @@ public class SqlBuilder extends BaseBuilder {
             }
             //维度字段
             if (FUNC_GROUP.getCode().equals(aggregatorType)) {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
+                fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
                 //数字类型做维度条件，将其转换为字符串类型
                 if (originDataType.equals(DECIMAL_TYPE.getType())) {
                     fieldName = String.format(" cast(%s as String)", fieldName);
@@ -443,9 +433,9 @@ public class SqlBuilder extends BaseBuilder {
             if (Objects.equals(targetDataType, DATETIME_TYPE.getType())) {
                 sqlExpression = String.format(" from_timestamp(%s,'yyyy-MM-dd') as `%s`", fieldName, fieldAliasName);
             } else {
-                fieldName = customField(fieldName, formula, customAggFlag, selectOptionDTO.getGranularity(), targetDataType);
+                fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
                 //筛选值查询去重并做空值过滤
-                if (selectOptionDTO.getQueryType() == 1) {
+                if (queryType == 1) {
                     sqlExpression = String.format(" DISTINCT(%s) as `%s`", fieldName, fieldAliasName);
                     if (customAggFlag > 0) {
                         whereSqlList.add(String.format(" %s is not null", formula));
@@ -458,9 +448,9 @@ public class SqlBuilder extends BaseBuilder {
                 }
             }
         }
-        if (!Strings.isNullOrEmpty(sqlExpression) && !selectOptionDTO.getQoqFlag()) {
+        if (!Strings.isNullOrEmpty(sqlExpression) && !qoqFlag) {
             selectCondition.append(sqlExpression);
-        } else if (selectOptionDTO.getQoqFlag()) {
+        } else if (qoqFlag) {
             fieldAliasAndFormulaMap.put(fieldAliasName, sqlExpression);
         }
         aliasAndFieldMap.put(fieldAliasName, originFieldName);
@@ -566,10 +556,6 @@ public class SqlBuilder extends BaseBuilder {
                     String whereStr = whereBuilder(filter);
                     if (!Strings.isNullOrEmpty(whereStr)) {
                         whereSqlList.add(whereStr);
-                        //同环比不受日期筛选条件的限制
-                        if (!Objects.equals(filter.getDataType(), DATETIME_TYPE.getType())) {
-                            whereQoqSqlList.add(whereStr);
-                        }
                     }
                 }
                 if (groupCode.equals(filter.getFieldName())) {
@@ -580,14 +566,6 @@ public class SqlBuilder extends BaseBuilder {
                         cassandraFilter = String.format(groupCode.concat(" in (%s)"), filter.getFieldValue().stream().collect(Collectors.joining(",")));
                     }
                 }
-            });
-        }
-    }
-
-    private void whereSqlBean( List<FilterConditionBean> filterList ) {
-        if (Objects.nonNull(filterList)) {
-            filterList.forEach(filter -> {
-
             });
         }
     }
@@ -609,8 +587,6 @@ public class SqlBuilder extends BaseBuilder {
         String aggregator = filterCondition.getAggregator();
         //筛选值数量
         int valuesSize = Objects.isNull(filterCondition.getFieldValue()) ? 0 : filterCondition.getFieldValue().size();
-        //是否是自定义表达式
-        boolean isAgg = filterCondition.getIsBuildAggregated() > 0;
         //字符串
         if (Objects.equals(dataType, STRING_TYPE.getType())) {
             //算子为空，单个值用等于(=)，多个值用包含（in）
@@ -734,6 +710,169 @@ public class SqlBuilder extends BaseBuilder {
             whereCondition.append(fieldName).append(" is not null");
         }
         return whereCondition.toString();
+    }
+    //endregion
+
+    //region sql_qoq
+
+    private void qoqHandle( List<IndexConditionBean> indexCondition ) {
+        if (Objects.nonNull(indexCondition)) {
+            //同环比指标遍历
+            List<IndexConditionBean> qoqIndexList = indexCondition.stream().filter(index -> index.getQoqType() > 0).collect(Collectors.toList());
+            for (IndexConditionBean index : qoqIndexList) {
+                if (QOQ_LIST.contains(index.getQoqType())) {
+                    selectJoinSqlList.add(generateQoqSql(index));
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成同环比SQL
+     *
+     * @param index 指标条件
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/12 15:42
+     */
+    private String generateQoqSql( IndexConditionBean index ) {
+        //同环比计算指标转换成同环比对象
+        QoqDTO qoq = convert2QoqDTO(index.getQoqConditionBean());
+        qoq.setQoqType(index.getQoqType());
+        //根据同环比计算字段别名获取对应的计算表达式
+        String fieldFormula = fieldAliasAndFormulaMap.get(index.getFieldAliasName());
+        //生成表别名
+        String tableAlias = generateTableAlias();
+        qoq.setTableAlias(tableAlias);
+        //生成同环比日期表达式
+        String qoqDateFormula = generateQoqDateFormula(qoq);
+        selectQoqSqlList.add(qoqDateFormula);
+        if (!Strings.isNullOrEmpty(fieldFormula)) {
+            selectQoqSqlList.add(fieldFormula);
+        }
+        //同环比sql拼接，包括on条件
+        String qoqSelect = selectQoqSqlList.stream().map(s -> s.replace(SYMBOL_POUND_KEY.getCode(), "")).collect(Collectors.joining(","));
+        String qoqGroup = groupSqlList.stream().collect(Collectors.joining(","));
+
+        //表别名前缀
+        String tableAliasPrefix = tableAliasDefault + SYMBOL_DOT.getCode();
+        //同环比where条件
+        String qoqWhere = whereSqlList.stream().collect(Collectors.joining(" and "));
+        //同环比主干SQL
+        String qoqSelectMainSql = String.format("(SELECT %s FROM %s where %s GROUP BY %s) AS %s ", qoqSelect, this.tableName, qoqWhere, qoqGroup, tableAlias);
+        //同环比计算字段拆分出表达式和对应的别名
+        String[] formulas = fieldFormula.split("as");
+        //同环比计算字段表达式
+        String calculateFieldFormula = formulas[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasPrefix);
+        //同环比计算增长值
+        if (qoq.getQoqResultType() == 1) {
+            //同环比计算表达式，增长值
+            String qoqCalculateFormula = String.format("%s - min(COALESCE(%s,0)) as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT.getCode()).concat(formulas[1]), formulas[1]);
+            selectSqlList.add(qoqCalculateFormula);
+        }
+        //同环比计算增长率
+        if (qoq.getQoqResultType() == 2) {
+            //同环比计算表达式，增长率
+            String qoqCalculateFormula = String.format("(%s - min(COALESCE(%s,0)))/ COALESCE(%s,1)as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT.getCode()).concat(formulas[1]), calculateFieldFormula, formulas[1]);
+            selectSqlList.add(qoqCalculateFormula);
+        }
+        return qoqSelectMainSql + qoq.getQoqJoinOn();
+    }
+
+    /**
+     * 生成同环比日期表达式
+     *
+     * @param qoq 同环比日期信息
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/12 13:49
+     */
+    private String generateQoqDateFormula( QoqDTO qoq ) {
+        //获取维度条件中参与同环比计算日期字段的别名
+        String alias = findKeyByValue(SYMBOL_POUND_KEY.getCode() + qoq.getFieldName(), aliasAndFieldMap);
+        qoq.setFieldAliasName(alias);
+        String dateFormat = DATE_TYPE_FORMAT_MAP.get(qoq.getGranularity());
+        //基础时间格式
+        String basicDateFormat = String.format("from_timestamp(%s,'%s')", qoq.getFieldName(), dateFormat);
+        //子连接on字段
+        String qoqChildJoinField = qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(qoq.getFieldAliasName());
+        //同环比sql，日期格式
+        String qoqSqlDateFormula = String.format("%s as %s", basicDateFormat, alias);
+        //连接查询SQL
+        String qoqJoinOn = "";
+
+        //日滚动同比上周今日计算
+        if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_WEEK.getCode()) {
+            if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
+                if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
+                    qoqJoinOn = String.format("ON %s = weeks_add(%s, 1)", basicDateFormat, qoqChildJoinField);
+                }
+            }
+        }
+        //滚动同比上月今日计算
+        if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_MONTH.getCode()) {
+            if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
+                qoqJoinOn = String.format("ON %s = months_add(%s, 1)", basicDateFormat, qoqChildJoinField);
+            }
+        }
+        //滚动同比去年本日、月、周计算
+        if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_YEAR.getCode()) {
+            if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
+                qoqJoinOn = String.format("ON %s = years_add(%s, 1)", basicDateFormat, qoqChildJoinField);
+            }
+            //按月滚动同比去年本月
+            if (Objects.equals(qoq.getGranularity(), DateType.DATE_MONTH.getCode())) {
+                qoqJoinOn = String.format("ON %s = from_timestamp(years_add(CONCAT(%s, '-01'), 1),'yyyy-MM')", basicDateFormat, qoqChildJoinField);
+            }
+            //按周滚动同比去年本周
+            if (qoq.getGranularity().equals(DateType.DATE_WEEK.getCode())) {
+                qoqJoinOn = String.format("ON %s = %s", weekFormula2.replace("%s", qoq.getFieldName()), qoqChildJoinField);
+                //同环比SQL日期
+                qoqSqlDateFormula = String.format("CONCAT( CAST(YEAR(%s) + 1 AS STRING),'年第',CAST(WEEKOFYEAR(%s) AS STRING), '周') AS %s", qoq.getFieldName(), qoq.getFieldName(), alias);
+            }
+        }
+        //滚动环比计算
+        if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_2.getCode()) {
+            //按日滚动环比
+            if (qoq.getGranularity().equals(DateType.DATE_DAY.getCode())) {
+                //主SQL与子SQL连接语句
+                qoqJoinOn = String.format(" ON %s = days_add(%s,1)", basicDateFormat, qoqChildJoinField);
+            }
+            //按周滚动环比
+            if (qoq.getGranularity().equals(DateType.DATE_WEEK.getCode())) {
+                qoqJoinOn = String.format("ON %s = %s", weekFormula2.replace("%s", qoq.getFieldName()), qoqChildJoinField);
+                //同环比SQL日期
+                qoqSqlDateFormula = String.format("CONCAT( CAST(YEAR(%s) AS STRING),'年第',CAST(WEEKOFYEAR(%s)+1 AS STRING), '周') AS %s", qoq.getFieldName(), qoq.getFieldName(), alias);
+            }
+            //按月滚动环比
+            if (qoq.getGranularity().equals(DateType.DATE_MONTH.getCode())) {
+                qoqJoinOn = String.format("ON %s = from_timestamp(months_add(CONCAT(%s, '-01'), 1),'yyyy-MM')", basicDateFormat, qoqChildJoinField);
+            }
+            //按年滚动环比
+            if (qoq.getGranularity().equals(DateType.DATE_YEAR.getCode())) {
+                qoqJoinOn = String.format("ON %s = from_timestamp(years_add(CONCAT(%s, '-01-01'), 1),'yyyy')", basicDateFormat, qoqChildJoinField);
+            }
+        }
+        //子连接条件不为空
+        if (!Strings.isNullOrEmpty(qoqJoinOn)) {
+            qoq.setQoqJoinOn(qoqJoinOn);
+        }
+        return qoqSqlDateFormula;
+    }
+
+    /**
+     * 同环比入参条件转换
+     */
+    private QoqDTO convert2QoqDTO( QoqConditionBean qoqConditionBean ) {
+        QoqDTO qoqDTO = new QoqDTO();
+        qoqDTO.setFieldName(qoqConditionBean.getFieldName());
+        qoqDTO.setFieldAliasName(qoqConditionBean.getFieldAliasName());
+        qoqDTO.setFieldDescription(qoqConditionBean.getFieldDescription());
+        qoqDTO.setGranularity(qoqConditionBean.getGranularity());
+        qoqDTO.setQoqResultType(qoqConditionBean.getQoqResultType());
+        qoqDTO.setQoqRadixTime(qoqConditionBean.getQoqRadixTime());
+        qoqDTO.setQoqReducedTime(qoqConditionBean.getQoqReducedTime());
+        return qoqDTO;
     }
     //endregion
 
@@ -883,105 +1022,6 @@ public class SqlBuilder extends BaseBuilder {
     }
     //endregion
 
-    //region 同环比条件处理
-
-    private void qoqHandle( List<IndexConditionBean> indexCondition ) {
-        if (Objects.nonNull(indexCondition)) {
-            //同环比指标遍历
-            List<IndexConditionBean> qoqIndexList = indexCondition.stream().filter(index -> index.getQoqType() > 0).collect(Collectors.toList());
-            for (IndexConditionBean index : qoqIndexList) {
-                if (index.getQoqType() > 0) {
-                    qoqSqlList.add(generateQoqSql(index));
-                }
-            }
-        }
-    }
-
-    /**
-     * 生成同环比SQL
-     *
-     * @param index 指标条件
-     * @return java.lang.String
-     * @author 刘凯峰
-     * @date 2019/3/12 15:42
-     */
-    private String generateQoqSql( IndexConditionBean index ) {
-        //同环比计算指标转换成同环比对象
-        QoqDTO qoq = convert2QoqDTO(index.getQoqConditionBean());
-        qoq.setQoqType(index.getQoqType());
-        //根据同环比计算字段别名获取对应的计算表达式
-        String fieldFormula = fieldAliasAndFormulaMap.get(index.getFieldAliasName());
-        //生成同环比日期表达式
-        String qoqDateFormula = generateQoqDateFormula(qoq);
-        selectQoqSqlList.add(qoqDateFormula);
-        if (!Strings.isNullOrEmpty(fieldFormula)) {
-            selectQoqSqlList.add(fieldFormula);
-        }
-        //同环比sql拼接，包括on条件
-        String qoqSelect = selectQoqSqlList.stream().map(s -> s.replace(DEFAULT_PLACEHOLDER, "")).collect(Collectors.joining(","));
-        String qoqGroup = groupSqlList.stream().collect(Collectors.joining(","));
-        //生成表别名
-        String tableAlias = generateTableAlias();
-        //表别名前缀
-        String tableAliasPrefix = tableAliasDefault + SYMBOL_DOT;
-        //同环比where条件
-        String qoqWhere = whereSqlList.stream().collect(Collectors.joining(" and "));
-        //同环比主干SQL
-        String qoqSelectMainSql = String.format("(SELECT %s FROM %s where %s GROUP BY %s) AS %s ", qoqSelect, this.tableName, qoqWhere, qoqGroup, tableAlias);
-        //同环比on条件
-        String qoqJoinOn = String.format(" ON from_timestamp (%s, 'yyyy-MM-dd') = %s", tableAliasPrefix.concat(qoq.getFieldName()), tableAlias.concat(SYMBOL_DOT).concat(qoq.getFieldAliasName()));
-        //同环比计算字段拆分出表达式和对应的别名
-        String[] formulas = fieldFormula.split("as");
-        //同环比计算字段表达式
-        String calculateFieldFormula = formulas[0].replace(DEFAULT_PLACEHOLDER, tableAliasPrefix);
-        //同环比计算表达式，增长值
-        String qoqCalculateFormula = String.format("%s - min(COALESCE(%s,0)) as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT).concat(formulas[1]), formulas[1]);
-        selectSqlList.add(qoqCalculateFormula);
-        return qoqSelectMainSql + qoqJoinOn;
-    }
-
-    /**
-     * 生成同环比日期表达式
-     *
-     * @param qoq 同环比日期信息
-     * @return java.lang.String
-     * @author 刘凯峰
-     * @date 2019/3/12 13:49
-     */
-    private String generateQoqDateFormula( QoqDTO qoq ) {
-        String formula = "";
-        String alias = findKeyByValue(DEFAULT_PLACEHOLDER + qoq.getFieldName(), aliasAndFieldMap);
-        qoq.setFieldAliasName(alias);
-        //按天同环比
-        if (qoq.getGranularity().equals(DateType.DATE_DAY.getCode())) {
-            //同比
-            if (qoq.getQoqType() == 1) {
-                formula = String.format("years_add(from_timestamp(%s,'yyyy-MM-dd'),-1) as %s", qoq.getFieldName(), alias);
-            }
-            //环比
-            if (qoq.getQoqType() == 2) {
-                formula = String.format("days_add(from_timestamp(%s,'yyyy-MM-dd'),-1) as %s", qoq.getFieldName(), alias);
-            }
-        }
-        return formula;
-    }
-
-    /**
-     * 同环比入参条件转换
-     */
-    private QoqDTO convert2QoqDTO( QoqConditionBean qoqConditionBean ) {
-        QoqDTO qoqDTO = new QoqDTO();
-        qoqDTO.setFieldName(qoqConditionBean.getFieldName());
-        qoqDTO.setFieldAliasName(qoqConditionBean.getFieldAliasName());
-        qoqDTO.setFieldDescription(qoqConditionBean.getFieldDescription());
-        qoqDTO.setGranularity(qoqConditionBean.getGranularity());
-        qoqDTO.setQoqResultType(qoqConditionBean.getQoqResultType());
-        qoqDTO.setQoqRadixTime(qoqConditionBean.getQoqRadixTime());
-        qoqDTO.setQoqReducedTime(qoqConditionBean.getQoqReducedTime());
-        return qoqDTO;
-    }
-    //endregion
-
     //region get方法
 
     /**
@@ -995,24 +1035,6 @@ public class SqlBuilder extends BaseBuilder {
         return selectFieldAliasList;
     }
 
-    /**
-     * 是否是同环比字段
-     *
-     * @param fieldAliasName 被判断字段别名
-     * @return boolean
-     * @author 刘凯峰
-     * @date 2019/1/8 11:13
-     */
-    public boolean isQoqField( String fieldAliasName ) {
-        boolean qoqFlag = false;
-        if (Objects.nonNull(qoqList) && !qoqList.isEmpty()) {
-            List<QoqDTO> qoqDTOS = qoqList.parallelStream().filter(qoq -> qoq.getQoqIndexAliasName().equals(fieldAliasName)).collect(Collectors.toList());
-            if (Objects.nonNull(qoqDTOS) && !qoqDTOS.isEmpty()) {
-                qoqFlag = true;
-            }
-        }
-        return qoqFlag;
-    }
 
     public boolean isFliterItem() {
         return getQueryType() == 1;

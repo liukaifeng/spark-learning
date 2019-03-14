@@ -33,10 +33,6 @@ public class SelectOptionDTO extends BaseConditionBean {
      * 聚合代码，eg：SUM
      */
     private String aggregator;
-    /**
-     * 同环比标识
-     */
-    private Boolean qoqFlag;
 
     /**
      * 查询类型
@@ -48,8 +44,4 @@ public class SelectOptionDTO extends BaseConditionBean {
      * 表别名
      */
     private String tableAlias;
-
-    public SelectOptionDTO() {
-        this.qoqFlag = false;
-    }
 }
