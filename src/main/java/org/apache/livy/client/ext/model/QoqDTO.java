@@ -61,6 +61,11 @@ public class QoqDTO extends QoqConditionBean {
      */
     private String tableAlias;
 
+    /**
+     * 同环比计算字段表达式
+     */
+    private String fieldFormula;
+
 
     public QoqDTO() {
         this.delQoqField = false;
@@ -114,4 +119,13 @@ public class QoqDTO extends QoqConditionBean {
     public void setQoqJoinOn( String qoqJoinOn ) {
         this.qoqJoinOn = qoqJoinOn;
     }
+
+    public String getFieldFormula() {
+        return fieldFormula;
+    }
+
+    public void setFieldFormula( String fieldFormula ) {
+        this.fieldFormula = fieldFormula;
+    }
+
 }

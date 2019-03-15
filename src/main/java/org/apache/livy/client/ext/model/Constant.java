@@ -99,15 +99,10 @@ public class Constant {
             "    DAYOFWEEK(%s) + 6,\n" +
             "    DAYOFWEEK(%s) - 1\n" +
             "  )";
-
-    public static String seasonFormula3 = "CONCAT(from_timestamp(%s,'yyyy'),'年', " +
-            "CAST(" +
-            "CASE WHEN( MONTH(%s) BETWEEN 1 AND 3)THEN'第1季度'" +
-            "WHEN(MONTH(%s) BETWEEN 4 AND 6) THEN '第2季度' " +
-            "WHEN(MONTH(%s) BETWEEN 7 AND 9) THEN '第3季度' " +
-            "WHEN(MONTH(%s) BETWEEN 10 AND 12) THEN'第4季度'" +
-            "END " +
-            "AS STRING))";
+    /**
+     * 季度格式化表达式
+     */
+    public static String seasonFormula = " CONCAT(CAST(YEAR(%s) AS STRING),'年第',CAST(QUARTER(%s) AS STRING ), '季度')";
 
     static {
         for (SparkUdf sparkUdf : SparkUdf.values()) {
@@ -143,6 +138,8 @@ public class Constant {
         QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_WEEK.getCode());
         QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_MONTH.getCode());
         QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_YEAR.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_SEASON.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_QOQ_CUSTOM.getCode());
     }
 
     public enum DataFieldType {
@@ -326,12 +323,13 @@ public class Constant {
     public enum AdvancedCmpType {
         ADVANCED_QOQ_1(1, "同比"),
         ADVANCED_QOQ_2(2, "环比"),
-        ADVANCED_CUSTOM(6, "自定义"),
+        ADVANCED_QOQ_CUSTOM(6, "自定义"),
         ADVANCED_PCT(7, "百分比"),
         ADVANCED_ROLL_QOQ_2(8, "滚动环比计算"),
         ADVANCED_ROLL_QOQ_WEEK(9, "周滚动同比计算"),
         ADVANCED_ROLL_QOQ_MONTH(10, "月滚动同比计算"),
-        ADVANCED_ROLL_QOQ_YEAR(11, "年滚动同比计算");
+        ADVANCED_ROLL_QOQ_YEAR(11, "年滚动同比计算"),
+        ADVANCED_ROLL_QOQ_SEASON(12, "季度滚动同比计算");
 
         private int code;
         private String desc;

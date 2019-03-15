@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import static java.util.regex.Pattern.compile;
 import static org.apache.livy.client.ext.model.Constant.*;
+import static org.apache.livy.client.ext.model.Constant.AdvancedCmpType.ADVANCED_QOQ_CUSTOM;
 import static org.apache.livy.client.ext.model.Constant.DataFieldType.*;
 import static org.apache.livy.client.ext.model.Constant.DateType.DATE_SEASON;
 import static org.apache.livy.client.ext.model.Constant.DateType.DATE_WEEK;
@@ -721,7 +722,12 @@ public class SqlBuilder extends BaseBuilder {
             List<IndexConditionBean> qoqIndexList = indexCondition.stream().filter(index -> index.getQoqType() > 0).collect(Collectors.toList());
             for (IndexConditionBean index : qoqIndexList) {
                 if (QOQ_LIST.contains(index.getQoqType())) {
-                    selectJoinSqlList.add(generateQoqSql(index));
+                    //自定义时间段同环比计算
+                    if (ADVANCED_QOQ_CUSTOM.getCode() == index.getQoqType()) {
+                        selectJoinSqlList.add(generateCustomQoqSql(index));
+                    } else {
+                        selectJoinSqlList.add(generateQoqSql(index));
+                    }
                 }
             }
         }
@@ -737,45 +743,19 @@ public class SqlBuilder extends BaseBuilder {
      */
     private String generateQoqSql( IndexConditionBean index ) {
         //同环比计算指标转换成同环比对象
-        QoqDTO qoq = convert2QoqDTO(index.getQoqConditionBean());
-        qoq.setQoqType(index.getQoqType());
-        //根据同环比计算字段别名获取对应的计算表达式
-        String fieldFormula = fieldAliasAndFormulaMap.get(index.getFieldAliasName());
-        //生成表别名
-        String tableAlias = generateTableAlias();
-        qoq.setTableAlias(tableAlias);
+        QoqDTO qoq = convert2QoqDTO(index);
         //生成同环比日期表达式
         String qoqDateFormula = generateQoqDateFormula(qoq);
         selectQoqSqlList.add(qoqDateFormula);
-        if (!Strings.isNullOrEmpty(fieldFormula)) {
-            selectQoqSqlList.add(fieldFormula);
-        }
         //同环比sql拼接，包括on条件
         String qoqSelect = selectQoqSqlList.stream().map(s -> s.replace(SYMBOL_POUND_KEY.getCode(), "")).collect(Collectors.joining(","));
         String qoqGroup = groupSqlList.stream().collect(Collectors.joining(","));
-
-        //表别名前缀
-        String tableAliasPrefix = tableAliasDefault + SYMBOL_DOT.getCode();
         //同环比where条件
         String qoqWhere = whereSqlList.stream().collect(Collectors.joining(" and "));
         //同环比主干SQL
-        String qoqSelectMainSql = String.format("(SELECT %s FROM %s where %s GROUP BY %s) AS %s ", qoqSelect, this.tableName, qoqWhere, qoqGroup, tableAlias);
-        //同环比计算字段拆分出表达式和对应的别名
-        String[] formulas = fieldFormula.split("as");
-        //同环比计算字段表达式
-        String calculateFieldFormula = formulas[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasPrefix);
-        //同环比计算增长值
-        if (qoq.getQoqResultType() == 1) {
-            //同环比计算表达式，增长值
-            String qoqCalculateFormula = String.format("%s - min(COALESCE(%s,0)) as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT.getCode()).concat(formulas[1]), formulas[1]);
-            selectSqlList.add(qoqCalculateFormula);
-        }
-        //同环比计算增长率
-        if (qoq.getQoqResultType() == 2) {
-            //同环比计算表达式，增长率
-            String qoqCalculateFormula = String.format("(%s - min(COALESCE(%s,0)))/ COALESCE(%s,1)as %s", calculateFieldFormula, tableAlias.concat(SYMBOL_DOT.getCode()).concat(formulas[1]), calculateFieldFormula, formulas[1]);
-            selectSqlList.add(qoqCalculateFormula);
-        }
+        String qoqSelectMainSql = String.format("(SELECT %s FROM %s where %s GROUP BY %s) AS %s ", qoqSelect, this.tableName, qoqWhere, qoqGroup, qoq.getTableAlias());
+        //生成同环比计算表达式，增长值（率）
+        generateQoqCalculateFormula(qoq);
         return qoqSelectMainSql + qoq.getQoqJoinOn();
     }
 
@@ -788,14 +768,12 @@ public class SqlBuilder extends BaseBuilder {
      * @date 2019/3/12 13:49
      */
     private String generateQoqDateFormula( QoqDTO qoq ) {
-        //获取维度条件中参与同环比计算日期字段的别名
-        String alias = findKeyByValue(SYMBOL_POUND_KEY.getCode() + qoq.getFieldName(), aliasAndFieldMap);
-        qoq.setFieldAliasName(alias);
-        String dateFormat = DATE_TYPE_FORMAT_MAP.get(qoq.getGranularity());
+        //同环比日期字段别名
+        String alias = qoq.getFieldAliasName();
         //基础时间格式
-        String basicDateFormat = String.format("from_timestamp(%s,'%s')", qoq.getFieldName(), dateFormat);
+        String basicDateFormat = getDateFormula(qoq.getGranularity(),qoq.getFieldName());
         //子连接on字段
-        String qoqChildJoinField = qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(qoq.getFieldAliasName());
+        String qoqChildJoinField = qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(alias);
         //同环比sql，日期格式
         String qoqSqlDateFormula = String.format("%s as %s", basicDateFormat, alias);
         //连接查询SQL
@@ -804,9 +782,16 @@ public class SqlBuilder extends BaseBuilder {
         //日滚动同比上周今日计算
         if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_WEEK.getCode()) {
             if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
-                if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
-                    qoqJoinOn = String.format("ON %s = weeks_add(%s, 1)", basicDateFormat, qoqChildJoinField);
-                }
+                qoqJoinOn = String.format("ON %s = weeks_add(%s, 1)", basicDateFormat, qoqChildJoinField);
+            }
+        }
+        //季滚动同比去年本季计算
+        if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_SEASON.getCode()) {
+            //按季滚动同比去年本季
+            if (qoq.getGranularity().equals(DateType.DATE_SEASON.getCode())) {
+                qoqJoinOn = String.format("ON %s = %s", seasonFormula.replace("%s", qoq.getFieldName()), qoqChildJoinField);
+                //同环比SQL日期
+                qoqSqlDateFormula = String.format("CONCAT( CAST(YEAR(%s) + 1 AS STRING),'年第',CAST(QUARTER(%s) AS STRING), '季度') AS %s", qoq.getFieldName(), qoq.getFieldName(), alias);
             }
         }
         //滚动同比上月今日计算
@@ -815,8 +800,9 @@ public class SqlBuilder extends BaseBuilder {
                 qoqJoinOn = String.format("ON %s = months_add(%s, 1)", basicDateFormat, qoqChildJoinField);
             }
         }
-        //滚动同比去年本日、月、周计算
+        //滚动同比去年本日、本月、本周计算
         if (qoq.getQoqType() == AdvancedCmpType.ADVANCED_ROLL_QOQ_YEAR.getCode()) {
+            //按日滚动同比去年本日
             if (Objects.equals(qoq.getGranularity(), DateType.DATE_DAY.getCode())) {
                 qoqJoinOn = String.format("ON %s = years_add(%s, 1)", basicDateFormat, qoqChildJoinField);
             }
@@ -844,6 +830,12 @@ public class SqlBuilder extends BaseBuilder {
                 //同环比SQL日期
                 qoqSqlDateFormula = String.format("CONCAT( CAST(YEAR(%s) AS STRING),'年第',CAST(WEEKOFYEAR(%s)+1 AS STRING), '周') AS %s", qoq.getFieldName(), qoq.getFieldName(), alias);
             }
+            //按季滚动环比
+            if (qoq.getGranularity().equals(DateType.DATE_SEASON.getCode())) {
+                qoqJoinOn = String.format("ON %s = %s", seasonFormula.replace("%s", qoq.getFieldName()), qoqChildJoinField);
+                //同环比SQL日期
+                qoqSqlDateFormula = String.format("CONCAT(CAST(YEAR(%s) AS STRING),'年第',CAST(QUARTER(%s)+1 AS STRING ), '季度') AS %s", qoq.getFieldName(), qoq.getFieldName(), alias);
+            }
             //按月滚动环比
             if (qoq.getGranularity().equals(DateType.DATE_MONTH.getCode())) {
                 qoqJoinOn = String.format("ON %s = from_timestamp(months_add(CONCAT(%s, '-01'), 1),'yyyy-MM')", basicDateFormat, qoqChildJoinField);
@@ -861,9 +853,98 @@ public class SqlBuilder extends BaseBuilder {
     }
 
     /**
+     * 生成自定义时间段，同环比计算join sql
+     *
+     * @param index 同环比计算指标对象
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/15 15:29
+     */
+    private String generateCustomQoqSql( IndexConditionBean index ) {
+        //同环比计算指标转换成同环比对象
+        QoqDTO qoq = convert2QoqDTO(index);
+        //生成同环比日期表达式
+        String qoqDateFormula = getDateFormula(qoq.getGranularity(),qoq.getFieldName());
+        //同环比基准时间，添加到主干SQL的筛选条件中
+        String[] qoqRadixTime = qoq.getQoqRadixTime().split(",");
+        //同环比对比时间，添加到子连接SQL的筛选条件中
+        String[] qoqReduceTime = qoq.getQoqReducedTime().split(",");
+        //主干SQL,日期筛选条件
+        String qoqMainSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqRadixTime);
+        //连接SQL,日期筛选条件
+        String qoqJoinSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqReduceTime);
+        //同环比计算，查询项
+        String qoqJoinSelect = selectQoqSqlList.stream().collect(Collectors.joining(","));
+        //同环比计算，筛选项
+        String qoqJoinWhere = (Objects.nonNull(whereSqlList) && whereSqlList.size() > 0) ? whereSqlList.stream().collect(Collectors.joining(" and ")) : " 1=1 ";
+        //同环比计算，分组项
+        String qoqJoinGroup = (Objects.nonNull(groupSqlList) && groupSqlList.size() > 0) ? " GROUP BY " + groupSqlList.stream().collect(Collectors.joining(",")) : "";
+        //同环比计算，连接（on）条件
+        List<String> list = Lists.newArrayList();
+        groupSqlList.forEach(s -> {
+            String fieldName = aliasAndFieldMap.get(s).replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + SYMBOL_DOT.getCode());
+            list.add(fieldName + "=" + qoq.getTableAlias() + "." + s);
+        });
+        String qoqJoinOn = " on " + list.stream().collect(Collectors.joining(" and "));
+        //同环比计算，连接sql
+        qoqJoinWhere = qoqJoinWhere + " and " + qoqJoinSqlWhereDate;
+        String qoqJoinSql = String.format(" (SELECT %s FROM  %s  WHERE %s %s) AS %s", qoqJoinSelect, this.tableName, qoqJoinWhere, qoqJoinGroup, qoq.getTableAlias());
+        whereSqlList.add(qoqMainSqlWhereDate);
+        //生成同环比计算表达式，增长值（率）
+        generateQoqCalculateFormula(qoq);
+        return qoqJoinSql + qoqJoinOn;
+    }
+
+    /**
+     * 生成同环比计算表达式，增长值（率）
+     *
+     * @param qoq 同环比计算对象
+     * @author 刘凯峰
+     * @date 2019/3/15 15:28
+     */
+    private void generateQoqCalculateFormula( QoqDTO qoq ) {
+        //同环比计算字段拆分出表达式和对应的别名
+        String[] formulas = qoq.getFieldFormula().split("as");
+        //同环比计算字段表达式
+        String calculateFieldFormula = formulas[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + SYMBOL_DOT.getCode());
+        //同环比计算增长值
+        if (qoq.getQoqResultType() == 1) {
+            //同环比计算表达式，增长值
+            String qoqCalculateFormula = String.format("%s - min(COALESCE(%s,0)) as %s", calculateFieldFormula, qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(formulas[1]), formulas[1]);
+            selectSqlList.add(qoqCalculateFormula);
+        }
+        //同环比计算增长率
+        if (qoq.getQoqResultType() == 2) {
+            //同环比计算表达式，增长率
+            String qoqCalculateFormula = String.format("(%s - min(COALESCE(%s,0)))/ COALESCE(%s,1)as %s", calculateFieldFormula, qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(formulas[1]), calculateFieldFormula, formulas[1]);
+            selectSqlList.add(qoqCalculateFormula);
+        }
+    }
+
+    /**
+     * 根据自定义时间，生成筛选条件
+     *
+     * @param qoqDateFormula 日期表达式
+     * @param qoqDate        自定义的时间
+     * @return java.lang.String
+     * @author 刘凯峰
+     * @date 2019/3/15 16:11
+     */
+    private String generateCustomQoqWhereDate( String qoqDateFormula, String[] qoqDate ) {
+        String qoqWhereDate = "";
+        if (qoqDate.length > 1) {
+            qoqWhereDate = String.format(" %s between '%s' and '%s'", qoqDateFormula, qoqDate[0], qoqDate[1]);
+        } else {
+            qoqWhereDate = String.format(" %s='%s'", qoqDateFormula, qoqDate[0]);
+        }
+        return qoqWhereDate;
+    }
+
+    /**
      * 同环比入参条件转换
      */
-    private QoqDTO convert2QoqDTO( QoqConditionBean qoqConditionBean ) {
+    private QoqDTO convert2QoqDTO( IndexConditionBean index ) {
+        QoqConditionBean qoqConditionBean = index.getQoqConditionBean();
         QoqDTO qoqDTO = new QoqDTO();
         qoqDTO.setFieldName(qoqConditionBean.getFieldName());
         qoqDTO.setFieldAliasName(qoqConditionBean.getFieldAliasName());
@@ -872,6 +953,20 @@ public class SqlBuilder extends BaseBuilder {
         qoqDTO.setQoqResultType(qoqConditionBean.getQoqResultType());
         qoqDTO.setQoqRadixTime(qoqConditionBean.getQoqRadixTime());
         qoqDTO.setQoqReducedTime(qoqConditionBean.getQoqReducedTime());
+        qoqDTO.setQoqType(index.getQoqType());
+        qoqDTO.setQoqIndexAliasName(index.getFieldAliasName());
+        //生成表别名
+        String tableAlias = generateTableAlias();
+        qoqDTO.setTableAlias(tableAlias);
+        //获取维度条件中参与同环比计算日期字段的别名
+        String alias = findKeyByValue(SYMBOL_POUND_KEY.getCode() + qoqDTO.getFieldName(), aliasAndFieldMap);
+        if (!Strings.isNullOrEmpty(alias)) {
+            qoqDTO.setFieldAliasName(alias);
+        }
+        //根据同环比计算字段别名获取对应的计算表达式
+        String fieldFormula = fieldAliasAndFormulaMap.get(qoqDTO.getQoqIndexAliasName());
+        qoqDTO.setFieldFormula(fieldFormula);
+        selectQoqSqlList.add(fieldFormula);
         return qoqDTO;
     }
     //endregion
@@ -1093,7 +1188,7 @@ public class SqlBuilder extends BaseBuilder {
             }
             //按季度的维度进行筛选，使用dayofweek表达式，筛选值需要转换才能使用
             if (Objects.equals(granularity, DATE_SEASON.getCode()) || Objects.equals(granularity, DateType.DATE_MAP_SEASON.getCode())) {
-                dateFormula = seasonFormula3.replace("%s", fieldName);
+                dateFormula = seasonFormula.replace("%s", fieldName);
             }
             //按每周n筛选，使用everyWeekFormula 表达式
             if (Objects.equals(granularity, DateType.DATE_EVERY_WEEK.getCode())) {

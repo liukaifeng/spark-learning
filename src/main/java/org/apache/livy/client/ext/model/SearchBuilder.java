@@ -341,7 +341,7 @@ public class SearchBuilder {
             return select;
         }
         //如果存在join子句，主干sql需要起别名
-        if (Objects.nonNull(sqlbuilder.getSelectJoinSqlList())) {
+        if (Objects.nonNull(sqlbuilder.getSelectJoinSqlList()) && sqlbuilder.getSelectJoinSqlList().size() > 0) {
             select = select.replace(SYMBOL_POUND_KEY.getCode(), "tb_1.");
             tableName = tableName + " as tb_1";
             joinSql = " left join " + sqlbuilder.getSelectJoinSqlList().stream().collect(Collectors.joining(" left join "));

@@ -42,7 +42,10 @@ public class TestDemo {
     }
 
     public static void main( String[] args ) {
-        System.out.println(Long.MIN_VALUE);
+
+        System.out.println(9^3);
+        System.out.println(9^4);
+        System.out.println(9^0);
 //        System.out.println("COUNT_BITS = Integer.SIZE - 3值:" + COUNT_BITS);
 //        System.out.println("CAPACITY = (1 << COUNT_BITS) - 1值:" + CAPACITY);
 //        System.out.println("RUNNING = -1 << COUNT_BITS:" + RUNNING);
