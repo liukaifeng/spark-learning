@@ -771,7 +771,7 @@ public class SqlBuilder extends BaseBuilder {
         //同环比日期字段别名
         String alias = qoq.getFieldAliasName();
         //基础时间格式
-        String basicDateFormat = getDateFormula(qoq.getGranularity(),qoq.getFieldName());
+        String basicDateFormat = getDateFormula(qoq.getGranularity(), qoq.getFieldName());
         //子连接on字段
         String qoqChildJoinField = qoq.getTableAlias().concat(SYMBOL_DOT.getCode()).concat(alias);
         //同环比sql，日期格式
@@ -864,15 +864,15 @@ public class SqlBuilder extends BaseBuilder {
         //同环比计算指标转换成同环比对象
         QoqDTO qoq = convert2QoqDTO(index);
         //生成同环比日期表达式
-        String qoqDateFormula = getDateFormula(qoq.getGranularity(),qoq.getFieldName());
+        String qoqDateFormula = getDateFormula(qoq.getGranularity(), qoq.getFieldName());
         //同环比基准时间，添加到主干SQL的筛选条件中
         String[] qoqRadixTime = qoq.getQoqRadixTime().split(",");
         //同环比对比时间，添加到子连接SQL的筛选条件中
         String[] qoqReduceTime = qoq.getQoqReducedTime().split(",");
         //主干SQL,日期筛选条件
-        String qoqMainSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqRadixTime);
+        String qoqMainSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqRadixTime, qoq.getGranularity());
         //连接SQL,日期筛选条件
-        String qoqJoinSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqReduceTime);
+        String qoqJoinSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqReduceTime, qoq.getGranularity());
         //同环比计算，查询项
         String qoqJoinSelect = selectQoqSqlList.stream().collect(Collectors.joining(","));
         //同环比计算，筛选项
@@ -930,8 +930,14 @@ public class SqlBuilder extends BaseBuilder {
      * @author 刘凯峰
      * @date 2019/3/15 16:11
      */
-    private String generateCustomQoqWhereDate( String qoqDateFormula, String[] qoqDate ) {
+    private String generateCustomQoqWhereDate( String qoqDateFormula, String[] qoqDate, String granularity ) {
         String qoqWhereDate = "";
+        if (DATE_WEEK.getCode().equals(granularity)) {
+
+        }
+        if (DATE_SEASON.getCode().equals(granularity)) {
+
+        }
         if (qoqDate.length > 1) {
             qoqWhereDate = String.format(" %s between '%s' and '%s'", qoqDateFormula, qoqDate[0], qoqDate[1]);
         } else {
