@@ -23,7 +23,6 @@ import java.util.Arrays;
  */
 public class ArrayMergeSorted {
     public static void main( String[] args ) {
-
         int[] a = {1, 3, 5, 7, 0, 0, 0, 0};
         int[] b = {2, 4, 6, 8};
         merge(a, 4, b, b.length);
@@ -31,6 +30,17 @@ public class ArrayMergeSorted {
     }
 
 
+    /**
+     * 合并两个有序数组
+     *
+     * @param a    数组a
+     * @param aLng 数组a长度
+     * @param b    数组b
+     * @param bLng 数组b长度
+     * @return void
+     * @author 刘凯峰
+     * @date 2019/3/18 17:42
+     */
     public static void merge( int[] a, int aLng, int[] b, int bLng ) {
         int totalLength = aLng + bLng - 1;
         --aLng;
@@ -39,7 +49,6 @@ public class ArrayMergeSorted {
             System.out.println("aLength：" + aLng + "  a[aLength]：" + a[aLng] + "  bLength：" + bLng + "  b[bLength]：" + b[bLng]);
             a[totalLength--] = (aLng >= 0 && a[aLng] > b[bLng]) ? a[aLng--] : b[bLng--];
         }
-
     }
 
 }
