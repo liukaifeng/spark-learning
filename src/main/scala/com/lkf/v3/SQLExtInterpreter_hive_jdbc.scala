@@ -8,7 +8,7 @@ import com.mongodb.casbah.{MongoClient, MongoCredential}
 import com.mongodb.util.JSON
 import com.mongodb.{DBCollection, DBObject, ServerAddress}
 import org.apache.livy.client.ext.model.Constant.PIVOT_ALIAS
-import org.apache.livy.client.ext.model.{DateUtils, QoqDTO, SparkSqlCondition, _}
+import org.apache.livy.client.ext.model.{DateUtils, SparkSqlCondition, _}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DataType, StringType, StructType}
@@ -52,9 +52,8 @@ object SQLExtInterpreter_hive_jdbc {
     val beginTime: Long = System.currentTimeMillis()
     sqlExtLog.beginTime = DateUtils.convertTimeToString(beginTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
     System.setProperty("hadoop.home.dir", "D:\\Java\\hadoop-3.0")
-
     //    val param = "{\"acessToken\":\"47853542-19b8-4da4-8135-128d9885ed41\",\"compareCondition\":[],\"dataSourceType\":1,\"dbName\":\"impala::e000112\",\"dimensionCondition\":[{\"aliasName\":\"支付订单量\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_group_x_di5lie1547707906000_0\",\"fieldDescription\":\"支付订单量\",\"fieldGroup\":0,\"fieldId\":\"190116134407005885\",\"fieldName\":\"di5lie\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"udfType\":0,\"uniqId\":\"1547707906000\"}],\"enterTime\":1547707900758,\"filterCondition\":[],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"190117145125001182\",\"sessionGroup\":\"group_report\",\"sessionId\":\"4\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"3000m\",\"spark.executor.memory\":\"3000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\",\"spark.driver.port\":\"10000\",\"spark.blockManager.port\":\"20000\",\"spark.port.maxRetries\":\"999\"},\"synSubmit\":true,\"tbId\":\"190116134407000403\",\"tbName\":\"wqwangzhandingdanfenxiceshi_sheet1_000112\",\"tracId\":\"1547707907000\"}"
-    val param = "{\"accessToken\":\"85850dc5-5c3f-4463-bad2-16515c257eed\",\"compareCondition\":[],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1552290046000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552290046000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和-日同比上月\",\"aliasName\":\"收款金额(求和-日同比上月)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_receipt_money1552442157000_0\",\"fieldDescription\":\"收款金额\",\"fieldGroup\":0,\"fieldId\":\"180620140424000875\",\"fieldName\":\"receipt_money\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqConditionBean\":{\"fieldAliasName\":\"ljc_qoq_x_settle_biz_datedayqoq_0\",\"fieldDescription\":\"营业日\",\"fieldName\":\"settle_biz_date\",\"granularity\":\"day\",\"qoqRadixTime\":\"2018-09-20\",\"qoqReducedTime\":\"2018-08-20\",\"qoqResultType\":1},\"qoqType\":6,\"udfType\":0,\"uniqId\":\"1552442157000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"181115111709000246\",\"sessionGroup\":\"group_report\",\"sessionId\":\"21\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140424000009\",\"tbName\":\"dw_trade_settle_detail_fact_p_group\",\"tracId\":\"1552639763000\"}"
+    val param = "{\"accessToken\":\"b93d34b3-8dc8-4097-9148-fe0710866bff\",\"compareCondition\":[{\"aliasName\":\"集团名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_group_name1552887967000_0\",\"fieldDescription\":\"集团名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000909\",\"fieldName\":\"group_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552887967000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1552290046000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552290046000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0},{\"aggregator\":\"\",\"aggregatorName\":\"\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1552290046000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"fieldValue\":[\"三斤耗儿鱼九龙滨江店\"],\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552879605000\"}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"支付金额(求和)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_pay_money1552877012000_0\",\"fieldDescription\":\"支付金额\",\"fieldGroup\":0,\"fieldId\":\"180620140424000874\",\"fieldName\":\"pay_money\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1552877012000\"},{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"就餐人数(求和)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_people_qty1552889085000_0\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140424000857\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"originDataType\":\"int\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1552889085000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"181115111709000246\",\"sessionGroup\":\"group_report\",\"sessionId\":\"21\",\"sortCondition\":[{\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_pay_money1552877012000_0\",\"fieldDescription\":\"支付金额\",\"fieldGroup\":0,\"fieldId\":\"180620140424000874\",\"fieldName\":\"pay_money\",\"granularity\":\"\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"sortFlag\":\"asc\",\"sortOrigin\":\"index\",\"sortType\":0,\"udfType\":0,\"uniqId\":\"1552877012000\"}],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140424000009\",\"tbName\":\"dw_trade_settle_detail_fact_p_group\",\"tracId\":\"1552889085000\"}"
 
     //组装spark sql
     val sparkSqlCondition: SparkSqlCondition = new SparkSqlBuild().buildSqlStatement(param)
@@ -65,16 +64,12 @@ object SQLExtInterpreter_hive_jdbc {
       sqlExtLog.tracId = sparkSqlCondition.getTracId
       sparkSqlCondition.getLimit
       var sqlStr: String = sparkSqlCondition.getSelectSql
-      val sqlQoqStr: String = sparkSqlCondition.getSelectQoqSql
       logger.info(s"【SQLExtInterpreter-日志】-【execute】-主体SQL：$sqlStr")
-      logger.info(s"【SQLExtInterpreter-日志】-【execute】-同环比SQL：$sqlQoqStr")
 
       //3-主体SQL执行
       val sqlExecuteBeginTime = System.currentTimeMillis()
       var df: DataFrame = null
-      df = HiveJdbcUtil.execute2DataFrame(sparkSession, sparkSqlCondition, sqlStr)
-      df.show()
-      return
+
       if (sqlStr.nonEmpty) {
         sqlExtLog.mainSql = sqlStr
         if (sparkSqlCondition.getSecondaryFlag) {
@@ -88,7 +83,7 @@ object SQLExtInterpreter_hive_jdbc {
           val jRows = Extraction.decompose(rows.toArray.map(_.toSeq))
           println(jSchema)
           println(jRows)
-          //          return
+          return
         }
       }
       sqlExtLog.sqlExecuteElapsedTime = System.currentTimeMillis() - sqlExecuteBeginTime
@@ -97,23 +92,12 @@ object SQLExtInterpreter_hive_jdbc {
       val crossOrderByNonNull = Objects.nonNull(sparkSqlCondition.getCrosstabByMap) && !sparkSqlCondition.getCrosstabByMap.isEmpty
       //无对比项
       val compareIsNull = Objects.isNull(sparkSqlCondition.getCompareList) || sparkSqlCondition.getCompareList.isEmpty
-      //同环比非空
-      val qoqNonNull = Objects.nonNull(sparkSqlCondition.getQoqList) && !sparkSqlCondition.getQoqList.isEmpty
 
       //交叉表只有维度和指标，排序及取前后n条处理
-      if (crossOrderByNonNull && compareIsNull && !qoqNonNull) {
+      if (crossOrderByNonNull && compareIsNull) {
         df = handleSortAndLimitResult(df, sparkSqlCondition)
-      }
-      //4-同环比
-      val qoqBeginTime = System.currentTimeMillis()
-      if (qoqNonNull) {
-        df = handleQoqSql(df, sparkSqlCondition, sparkSession)
       }
 
-      //交叉表只有维度和指标，排序及取前后n条处理
-      if (compareIsNull && qoqNonNull) {
-        df = handleSortAndLimitResult(df, sparkSqlCondition)
-      }
       //5-自定义字段作为筛选项处理
       df = handleCustomField(df, sparkSqlCondition)
 
@@ -182,147 +166,6 @@ object SQLExtInterpreter_hive_jdbc {
       }
     }
     df
-  }
-
-  /**
-    * 同环比指标计算
-    *
-    * @param df                主体数据集（非同比计算数据集）
-    * @param sparkSqlCondition 同环比计算条件
-    * @param sparkSession      hive上下文
-    */
-  private[this] def handleQoqSql(df: DataFrame, sparkSqlCondition: SparkSqlCondition, sparkSession: SparkSession): DataFrame = {
-    var dfQoqResult = df
-    //同环比
-    if (sparkSqlCondition.getQoqList != null && sparkSqlCondition.getQoqList.size() > 0) {
-      //同环比SQL
-      var df1: DataFrame = HiveJdbcUtil.loadData2DataFrame(sparkSession, sparkSqlCondition, sparkSqlCondition.getSelectQoqSql)
-      //同环比计算
-      dfQoqResult = handleQoqDf(df, df1, sparkSqlCondition)
-    }
-    dfQoqResult
-  }
-
-  /**
-    * 同环比计算
-    *
-    * @param df0               主体SQL数据集
-    * @param dfQoq             同环比SQL数据集
-    * @param sparkSqlCondition 同环比计算条件
-    */
-  private[this] def handleQoqDf(df0: DataFrame, dfQoq: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
-    var df1 = df0
-    //同环比计算条件
-    val qoqList: List[QoqDTO] = JavaConversions.asScalaBuffer(sparkSqlCondition.getQoqList).toList
-
-    if (qoqList.nonEmpty) {
-      //查询项字段
-      var selectList: List[String] = if (sparkSqlCondition.getSelectList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getSelectList).toList else Nil
-      //分组字段
-      var groupList: List[String] = if (sparkSqlCondition.getGroupList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getGroupList).toList else Nil
-      //对比字段
-      val compareList: List[String] = if (sparkSqlCondition.getCompareList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getCompareList).toList else Nil
-      //聚合字段
-      val sparkAggMap: mutable.Map[String, util.List[String]] = sparkSqlCondition.getSparkAggMap.asScala
-      //聚合字段
-      val aggList: List[Column] = sparkAgg(sparkAggMap)
-      if (compareList != null) {
-        groupList = compareList.:::(groupList)
-      }
-      //数据集连接类型
-      var joinType = joinTypeInner
-      if (groupList.isEmpty) {
-        joinType = joinTypeCross
-      }
-      //同环比计算
-      var df2 = handleQoq(dfQoq, qoqList.head, groupList, aggList)
-
-      //同环比结果集合并
-      if (joinType == joinTypeCross) {
-        qoqList.tail.foreach(qoq => df2 = df2.crossJoin(handleQoq(dfQoq, qoq, groupList, aggList)))
-      }
-      if (joinType == joinTypeInner) {
-        qoqList.tail.foreach(qoq => df2 = df2.join(handleQoq(dfQoq, qoq, groupList, aggList), groupList, joinTypeInner))
-      }
-
-      //主体结果集与同环比结果合并
-      if (df0 == null) {
-        df1 = df2
-      } else if (joinType == joinTypeCross) {
-        df1 = df0.crossJoin(df2)
-      } else if (joinType == joinTypeInner) {
-        df1 = df0.join(df2, groupList, joinType)
-      }
-      var selectCols: List[Column] = List()
-      selectList = groupList.:::(selectList)
-      selectList.distinct.foreach(select => selectCols = selectCols :+ col(select))
-
-      //重新查询,统计和排序,确保顺序与参数一致
-      //分组字段不为空
-      if (groupList.nonEmpty) {
-        df1 = df1.select(selectCols: _*).groupBy(groupList.head, groupList.tail: _*).agg(aggList.head, aggList.tail: _*)
-      }
-      else {
-        df1 = df1.select(selectCols: _*).agg(aggList.head, aggList.tail: _*)
-      }
-    }
-    df1
-  }
-
-  /** 同环比计算
-    * 1）环比增长率=（本期数－上期数）/上期数×100%
-    * 2）同比增长率=（本期数－同期数）/同期数×100%
-    *
-    * @param dfQoq     数据集
-    * @param qoqDTO    同环比条件
-    * @param groupList 分组字段
-    */
-  private[this] def handleQoq(dfQoq: DataFrame, qoqDTO: QoqDTO, groupList: List[String], sparkAggList: List[Column]): DataFrame = {
-    //根据同环比字段反转
-    var df1 = dfQoq
-    if (groupList.nonEmpty) {
-      df1 = dfQoq.coalesce(defaultNumPartitions).groupBy(groupList.head, groupList.tail: _*)
-        .pivot(qoqDTO.getQoqTimeAliasName, Seq(qoqDTO.getQoqRadixTime, qoqDTO.getQoqReducedTime))
-        .agg(sum(qoqDTO.getQoqIndexAliasName))
-    } else {
-      df1 = dfQoq.coalesce(defaultNumPartitions).groupBy()
-        .pivot(qoqDTO.getQoqTimeAliasName, Seq(qoqDTO.getQoqRadixTime, qoqDTO.getQoqReducedTime))
-        .agg(sum(qoqDTO.getQoqIndexAliasName))
-    }
-    df1 = df1.withColumn("new_col", col("2018-11-26") + col("2018-11-25"))
-    df1.show()
-    //组装查询项
-    var selectCols: List[Column] = List()
-    groupList.foreach(group => selectCols = selectCols :+ col(group))
-
-    //同环比基数时间
-    val qoqRadixTime = qoqDTO.getQoqRadixTime
-    //同环比对比时间
-    val qoqReducedTime = qoqDTO.getQoqReducedTime
-    //同环比指标别名
-    val qoqIndexAliasName = qoqDTO.getQoqIndexAliasName
-    //同环比基数时间列
-    val qoqRadixTimeCol: Column = when(isnull(col(qoqRadixTime)), 0).otherwise(col(qoqRadixTime))
-    //同环比对比时间列
-    val qoqReducedTimeCol: Column = when(isnull(col(qoqReducedTime)), 0).otherwise(col(qoqReducedTime))
-    //同环比对比时间列,作为分母
-
-    //增长值表达式
-    val growthValueExpression: Column = (qoqRadixTimeCol - qoqReducedTimeCol).as(qoqIndexAliasName)
-
-    //增长率表达式
-    val growthRateExpression: Column = ((qoqRadixTimeCol - qoqReducedTimeCol) / qoqReducedTimeCol).as(qoqIndexAliasName)
-
-    //增长值
-    if (qoqDTO.getQoqResultType == 1) {
-      selectCols = selectCols :+ growthValueExpression
-    }
-    //增长率
-    if (qoqDTO.getQoqResultType == 2) {
-      selectCols = selectCols :+ growthRateExpression
-    }
-    df1 = df1.select(selectCols: _*)
-    df1
   }
 
   //筛选项的值处理

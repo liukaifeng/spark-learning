@@ -54,14 +54,12 @@ class SparkKuduStrategy(sparkConf: SparkConf) extends ISessionStrategy {
       .filter(sparkSqlCondition.getCassandraFilter)
 
     val mainSql = sparkSqlCondition.getSelectSql
-    val qoqSql = sparkSqlCondition.getSelectQoqSql
 
     //临时表命名
     val tempView = "temp_kudu_table".concat(System.currentTimeMillis().toString)
     //创建临时表
     df.createOrReplaceTempView(tempView)
     sparkSqlCondition.setSelectSql(mainSql.replace(kuduTable, tempView))
-    sparkSqlCondition.setSelectQoqSql(qoqSql.replace(kuduTable, tempView))
     sparkSession
   }
 }

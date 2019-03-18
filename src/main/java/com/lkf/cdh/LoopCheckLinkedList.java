@@ -1,10 +1,18 @@
 package com.lkf.cdh;
 
-import com.alibaba.fastjson.JSONObject;
-import org.json4s.jackson.Json;
-
 /**
  * 检查链表中是否存在循环
+ * 1 2 3 4 5
+ * <p>
+ * slow:1 fast:3
+ * <p>
+ * slow:2 fast:5
+ * <p>
+ * slow:3 fast:5
+ * <p>
+ * slow:4 fast:5
+ * <p>
+ * slow:5 fast:5
  *
  * @author 刘凯峰
  * @date 2019-03-06 17-27
@@ -24,6 +32,7 @@ public class LoopCheckLinkedList {
         }
         return false;
     }
+
     public static void main( String[] args ) {
         SingleLinkedListNode node1 = new SingleLinkedListNode(1);
         SingleLinkedListNode node2 = new SingleLinkedListNode(2);

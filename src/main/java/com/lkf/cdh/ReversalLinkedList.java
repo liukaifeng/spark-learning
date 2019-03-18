@@ -35,19 +35,23 @@ public class ReversalLinkedList {
      * @date 2019/3/6 17:02
      */
     public static SingleLinkedListNode recursionReverse( SingleLinkedListNode head ) {
+        System.out.println("head："+JSONObject.toJSONString(head));
+
         //如果是空链表或者尾结点
         if (head == null || head.getNext() == null) {
             return head;
         }
+
         //先反转后续结点
-        SingleLinkedListNode reversedHead = recursionReverse(head.getNext());
+        SingleLinkedListNode newNode = recursionReverse(head.getNext());
+        System.out.println("newNode："+JSONObject.toJSONString(newNode));
 
         //当前结点指针指向前一结点
         head.getNext().setNext(head);
 
         //令前一结点的指针域为null
         head.setNext(null);
-        return reversedHead;
+        return newNode;
     }
 
     /**
@@ -89,6 +93,8 @@ public class ReversalLinkedList {
         node2.setNext(node3);
         node3.setNext(node4);
         node4.setNext(null);
+
+//        System.out.println(JSONObject.toJSONString(node1));
 
 //        System.out.println(JSONObject.toJSONString(foreachReverse(node1)));
         System.out.println(JSONObject.toJSONString(recursionReverse(node1)));

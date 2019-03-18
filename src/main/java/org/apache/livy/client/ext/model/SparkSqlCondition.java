@@ -36,11 +36,6 @@ public class SparkSqlCondition extends BaseBuilder {
     private String selectSql;
 
     /**
-     * 同环比sql语句
-     */
-    private String selectQoqSql;
-
-    /**
      * 结果集中是否清除自定义字段列
      */
     private Boolean delFilterField;
@@ -231,13 +226,6 @@ public class SparkSqlCondition extends BaseBuilder {
         this.qoqList = qoqList;
     }
 
-    public String getSelectQoqSql() {
-        return selectQoqSql;
-    }
-
-    public void setSelectQoqSql( String selectQoqSql ) {
-        this.selectQoqSql = selectQoqSql;
-    }
 
     public Map<String, String> getFieldAliasAndDescMap() {
         return fieldAliasAndDescMap;

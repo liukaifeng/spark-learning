@@ -220,16 +220,15 @@ public class SqlBuilder extends BaseBuilder {
         tableBuilder(biReportBuildInDTO);
         //where
         whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
-
+        //select
         selectSqlBuilder(biReportBuildInDTO);
-
-//        //index
-//        sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
-//        //orderBy
-//        orderBySqlBuilder(biReportBuildInDTO);
-//        //自定义字段作为筛选项
-//        customFieldHandle(biReportBuildInDTO.getFilterCondition());
-//
+        //index
+        sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
+        //orderBy
+        orderBySqlBuilder(biReportBuildInDTO);
+        //自定义字段作为筛选项
+        customFieldHandle(biReportBuildInDTO.getFilterCondition());
+        //同环比
         qoqHandle(biReportBuildInDTO.getIndexCondition());
     }
     //endregion
@@ -747,9 +746,14 @@ public class SqlBuilder extends BaseBuilder {
         //生成同环比日期表达式
         String qoqDateFormula = generateQoqDateFormula(qoq);
         selectQoqSqlList.add(qoqDateFormula);
+        List<String> qoqGroupSqlList = groupSqlList;
+        String qoqDateAlias = qoqDateFormula.split("as")[1];
+        if (!qoqGroupSqlList.contains(qoqDateAlias)) {
+            qoqGroupSqlList.add(qoqDateAlias);
+        }
         //同环比sql拼接，包括on条件
         String qoqSelect = selectQoqSqlList.stream().map(s -> s.replace(SYMBOL_POUND_KEY.getCode(), "")).collect(Collectors.joining(","));
-        String qoqGroup = groupSqlList.stream().collect(Collectors.joining(","));
+        String qoqGroup = qoqGroupSqlList.stream().collect(Collectors.joining(","));
         //同环比where条件
         String qoqWhere = whereSqlList.stream().collect(Collectors.joining(" and "));
         //同环比主干SQL
@@ -863,16 +867,10 @@ public class SqlBuilder extends BaseBuilder {
     private String generateCustomQoqSql( IndexConditionBean index ) {
         //同环比计算指标转换成同环比对象
         QoqDTO qoq = convert2QoqDTO(index);
-        //生成同环比日期表达式
-        String qoqDateFormula = getDateFormula(qoq.getGranularity(), qoq.getFieldName());
-        //同环比基准时间，添加到主干SQL的筛选条件中
-        String[] qoqRadixTime = qoq.getQoqRadixTime().split(",");
-        //同环比对比时间，添加到子连接SQL的筛选条件中
-        String[] qoqReduceTime = qoq.getQoqReducedTime().split(",");
         //主干SQL,日期筛选条件
-        String qoqMainSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqRadixTime, qoq.getGranularity());
+        String qoqMainSqlWhereDate = generateCustomQoqWhereDate(qoq, qoq.getQoqRadixTime());
         //连接SQL,日期筛选条件
-        String qoqJoinSqlWhereDate = generateCustomQoqWhereDate(qoqDateFormula, qoqReduceTime, qoq.getGranularity());
+        String qoqJoinSqlWhereDate = generateCustomQoqWhereDate(qoq, qoq.getQoqReducedTime());
         //同环比计算，查询项
         String qoqJoinSelect = selectQoqSqlList.stream().collect(Collectors.joining(","));
         //同环比计算，筛选项
@@ -924,24 +922,33 @@ public class SqlBuilder extends BaseBuilder {
     /**
      * 根据自定义时间，生成筛选条件
      *
-     * @param qoqDateFormula 日期表达式
-     * @param qoqDate        自定义的时间
+     * @param qoqDTO  同环比信息对象
+     * @param qoqDate 自定义的时间
      * @return java.lang.String
      * @author 刘凯峰
      * @date 2019/3/15 16:11
      */
-    private String generateCustomQoqWhereDate( String qoqDateFormula, String[] qoqDate, String granularity ) {
+    private String generateCustomQoqWhereDate( QoqDTO qoqDTO, String qoqDate ) {
         String qoqWhereDate = "";
-        if (DATE_WEEK.getCode().equals(granularity)) {
-
+        //生成同环比日期表达式
+        String qoqDateFormula = getDateFormula(qoqDTO.getGranularity(), qoqDTO.getFieldName());
+        //解析对自定义时间段
+        String[] qoqDates = qoqDate.split(",");
+        //自定义时间，按周对比
+        if (DATE_WEEK.getCode().equals(qoqDTO.getGranularity())) {
+            String[] date = qoqDates[0].split("-");
+            qoqDates[0] = String.format("%s年第%s周", date[0], Integer.valueOf(date[1]));
         }
-        if (DATE_SEASON.getCode().equals(granularity)) {
-
+        //自定义时间，按季对比
+        if (DATE_SEASON.getCode().equals(qoqDTO.getGranularity())) {
+            String[] date = qoqDates[0].split("-");
+            qoqDates[0] = String.format("%s年第%s季度", date[0], Integer.valueOf(date[1]));
         }
-        if (qoqDate.length > 1) {
-            qoqWhereDate = String.format(" %s between '%s' and '%s'", qoqDateFormula, qoqDate[0], qoqDate[1]);
+        //如果是日期时间段，使用 between m and n
+        if (qoqDates.length == 2) {
+            qoqWhereDate = String.format(" %s between '%s' and '%s'", qoqDateFormula, qoqDates[0], qoqDates[1]);
         } else {
-            qoqWhereDate = String.format(" %s='%s'", qoqDateFormula, qoqDate[0]);
+            qoqWhereDate = String.format(" %s='%s'", qoqDateFormula, qoqDates[0]);
         }
         return qoqWhereDate;
     }

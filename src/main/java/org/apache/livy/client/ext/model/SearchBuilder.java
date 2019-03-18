@@ -115,41 +115,39 @@ public class SearchBuilder {
      * 降序排序取前10条：sql降序，结果降序
      * </p>
      */
-//    private SqlSortBean orderBuilder( SqlBuilder sqlbuilder ) {
-//        //排序条件分隔符
-//        String dotStr = ",";
-//        //默认升序
-//        String sort = Constant.SORT_ASC;
-//
-//        //sql 排序语句拼接
-//        StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
-//        //排序字段与升降序对应关系
-//        Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
-//        SqlSortBean sqlSortBean = new SqlSortBean();
-//        //排序字段不为空
-//        if (orderByMap != null && !orderByMap.isEmpty()) {
-//            //遍历排序项
-//            for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
-//                if (!sqlbuilder.isQoqField(entry.getKey())) {
-//                    sqlSortBean.setSortFieldAliasName(entry.getKey());
-//                    //0-全部 1-前几条 2-后几条
-//                    if (sqlbuilder.getQueryPoint() == 2) {
-//                        sort = Constant.SORT_DESC.equals(entry.getValue().toUpperCase()) ? Constant.SORT_ASC : Constant.SORT_DESC;
-//                        String resultSort = String.format(" %s `%s` %s", ORDER_BY, entry.getKey(), entry.getValue()).concat(getSortNull(entry.getValue()));
-//                        sqlSortBean.setSortAfterExpression(resultSort);
-//                        sqlSortBean.setAfterFlag(true);
-//                    } else {
-//                        sort = entry.getValue();
-//                    }
-//                    stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
-//                }
-//            }
-//        } else {
-//            sort = Constant.SORT_DESC;
-//            //指标字段
-//            List<String> indexList = sqlbuilder.getIndexList();
-//            String fieldAliasName = "";
-//            //同环比字段不参与排序
+    private SqlSortBean orderBuilder( SqlBuilder sqlbuilder ) {
+        //排序条件分隔符
+        String dotStr = ",";
+        //默认升序
+        String sort = Constant.SORT_ASC;
+
+        //sql 排序语句拼接
+        StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
+        //排序字段与升降序对应关系
+        Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
+        SqlSortBean sqlSortBean = new SqlSortBean();
+        //排序字段不为空
+        if (orderByMap != null && !orderByMap.isEmpty()) {
+            //遍历排序项
+            for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
+                sqlSortBean.setSortFieldAliasName(entry.getKey());
+                //0-全部 1-前几条 2-后几条
+                if (sqlbuilder.getQueryPoint() == 2) {
+                    sort = Constant.SORT_DESC.equals(entry.getValue().toUpperCase()) ? Constant.SORT_ASC : Constant.SORT_DESC;
+                    String resultSort = String.format(" %s `%s` %s", ORDER_BY, entry.getKey(), entry.getValue()).concat(getSortNull(entry.getValue()));
+                    sqlSortBean.setSortAfterExpression(resultSort);
+                    sqlSortBean.setAfterFlag(true);
+                } else {
+                    sort = entry.getValue();
+                }
+                stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
+            }
+        } else {
+            sort = Constant.SORT_DESC;
+            //指标字段
+            List<String> indexList = sqlbuilder.getIndexList();
+            String fieldAliasName = "";
+            //同环比字段不参与排序
 //            if (Objects.nonNull(indexList) && !indexList.isEmpty()) {
 //                indexList = indexList.parallelStream().filter(index -> !sqlbuilder.isQoqField(index)).collect(Collectors.toList());
 //                if (Objects.nonNull(indexList) && indexList.size() > 0) {
@@ -157,19 +155,19 @@ public class SearchBuilder {
 //                    fieldAliasName = indexList.get(0);
 //                }
 //            }
-//            if (!Strings.isNullOrEmpty(fieldAliasName)) {
-//                sqlSortBean.setSortFieldAliasName(fieldAliasName);
-//                stringBuilder.append("`").append(fieldAliasName).append("` ").append(getSortNull(sort)).append(dotStr);
-//            }
-//        }
-//        if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
-//            return null;
-//        }
-//        //sql 排序语句
-//        String sqlOrderBy = stringBuilder.substring(0, stringBuilder.length() - dotStr.length());
-//        sqlSortBean.setSortExpression(sqlOrderBy);
-//        return sqlSortBean;
-//    }
+            if (!Strings.isNullOrEmpty(fieldAliasName)) {
+                sqlSortBean.setSortFieldAliasName(fieldAliasName);
+                stringBuilder.append("`").append(fieldAliasName).append("` ").append(getSortNull(sort)).append(dotStr);
+            }
+        }
+        if (Objects.equals(stringBuilder.toString(), ORDER_BY)) {
+            return null;
+        }
+        //sql 排序语句
+        String sqlOrderBy = stringBuilder.substring(0, stringBuilder.length() - dotStr.length());
+        sqlSortBean.setSortExpression(sqlOrderBy);
+        return sqlSortBean;
+    }
 
 
     /**
@@ -319,7 +317,7 @@ public class SearchBuilder {
         boolean customFieldNonNull = Objects.nonNull(sparkSqlCondition.getFilterCustomFieldList()) && sparkSqlCondition.getFilterCustomFieldList().size() > 0;
         //对比条件非空
         boolean compareNonNull = Objects.nonNull(sparkSqlCondition.getCompareList()) && sparkSqlCondition.getCompareList().size() > 0;
-        if ((crossOrderByNonNull && compareIsNull) || qoqNonNull || customFieldNonNull || compareNonNull) {
+        if ((crossOrderByNonNull && compareIsNull) || customFieldNonNull || compareNonNull) {
             sparkSqlCondition.setSecondaryFlag(true);
         }
         return sparkSqlCondition;
@@ -333,7 +331,7 @@ public class SearchBuilder {
         //表名
         String tableName = tableBuilder(sqlbuilder);
         //排序项
-        SqlSortBean sqlOrderBean = null;//orderBuilder(sqlbuilder);
+        SqlSortBean sqlOrderBean =orderBuilder(sqlbuilder);
         //join sql
         String joinSql = "";
 
