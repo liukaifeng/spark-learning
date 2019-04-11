@@ -62,9 +62,14 @@ public class QoqDTO extends QoqConditionBean {
     private String tableAlias;
 
     /**
-     * 同环比计算字段表达式
+     * 同环比计算表达式(增长值，增长率)
      */
     private String fieldFormula;
+
+    /**
+     * 同环比计算表达式(增长值，增长率)别名
+     */
+    private String fieldFormulaAlias;
 
 
     public QoqDTO() {
@@ -126,6 +131,15 @@ public class QoqDTO extends QoqConditionBean {
 
     public void setFieldFormula( String fieldFormula ) {
         this.fieldFormula = fieldFormula;
+    }
+
+
+    public String getFieldFormulaAlias() {
+        return fieldFormulaAlias;
+    }
+
+    public void setFieldFormulaAlias( String fieldFormulaAlias ) {
+        this.fieldFormulaAlias = fieldFormulaAlias;
     }
 
 }

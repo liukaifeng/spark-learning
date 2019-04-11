@@ -18,9 +18,9 @@
 package org.apache.livy.client.ext.model;
 
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.parquet.Strings;
 
 import java.util.List;
 import java.util.Map;

@@ -281,7 +281,7 @@ public class SearchBuilder {
         sparkSqlCondition.setSparkConfig(sqlbuilder.getSparkConfigMap());
         //分组字段
         sparkSqlCondition.setGroupList(sqlbuilder.getGroupList());
-        sparkSqlCondition.setLimit(sqlbuilder.getLimit());
+        sparkSqlCondition.setLimit((Objects.isNull(sqlbuilder.getLimit()) || sqlbuilder.getLimit() <= 0) ? Constant.DEFAULT_LIMIE.intValue() : sqlbuilder.getLimit());
         sparkSqlCondition.setQueryType(sqlbuilder.getQueryType());
         sparkSqlCondition.setSparkAggMap(sqlbuilder.getSparkAggMap());
         sparkSqlCondition.setQueryPoint(sqlbuilder.getQueryPoint());
@@ -298,7 +298,7 @@ public class SearchBuilder {
         sparkSqlCondition.setTracId(sqlbuilder.getTracId());
         sparkSqlCondition.setCompareSortFlag(sqlbuilder.getCompareSortFlag());
         sparkSqlCondition.setMongoConfigMap(sqlbuilder.getMongoConfigMap());
-        sparkSqlCondition.setDimensionIsEmpty(sqlbuilder.getDimensionIsEmpty());
+        sparkSqlCondition.setDimensionIsExists(sqlbuilder.getDimensionIsExists());
         sparkSqlCondition.setHiveJdbcConfig(sqlbuilder.getHiveJdbcConfig());
         if (compare != null && !compare.isEmpty()) {
             sparkSqlCondition.setCompareList(compare);
@@ -331,7 +331,7 @@ public class SearchBuilder {
         //表名
         String tableName = tableBuilder(sqlbuilder);
         //排序项
-        SqlSortBean sqlOrderBean =orderBuilder(sqlbuilder);
+        SqlSortBean sqlOrderBean = orderBuilder(sqlbuilder);
         //join sql
         String joinSql = "";
 
@@ -399,6 +399,7 @@ public class SearchBuilder {
         long limit = 0L;
         //存在对比项，条数限制1500，最后结果集根据指定条数截取
         boolean compareFlag = Objects.nonNull(sqlbuilder.getCompareFieldList()) && sqlbuilder.getCompareFieldList().size() > 0;
+        //请求数据量小于等于0或大于1500条，使用默认条数限制
         if (sqlbuilder.getLimit() <= 0 || sqlbuilder.getLimit() > Constant.DEFAULT_LIMIE || compareFlag) {
             limit = Constant.DEFAULT_LIMIE;
         } else {
@@ -410,10 +411,11 @@ public class SearchBuilder {
         }
         //数据导出条数限制,请求条数小于等于0或大于10000条时，限制条数10000条
         if (sqlbuilder.getQueryType() == 2) {
-            if (sqlbuilder.getLimit() <= 0 || sqlbuilder.getLimit() > Constant.EXPORT_LIMIE || sqlbuilder.getLimit() == 1500) {
+            if (sqlbuilder.getLimit() <= 0 || sqlbuilder.getLimit() > Constant.EXPORT_LIMIE || Objects.equals(sqlbuilder.getLimit(), Constant.DEFAULT_LIMIE)) {
                 limit = Constant.EXPORT_LIMIE;
             }
         }
+        //对比项不为空，重置请求条数
         if (!compareFlag) {
             sqlbuilder.setLimit(Math.toIntExact(limit));
         }

@@ -106,7 +106,7 @@ public class BaseBuilder {
     /**
      * 是否有维度条件
      */
-    private Boolean dimensionIsEmpty = true;
+    private Boolean dimensionIsExists = true;
 
     public void setLimit( Integer limit ) {
         this.limit = limit;
@@ -153,13 +153,6 @@ public class BaseBuilder {
         this.queryPoint = queryPoint;
     }
 
-    public int getLimit() {
-        return limit;
-    }
-
-    public void setLimit(int limit) {
-        this.limit = limit;
-    }
 
     public int getDataSourceType() {
         return dataSourceType;
@@ -230,12 +223,12 @@ public class BaseBuilder {
         this.kuduMaster = kuduMaster;
     }
 
-    public Boolean getDimensionIsEmpty() {
-        return dimensionIsEmpty;
+    public Boolean getDimensionIsExists() {
+        return dimensionIsExists;
     }
 
-    public void setDimensionIsEmpty( Boolean dimensionIsEmpty ) {
-        this.dimensionIsEmpty = dimensionIsEmpty;
+    public void setDimensionIsExists( Boolean dimensionIsEmpty ) {
+        this.dimensionIsExists = dimensionIsEmpty;
     }
 
     public Map<String, String> getHiveJdbcConfig() {
@@ -244,5 +237,9 @@ public class BaseBuilder {
 
     public void setHiveJdbcConfig( Map<String, String> hiveJdbcConfig ) {
         this.hiveJdbcConfig = hiveJdbcConfig;
+    }
+
+    public Integer getLimit() {
+        return limit;
     }
 }

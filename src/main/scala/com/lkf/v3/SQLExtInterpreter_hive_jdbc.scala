@@ -52,8 +52,8 @@ object SQLExtInterpreter_hive_jdbc {
     val beginTime: Long = System.currentTimeMillis()
     sqlExtLog.beginTime = DateUtils.convertTimeToString(beginTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
     System.setProperty("hadoop.home.dir", "D:\\Java\\hadoop-3.0")
-    //    val param = "{\"acessToken\":\"47853542-19b8-4da4-8135-128d9885ed41\",\"compareCondition\":[],\"dataSourceType\":1,\"dbName\":\"impala::e000112\",\"dimensionCondition\":[{\"aliasName\":\"支付订单量\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_group_x_di5lie1547707906000_0\",\"fieldDescription\":\"支付订单量\",\"fieldGroup\":0,\"fieldId\":\"190116134407005885\",\"fieldName\":\"di5lie\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"udfType\":0,\"uniqId\":\"1547707906000\"}],\"enterTime\":1547707900758,\"filterCondition\":[],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"190117145125001182\",\"sessionGroup\":\"group_report\",\"sessionId\":\"4\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"3000m\",\"spark.executor.memory\":\"3000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\",\"spark.driver.port\":\"10000\",\"spark.blockManager.port\":\"20000\",\"spark.port.maxRetries\":\"999\"},\"synSubmit\":true,\"tbId\":\"190116134407000403\",\"tbName\":\"wqwangzhandingdanfenxiceshi_sheet1_000112\",\"tracId\":\"1547707907000\"}"
-    val param = "{\"accessToken\":\"b93d34b3-8dc8-4097-9148-fe0710866bff\",\"compareCondition\":[{\"aliasName\":\"集团名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_group_name1552887967000_0\",\"fieldDescription\":\"集团名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000909\",\"fieldName\":\"group_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552887967000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1552290046000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552290046000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0},{\"aggregator\":\"\",\"aggregatorName\":\"\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1552290046000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"fieldValue\":[\"三斤耗儿鱼九龙滨江店\"],\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1552879605000\"}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"支付金额(求和)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_pay_money1552877012000_0\",\"fieldDescription\":\"支付金额\",\"fieldGroup\":0,\"fieldId\":\"180620140424000874\",\"fieldName\":\"pay_money\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1552877012000\"},{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"就餐人数(求和)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_people_qty1552889085000_0\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140424000857\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"originDataType\":\"int\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1552889085000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"181115111709000246\",\"sessionGroup\":\"group_report\",\"sessionId\":\"21\",\"sortCondition\":[{\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_pay_money1552877012000_0\",\"fieldDescription\":\"支付金额\",\"fieldGroup\":0,\"fieldId\":\"180620140424000874\",\"fieldName\":\"pay_money\",\"granularity\":\"\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"sortFlag\":\"asc\",\"sortOrigin\":\"index\",\"sortType\":0,\"udfType\":0,\"uniqId\":\"1552877012000\"}],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140424000009\",\"tbName\":\"dw_trade_settle_detail_fact_p_group\",\"tracId\":\"1552889085000\"}"
+    val param = "{\"accessToken\":\"997651f3-4be5-47c4-9f98-a237d279baf8\",\"compareCondition\":[{\"aliasName\":\"品牌名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_brand_name1554945055000_0\",\"fieldDescription\":\"品牌名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000911\",\"fieldName\":\"brand_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554945055000\"},{\"aliasName\":\"客位名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_table_name1554962837000_0\",\"fieldDescription\":\"客位名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000850\",\"fieldName\":\"table_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554962837000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1554271077000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554271077000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和-百分比\",\"aliasName\":\"就餐人数(求和-百分比)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_people_qty1554805315000_0\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140424000857\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"originDataType\":\"int\",\"qoqType\":7,\"udfType\":0,\"uniqId\":\"1554805315000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":-1,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"181115111709000246\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140424000009\",\"tbName\":\"dw_trade_settle_detail_fact_p_group\",\"tracId\":\"15549644180007245662863\"}"
+    //    val param = "{\"accessToken\":\"34763405-afd4-44bd-bd86-fa277dc2879b\",\"compareCondition\":[{\"aliasName\":\"营业日\",\"dataType\":\"datetime\",\"fieldAliasName\":\"ljc_compare_x_settle_biz_date1553235288000_0\",\"fieldDescription\":\"营业日\",\"fieldGroup\":0,\"fieldId\":\"180620140417000718\",\"fieldName\":\"settle_biz_date\",\"isBuildAggregated\":0,\"originDataType\":\"datetime\",\"udfType\":0,\"uniqId\":\"1553235288000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1553235279000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000824\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1553235279000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"实际收入（实收）(求和)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_real_income1553235341000_0\",\"fieldDescription\":\"实际收入（实收）\",\"fieldGroup\":0,\"fieldId\":\"180620140418000779\",\"fieldName\":\"real_income\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1553235341000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":1500,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"181115134910005556\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[{\"dataType\":\"\",\"fieldAliasName\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldName\":\"实际收入（实收）(求和):%2017-09-01\",\"isBuildAggregated\":0,\"sortFlag\":\"desc\",\"sortType\":1,\"udfType\":0}],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group_n2\",\"tracId\":\"1553235392000\"}"
 
     //组装spark sql
     val sparkSqlCondition: SparkSqlCondition = new SparkSqlBuild().buildSqlStatement(param)
@@ -74,6 +74,8 @@ object SQLExtInterpreter_hive_jdbc {
         sqlExtLog.mainSql = sqlStr
         if (sparkSqlCondition.getSecondaryFlag) {
           df = HiveJdbcUtil.execute2DataFrame(sparkSession, sparkSqlCondition, sqlStr)
+
+          df.show()
         }
         else {
           val map = HiveJdbcUtil.execute2Result(sparkSqlCondition, sqlStr)
@@ -83,9 +85,11 @@ object SQLExtInterpreter_hive_jdbc {
           val jRows = Extraction.decompose(rows.toArray.map(_.toSeq))
           println(jSchema)
           println(jRows)
+
           return
         }
       }
+
       sqlExtLog.sqlExecuteElapsedTime = System.currentTimeMillis() - sqlExecuteBeginTime
 
       //交叉表排序条件非空
@@ -148,9 +152,11 @@ object SQLExtInterpreter_hive_jdbc {
     var df = limitDf
     //交叉表排序条件
     val orderCols = sparkOrderCols(sparkSqlCondition.getCrosstabByMap)
+
     //交叉表排序
     //    df = df.na.fill(fillValue).orderBy(orderCols: _*)
     df = df.orderBy(orderCols: _*)
+
     //取后n条数据
     if (sparkSqlCondition.getQueryPoint == 2) {
       //总条数
@@ -251,6 +257,7 @@ object SQLExtInterpreter_hive_jdbc {
   //自定义字段作为筛选项处理
   private[this] def handleCustomField(sqlDf: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
     var df = sqlDf
+    df.show()
     //自定义字段筛选项
     val customField: util.List[String] = sparkSqlCondition.getFilterCustomFieldList
     //筛选表达式
@@ -289,8 +296,7 @@ object SQLExtInterpreter_hive_jdbc {
     //多个对比列合并并起别名
     df1 = combineCompareColumn(df1, sparkSqlCondition)
 
-    //没有指定排序项时，反转列默认升序排序
-    if (sparkSqlCondition.getCompareSortFlag || !sparkSqlCondition.getDimensionIsEmpty) {
+    if (!sparkSqlCondition.getDimensionIsExists) {
       compareValues = df1.coalesce(defaultNumPartitions).select(pivotsAlias).orderBy(asc(pivotsAlias)).distinct().limit(compareLimit).rdd.map(r => r.get(0).toString).collect().toList
     }
     else {
@@ -325,6 +331,7 @@ object SQLExtInterpreter_hive_jdbc {
         df1 = df1.groupBy().pivot(pivotsAlias, compareValues).agg(aggList.head, aggList.tail: _*)
         pivotFlag = true
       }
+
       //交叉表排序
       if (!crosstabMap.isEmpty && pivotFlag) {
         df1 = handleSortAndLimitResult(df1, sparkSqlCondition)

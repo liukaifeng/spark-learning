@@ -161,6 +161,7 @@ object HiveJdbcUtil {
       val statement = conn.prepareStatement(preSql)
       try {
         statement.execute(memLimit)
+        statement.execute("set NUM_SCANNER_THREADS=1")
         //结果集
         val rs: ResultSet = statement.executeQuery
         try {

@@ -44,4 +44,8 @@ public class SelectOptionDTO extends BaseConditionBean {
      * 表别名
      */
     private String tableAlias;
+    /**
+     * 维度条件为空，对比条件不为空情况下的百分计算使用
+     */
+    private Boolean dimensionIsEmpty;
 }

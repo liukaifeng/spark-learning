@@ -28,7 +28,7 @@ object SQLDataInterpreter_hive_jdbc {
   private val APPLICATION_JSON = "application/json"
 
   def main(args: Array[String]): Unit = {
-    val code = "{\"accessToken\":\"b1241c12-b194-464e-9f36-e3ecbf904e9d\",\"sql\":\"SELECT   store_name AS store_name,   CAST(group_name AS STRING) AS group_name,   SUM(dinner_time) AS dinner_time FROM   e000.dw_trade_bill_fact_p_group_n2 WHERE group_code = 9759 GROUP BY store_name,   group_name ORDER BY dinner_time NULLS LAST LIMIT 1500\",\"compareCondition\":[{\"aliasName\":\"\",\"dataType\":\"\",\"fieldAliasName\":\"group_name\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"180620140418000825\",\"fieldName\":\"group_name\",\"isBuildAggregated\":0,\"originDataType\":\"\",\"udfType\":0,\"uniqId\":\"\"}],\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"\",\"dataType\":\"\",\"fieldAliasName\":\"store_name\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"\",\"udfType\":0,\"uniqId\":\"\"}],\"filterCondition\":[],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"\",\"aliasName\":\"\",\"dataType\":\"\",\"fieldAliasName\":\"dinner_time\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"\",\"fieldName\":\"dinner_time\",\"isBuildAggregated\":0,\"originDataType\":\"\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"\"}],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"181029104703005073\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"1\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group_n2\",\"tracId\":\"1551063485000\"}"
+    val code = "{\"accessToken\":\"datacube-open-apis-1111-666666666666\",\"compareCondition\":[{\"fieldAliasName\":\"payway\",\"fieldGroup\":0,\"fieldName\":\"payway\",\"isBuildAggregated\":0,\"udfType\":0}],\"computeKind\":\"sql_ext_dc\",\"dataSourceType\":1,\"dimensionCondition\":[{\"fieldAliasName\":\"store_name\",\"fieldGroup\":0,\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"fieldAliasName\":\"notincome\",\"fieldGroup\":0,\"fieldName\":\"notincome\",\"isBuildAggregated\":0,\"qoqType\":0,\"udfType\":0}],\"kuduMaster\":\"hadoop207\",\"limit\":0,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"sessionGroup\":\"group_report\",\"sessionId\":\"4\",\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"sql\":\"select  store_name, replace(settlement_name, '.', '$') as payway, cast(round(sum(non_income),2) as decimal(38,2)) as notIncome from e000.dw_trade_settle_detail_fact_p_group_upgrade  where group_code = 3297 and table_settle_time >= '2018-01-01 00:00:00' and table_settle_time < '2018-03-01 00:00:00' group by store_name,settlement_name order by store_name,settlement_name limit 1500 \",\"synSubmit\":true,\"tracId\":\"00001\"}"
     val sqlExtLog: SqlExtInterpreterLog = new SqlExtInterpreterLog
     var result: JObject = null
     //组装spark sql
@@ -82,6 +82,7 @@ object SQLDataInterpreter_hive_jdbc {
   def pivotExecute(condition: SparkSqlCondition): JObject = {
     val sparkSession: SparkSession = SparkSourceContext.getSparkSession(condition)
     var df = HiveJdbcUtil.execute2DataFrame(sparkSession, condition, condition.getSelectSql)
+    df.show()
     val sparkAggMap: mutable.Map[String, util.List[String]] = condition.getSparkAggMap.asScala
     val aggList: List[Column] = sparkAgg(sparkAggMap)
     val compareList: List[String] = if (condition.getCompareList != null) JavaConversions.asScalaBuffer(condition.getCompareList).toList else Nil
@@ -94,11 +95,12 @@ object SQLDataInterpreter_hive_jdbc {
         df = df.groupBy().pivot(compareList.head).agg(aggList.head, aggList.tail: _*)
       }
     }
+    df.show()
     val jsonString = df.schema.json
     val jSchema = parse(jsonString)
     // 11-获取数据
-    val rows = df.take(condition.getLimit).map(_.toSeq)
-    val jRows = Extraction.decompose(rows)
+    val rows = df.take(10)
+    val jRows = Extraction.decompose(rows.map(_.toSeq))
     APPLICATION_JSON -> (("schema" -> jSchema) ~ ("data" -> jRows) ~ ("total" -> 0))
   }
 
