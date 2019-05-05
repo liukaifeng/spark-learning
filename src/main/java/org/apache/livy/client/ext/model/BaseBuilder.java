@@ -97,7 +97,6 @@ public class BaseBuilder {
      * */
     private Map<String, String> hiveJdbcConfig;
 
-
     /**
      * 是否需要二次计算标识
      */
@@ -107,6 +106,19 @@ public class BaseBuilder {
      * 是否有维度条件
      */
     private Boolean dimensionIsExists = true;
+
+    /**
+     * 对比条件下百分比计算标识
+     */
+    private Boolean comparePctFlag = false;
+
+    public Boolean getComparePctFlag() {
+        return comparePctFlag;
+    }
+
+    public void setComparePctFlag( Boolean comparePctFlag ) {
+        this.comparePctFlag = comparePctFlag;
+    }
 
     public void setLimit( Integer limit ) {
         this.limit = limit;
@@ -120,12 +132,11 @@ public class BaseBuilder {
         this.secondaryFlag = secondaryFlag;
     }
 
-
     public String getTable() {
         return table;
     }
 
-    public void setTable(String table) {
+    public void setTable( String table ) {
         this.table = table;
     }
 
@@ -133,7 +144,7 @@ public class BaseBuilder {
         return keyspace;
     }
 
-    public void setKeyspace(String keyspace) {
+    public void setKeyspace( String keyspace ) {
         this.keyspace = keyspace;
     }
 
@@ -141,7 +152,7 @@ public class BaseBuilder {
         return queryType;
     }
 
-    public void setQueryType(int queryType) {
+    public void setQueryType( int queryType ) {
         this.queryType = queryType;
     }
 
@@ -149,7 +160,7 @@ public class BaseBuilder {
         return queryPoint;
     }
 
-    public void setQueryPoint(int queryPoint) {
+    public void setQueryPoint( int queryPoint ) {
         this.queryPoint = queryPoint;
     }
 
@@ -158,7 +169,7 @@ public class BaseBuilder {
         return dataSourceType;
     }
 
-    public void setDataSourceType(int dataSourceType) {
+    public void setDataSourceType( int dataSourceType ) {
         this.dataSourceType = dataSourceType;
     }
 
@@ -166,7 +177,7 @@ public class BaseBuilder {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public void setPage( Integer page ) {
         this.page = page;
     }
 
@@ -174,7 +185,7 @@ public class BaseBuilder {
         return sessionId;
     }
 
-    public void setSessionId(String sessionId) {
+    public void setSessionId( String sessionId ) {
         this.sessionId = sessionId;
     }
 
@@ -183,7 +194,7 @@ public class BaseBuilder {
         return tracId;
     }
 
-    public void setTracId(String tracId) {
+    public void setTracId( String tracId ) {
         this.tracId = tracId;
     }
 
@@ -191,7 +202,7 @@ public class BaseBuilder {
         return compareSortFlag;
     }
 
-    public void setCompareSortFlag(Boolean compareSortFlag) {
+    public void setCompareSortFlag( Boolean compareSortFlag ) {
         this.compareSortFlag = compareSortFlag;
     }
 
@@ -203,7 +214,7 @@ public class BaseBuilder {
         return sparkConfigMap;
     }
 
-    public void setSparkConfigMap(Map<String, String> sparkConfigMap) {
+    public void setSparkConfigMap( Map<String, String> sparkConfigMap ) {
         this.sparkConfigMap = sparkConfigMap;
     }
 
@@ -211,7 +222,7 @@ public class BaseBuilder {
         return mongoConfigMap;
     }
 
-    public void setMongoConfigMap(Map<String, String> mongoConfigMap) {
+    public void setMongoConfigMap( Map<String, String> mongoConfigMap ) {
         this.mongoConfigMap = mongoConfigMap;
     }
 
@@ -219,7 +230,7 @@ public class BaseBuilder {
         return kuduMaster;
     }
 
-    public void setKuduMaster(String kuduMaster) {
+    public void setKuduMaster( String kuduMaster ) {
         this.kuduMaster = kuduMaster;
     }
 

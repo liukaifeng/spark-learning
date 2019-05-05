@@ -60,6 +60,14 @@ public class Constant {
      */
     public static final String COMPARE_SPLIT_CHAR = ":%";
     /**
+     * 百分比计算字段后缀
+     */
+    public static final String PCT_SUFFIX_1 = "_pct1";
+    /**
+     * 百分比计算字段后缀
+     */
+    public static final String PCT_SUFFIX_2 = "_pct2";
+    /**
      * 用户自定义函数集合
      */
     public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newHashMap();

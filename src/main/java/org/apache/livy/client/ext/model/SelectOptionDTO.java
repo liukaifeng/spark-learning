@@ -48,4 +48,8 @@ public class SelectOptionDTO extends BaseConditionBean {
      * 维度条件为空，对比条件不为空情况下的百分计算使用
      */
     private Boolean dimensionIsEmpty;
+    /**
+     * 对比项是否为空
+     */
+    private Boolean compareIsEmpty;
 }

@@ -52,7 +52,7 @@ object SQLExtInterpreter_hive_jdbc {
     val beginTime: Long = System.currentTimeMillis()
     sqlExtLog.beginTime = DateUtils.convertTimeToString(beginTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
     System.setProperty("hadoop.home.dir", "D:\\Java\\hadoop-3.0")
-    val param = "{\"accessToken\":\"997651f3-4be5-47c4-9f98-a237d279baf8\",\"compareCondition\":[{\"aliasName\":\"品牌名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_brand_name1554945055000_0\",\"fieldDescription\":\"品牌名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000911\",\"fieldName\":\"brand_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554945055000\"},{\"aliasName\":\"客位名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_table_name1554962837000_0\",\"fieldDescription\":\"客位名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000850\",\"fieldName\":\"table_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554962837000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1554271077000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140424000908\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1554271077000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和-百分比\",\"aliasName\":\"就餐人数(求和-百分比)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_people_qty1554805315000_0\",\"fieldDescription\":\"就餐人数\",\"fieldGroup\":0,\"fieldId\":\"180620140424000857\",\"fieldName\":\"people_qty\",\"isBuildAggregated\":0,\"originDataType\":\"int\",\"qoqType\":7,\"udfType\":0,\"uniqId\":\"1554805315000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":-1,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"181115111709000246\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140424000009\",\"tbName\":\"dw_trade_settle_detail_fact_p_group\",\"tracId\":\"15549644180007245662863\"}"
+    val param = "{\"accessToken\":\"6a6da873-c91b-4f26-bf38-0f4b290bda5b\",\"compareCondition\":[{\"aliasName\":\"性别\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_di4liestr1556433491000_0\",\"fieldDescription\":\"性别\",\"fieldGroup\":0,\"fieldId\":\"190428113051002416\",\"fieldName\":\"di4lie\",\"granularity\":\"str\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1556433491000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000112\",\"dimensionCondition\":[{\"aliasName\":\"部门\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_di3liestr1556433489000_0\",\"fieldDescription\":\"部门\",\"fieldGroup\":0,\"fieldId\":\"190428113051002415\",\"fieldName\":\"di3lie\",\"granularity\":\"str\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1556433489000\"}],\"filterCondition\":[],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"dis_count\",\"aggregatorName\":\"去重计数-百分比\",\"aliasName\":\"工作天数(去重计数-百分比)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_dis_count_x_di9liedouble1556433500000_0\",\"fieldDescription\":\"工作天数\",\"fieldGroup\":0,\"fieldId\":\"190428113051002421\",\"fieldName\":\"di9lie\",\"granularity\":\"double\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":7,\"udfType\":0,\"uniqId\":\"1556433500000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":10,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"190428111417000046\",\"sessionGroup\":\"group_report\",\"sessionId\":\"5\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"190428113051000136\",\"tbName\":\"tonghuanbi_4281_qsl_000112\",\"tracId\":\"15570215330006136640871\"}"
     //    val param = "{\"accessToken\":\"34763405-afd4-44bd-bd86-fa277dc2879b\",\"compareCondition\":[{\"aliasName\":\"营业日\",\"dataType\":\"datetime\",\"fieldAliasName\":\"ljc_compare_x_settle_biz_date1553235288000_0\",\"fieldDescription\":\"营业日\",\"fieldGroup\":0,\"fieldId\":\"180620140417000718\",\"fieldName\":\"settle_biz_date\",\"isBuildAggregated\":0,\"originDataType\":\"datetime\",\"udfType\":0,\"uniqId\":\"1553235288000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1553235279000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000824\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1553235279000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"实际收入（实收）(求和)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_real_income1553235341000_0\",\"fieldDescription\":\"实际收入（实收）\",\"fieldGroup\":0,\"fieldId\":\"180620140418000779\",\"fieldName\":\"real_income\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1553235341000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":1500,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"181115134910005556\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[{\"dataType\":\"\",\"fieldAliasName\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldName\":\"实际收入（实收）(求和):%2017-09-01\",\"isBuildAggregated\":0,\"sortFlag\":\"desc\",\"sortType\":1,\"udfType\":0}],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group_n2\",\"tracId\":\"1553235392000\"}"
 
     //组装spark sql
@@ -74,7 +74,6 @@ object SQLExtInterpreter_hive_jdbc {
         sqlExtLog.mainSql = sqlStr
         if (sparkSqlCondition.getSecondaryFlag) {
           df = HiveJdbcUtil.execute2DataFrame(sparkSession, sparkSqlCondition, sqlStr)
-
           df.show()
         }
         else {
@@ -85,7 +84,6 @@ object SQLExtInterpreter_hive_jdbc {
           val jRows = Extraction.decompose(rows.toArray.map(_.toSeq))
           println(jSchema)
           println(jRows)
-
           return
         }
       }
@@ -319,19 +317,29 @@ object SQLExtInterpreter_hive_jdbc {
     }
 
     //聚合字段
-    val aggList: List[Column] = sparkAgg(sparkAggMap)
-    if (aggList != null && aggList.nonEmpty) {
+    var aggList: List[Column] = sparkAgg(sparkAggMap)
+    if ((aggList != null && aggList.nonEmpty) || sparkSqlCondition.getComparePctFlag) {
       var pivotFlag = false
       //对比项反转
       if (groupList != null && groupList.nonEmpty) {
-        df1 = df1.groupBy(groupList.head, groupList.tail: _*).pivot(pivotsAlias, compareValues).agg(aggList.head, aggList.tail: _*)
+        //百分比计算
+        if (sparkSqlCondition.getComparePctFlag) {
+          //拼接百分比表达式
+          for ((k: String, v: String) <- sparkSqlCondition.getPctMap.asScala) {
+            aggList = aggList :+ min(col(k) / col(v)).alias(k.substring(0, k.length - 5))
+          }
+          df1 = df1.groupBy(groupList.head, groupList.tail: _*).pivot(pivotsAlias, compareValues).agg(aggList.head, aggList.tail: _*)
+          pivotFlag = true
+        }
+        else {
+          df1 = df1.groupBy(groupList.head, groupList.tail: _*).pivot(pivotsAlias, compareValues).agg(aggList.head, aggList.tail: _*)
+        }
         pivotFlag = true
       }
       else {
         df1 = df1.groupBy().pivot(pivotsAlias, compareValues).agg(aggList.head, aggList.tail: _*)
         pivotFlag = true
       }
-
       //交叉表排序
       if (!crosstabMap.isEmpty && pivotFlag) {
         df1 = handleSortAndLimitResult(df1, sparkSqlCondition)

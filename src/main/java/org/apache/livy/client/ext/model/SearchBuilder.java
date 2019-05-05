@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static org.apache.livy.client.ext.model.Constant.COMPARE_SPLIT_CHAR;
+import static org.apache.livy.client.ext.model.Constant.PCT_SUFFIX_1;
 import static org.apache.livy.client.ext.model.Constant.SymbolType.SYMBOL_POUND_KEY;
 
 
@@ -125,22 +126,29 @@ public class SearchBuilder {
         StringBuilder stringBuilder = new StringBuilder(ORDER_BY);
         //排序字段与升降序对应关系
         Map<String, String> orderByMap = sqlbuilder.getOrderByMap();
+        //百分比字段
+        Map<String, String> pctMap = sqlbuilder.getPctMap();
+
         SqlSortBean sqlSortBean = new SqlSortBean();
         //排序字段不为空
         if (orderByMap != null && !orderByMap.isEmpty()) {
             //遍历排序项
             for (Map.Entry<String, String> entry : orderByMap.entrySet()) {
-                sqlSortBean.setSortFieldAliasName(entry.getKey());
+                String key = entry.getKey();
+                if (!pctMap.isEmpty() && pctMap.containsKey(key.concat(PCT_SUFFIX_1))) {
+                    key = key.concat(PCT_SUFFIX_1);
+                }
+                sqlSortBean.setSortFieldAliasName(key);
                 //0-全部 1-前几条 2-后几条
                 if (sqlbuilder.getQueryPoint() == 2) {
                     sort = Constant.SORT_DESC.equals(entry.getValue().toUpperCase()) ? Constant.SORT_ASC : Constant.SORT_DESC;
-                    String resultSort = String.format(" %s `%s` %s", ORDER_BY, entry.getKey(), entry.getValue()).concat(getSortNull(entry.getValue()));
+                    String resultSort = String.format(" %s `%s` %s", ORDER_BY, key, entry.getValue()).concat(getSortNull(entry.getValue()));
                     sqlSortBean.setSortAfterExpression(resultSort);
                     sqlSortBean.setAfterFlag(true);
                 } else {
                     sort = entry.getValue();
                 }
-                stringBuilder.append("`").append(entry.getKey()).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
+                stringBuilder.append("`").append(key).append("` ").append(sort).append(getSortNull(sort)).append(dotStr);
             }
         } else {
             sort = Constant.SORT_DESC;
@@ -300,6 +308,8 @@ public class SearchBuilder {
         sparkSqlCondition.setMongoConfigMap(sqlbuilder.getMongoConfigMap());
         sparkSqlCondition.setDimensionIsExists(sqlbuilder.getDimensionIsExists());
         sparkSqlCondition.setHiveJdbcConfig(sqlbuilder.getHiveJdbcConfig());
+        sparkSqlCondition.setPctMap(sqlbuilder.getPctMap());
+        sparkSqlCondition.setComparePctFlag(sqlbuilder.getComparePctFlag());
         if (compare != null && !compare.isEmpty()) {
             sparkSqlCondition.setCompareList(compare);
         }

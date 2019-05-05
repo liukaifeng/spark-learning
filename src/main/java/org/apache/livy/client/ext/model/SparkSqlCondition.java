@@ -114,6 +114,19 @@ public class SparkSqlCondition extends BaseBuilder {
      * 同环比条件
      */
     private List<QoqDTO> qoqList = Lists.newArrayList();
+    /**
+     * 百分比计算，分子分母列名映射关系
+     */
+    private Map<String, String> pctMap;
+
+    public Map<String, String> getPctMap() {
+        return pctMap;
+    }
+
+    public void setPctMap( Map<String, String> pctMap ) {
+        this.pctMap = pctMap;
+    }
+
 
     public List<String> getFilterCustomFieldList() {
         return filterCustomFieldList;
