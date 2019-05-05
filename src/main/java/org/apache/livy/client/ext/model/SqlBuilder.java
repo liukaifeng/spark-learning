@@ -422,7 +422,7 @@ public class SqlBuilder extends BaseBuilder {
                 fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
                 sqlExpression = String.format(" cast(%s as String) as `%s` ", fieldName, fieldAliasName);
                 compareFieldList.add(fieldAliasName);
-                if ((!originDataType.equals(DataFieldType.DATETIME_TYPE.getType()) || customAggFlag != 0) && dimensionIsEmpty) {
+                if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType()) || customAggFlag != 0 || dimensionIsEmpty) {
                     selectQoqSqlList.add(sqlExpression);
                 }
             }
@@ -430,9 +430,9 @@ public class SqlBuilder extends BaseBuilder {
             if (FUNC_GROUP.getCode().equals(aggregatorType)) {
                 fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
                 //数字类型做维度条件，将其转换为字符串类型
-                if (originDataType.equals(DECIMAL_TYPE.getType())) {
-                    fieldName = String.format(" cast(%s as String)", fieldName);
-                }
+//                if (originDataType.equals(DECIMAL_TYPE.getType())) {
+//                    fieldName = String.format(" cast(%s as String)", fieldName);
+//                }
                 sqlExpression = String.format(" %s as `%s` ", fieldName, fieldAliasName);
                 if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType()) || customAggFlag != 0) {
                     selectQoqSqlList.add(sqlExpression);
@@ -492,15 +492,13 @@ public class SqlBuilder extends BaseBuilder {
         String pctJoinTableAlias = generateTableAlias();
         //百分比分母SQL
         String pctJoinSql = "";
-        //对比项SQL
-        String compareSql = "";
         //聚合表达式拆分，分别取出表达式和别名
         String[] formula2 = sqlExpression.split("as");
-        //对比条件为空，维度条件不为空
-        if (selectOptionDTO.getCompareIsEmpty() && !selectOptionDTO.getDimensionIsEmpty()) {
-            List<String> newSqlExpression = Lists.newArrayList();
-            newSqlExpression.add(sqlExpression);
-            //根据维度项别名获取对应字段名
+        List<String> newSqlExpression = Lists.newArrayList();
+        newSqlExpression.add(sqlExpression);
+        //维度条件不为空
+        if (!selectOptionDTO.getDimensionIsEmpty()) {
+            //根据维度项别名获取对应字段名  groupList.stream().map(aliasAndFieldMap::get).collect(Collectors.toList());
             List<String> pctGroupByList = Lists.newArrayList();
             groupList.forEach(g -> {
                 if (!Strings.isNullOrEmpty(selectAllFieldMap.get(g))) {
@@ -514,57 +512,71 @@ public class SqlBuilder extends BaseBuilder {
             sqlExpression = newSqlExpression.stream().collect(Collectors.joining(","));
             //如果维度项不为空，拼接分组语句
             String pctGroupBySql = pctGroupByList.isEmpty() ? "" : pctGroupByList.stream().filter(Objects::nonNull).collect(Collectors.joining(","));
-            //分组语句为空
-            if (Strings.isNullOrEmpty(pctGroupBySql)) {
-                pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s) AS %s ON 1 = 1", sqlExpression, this.tableName, pctWhere, pctJoinTableAlias);
-            } else {
-                pctJoinSql = String.format("(SELECT SUM(a.%s) AS %s FROM (SELECT %s FROM  %s WHERE %s %s) AS a) AS %s ON 1 = 1",
-                        formula2[1], formula2[1], sqlExpression, this.tableName, pctWhere, " GROUP BY " + pctGroupBySql, pctJoinTableAlias);
-            }
-            //百分比计算表达式
-            sqlExpression = String.format("%s / MIN(%s) AS %s", formula2[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + "."), pctJoinTableAlias.concat(".").concat(formula2[1]), formula2[1]);
-        }
-        //对比条件不为空，维度条件不为空
-        if (!selectOptionDTO.getCompareIsEmpty() && !selectOptionDTO.getDimensionIsEmpty()) {
-            //对比项查询项格式
-            List<String> compareSelectList = Lists.newArrayList();
-            //对比项join on格式
-            List<String> compareJoinOnList = Lists.newArrayList();
-            //对比项别名与字段名映射关系遍历
-            compareFieldMap.forEach(( k, v ) -> {
-                String name = selectAllFieldMap.get(k);
-                if (!Strings.isNullOrEmpty(name)) {
-                    compareSelectList.add(name);
-                    String joinName = name.substring(0, name.toLowerCase().lastIndexOf("as")).replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault.concat("."));
-                    compareJoinOnList.add(String.format("%s =%s.%s", joinName, pctJoinTableAlias, k));
+            //如果对比条件为空
+            if (selectOptionDTO.getCompareIsEmpty()) {
+                //分组语句为空
+                if (Strings.isNullOrEmpty(pctGroupBySql)) {
+                    pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s) AS %s ON 1 = 1", sqlExpression, this.tableName, pctWhere, pctJoinTableAlias);
                 } else {
+                    pctJoinSql = String.format("(SELECT SUM(a.%s) AS %s FROM (SELECT %s FROM  %s WHERE %s %s) AS a) AS %s ON 1 = 1",
+                            formula2[1], formula2[1], sqlExpression, this.tableName, pctWhere, " GROUP BY " + pctGroupBySql, pctJoinTableAlias);
+                }
+                //百分比计算表达式
+                sqlExpression = String.format("%s / MIN(%s) AS %s", formula2[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + "."), pctJoinTableAlias.concat(".").concat(formula2[1]), formula2[1]);
+            } else {
+                //对比项查询项格式
+                List<String> compareSelectList = Lists.newArrayList();
+                //对比项join on格式
+                List<String> compareJoinOnList = Lists.newArrayList();
+                //去重计数查询项
+                List<String> compareDistCountSelectList = Lists.newArrayList();
+                //去重计数分组项
+                List<String> compareDistCountGroupList = Lists.newArrayList();
+                //表达式别名
+                String aliasName = formula2[1].replace("`", "").trim();
+                compareDistCountSelectList.add("SUM(a.$) AS $".replace("$", aliasName));
+
+                //对比项别名与字段名映射关系遍历
+                compareFieldMap.forEach(( k, v ) -> {
                     compareSelectList.add(v + " as " + k);
                     compareJoinOnList.add(String.format("%s.%s =%s.%s", tableAliasDefault, v, pctJoinTableAlias, k));
+                    compareDistCountSelectList.add("a.$ AS $".replace("$", k.replace('`', ' ').trim()));
+                    compareDistCountGroupList.add(k);
+                });
+                compareSelectList.add(sqlExpression);
+                //对比项查询语句
+                String compareSelect = compareSelectList.stream().collect(Collectors.joining(","));
+                pctGroupByList.addAll(compareFieldMap.values());
+                //对比项分组语句
+                String compareGroup = " GROUP BY " + pctGroupByList.stream().collect(Collectors.joining(","));
+                //对比项join on语句
+                String compareJoinOn = compareJoinOnList.stream().collect(Collectors.joining(" and "));
+                String tbName = this.tableName;
+                //去重计数求百分比
+                if (selectOptionDTO.getAggregator().equals(FunctionType.FUNC_DISTINCT_COUNT.getCode())) {
+                    //子查询，根据维度和对比计算
+                    tbName = String.format("(SELECT %s FROM  %s WHERE %s %s) AS a", compareSelect, tbName, pctWhere, compareGroup);
+                    //去重计数百分比，查询项
+                    compareSelect = compareDistCountSelectList.stream().collect(Collectors.joining(","));
+                    //去重计数百分比，分组项
+                    compareGroup = " GROUP BY " + compareDistCountGroupList.stream().collect(Collectors.joining(","));
                 }
-            });
-            compareSelectList.add(sqlExpression);
-            //对比项查询语句
-            String compareSelect = compareSelectList.stream().collect(Collectors.joining(","));
-            //对比项分组语句
-            String compareGroup = " GROUP BY " + compareFieldMap.keySet().stream().collect(Collectors.joining(","));
-            //对比项join on语句
-            String compareJoinOn = compareJoinOnList.stream().collect(Collectors.joining(" and "));
-            //百分比分母项SQL
-            pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s %s) AS %s ON %s", compareSelect, this.tableName, pctWhere, compareGroup, pctJoinTableAlias, compareJoinOn);
-            String aliasName = formula2[1].replace("`", "").trim();
-            String pct1 = aliasName.concat(PCT_SUFFIX_1);
-            String pct2 = aliasName.concat(PCT_SUFFIX_2);
+                //百分比分母项SQL，根据对比项计算
+                pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s %s) AS %s ON %s", compareSelect, tbName, pctWhere, compareGroup, pctJoinTableAlias, compareJoinOn);
 
-            pctMap.put(pct1, pct2);
-            sqlExpression = String.format("%s AS %s ,MIN(%s) AS %s"
-                    , formula2[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + ".")
-                    , pct1
-                    , pctJoinTableAlias.concat(".").concat(formula2[1])
-                    , pct2);
-            this.setComparePctFlag(true);
-        }
-        //维度条件为空，对比条件不为空，指标百分比皆为100%
-        if (!selectOptionDTO.getCompareIsEmpty() && selectOptionDTO.getDimensionIsEmpty()) {
+                String pct1 = aliasName.concat(PCT_SUFFIX_1);
+                String pct2 = aliasName.concat(PCT_SUFFIX_2);
+
+                pctMap.put(pct1, pct2);
+                sqlExpression = String.format("%s AS %s ,MIN(%s) AS %s"
+                        , formula2[0].replace(SYMBOL_POUND_KEY.getCode(), tableAliasDefault + ".")
+                        , pct1
+                        , pctJoinTableAlias.concat(".").concat(formula2[1])
+                        , pct2);
+                this.setComparePctFlag(true);
+            }
+        } else {
+            //维度条件为空，对比条件不为空，指标百分比皆为100%
             sqlExpression = String.format(" MIN(1) AS %s", formula2[1]);
         }
         if (!Strings.isNullOrEmpty(pctJoinSql)) {
