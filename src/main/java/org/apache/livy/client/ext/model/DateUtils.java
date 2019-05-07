@@ -33,7 +33,7 @@ public class DateUtils {
     /**
      * 时间格式 年月日
      */
-    public final static String DAY_OF_DATE_FRM = "yyyy-MM-dd";
+    public final static String DAY_OF_DATE_FRM = "DD";
 
     /**
      * 时间格式 年月日 时分秒

@@ -552,15 +552,13 @@ public class SqlBuilder extends BaseBuilder {
                 //对比项join on语句
                 String compareJoinOn = compareJoinOnList.stream().collect(Collectors.joining(" and "));
                 String tbName = this.tableName;
-                //去重计数求百分比
-                if (selectOptionDTO.getAggregator().equals(FunctionType.FUNC_DISTINCT_COUNT.getCode())) {
-                    //子查询，根据维度和对比计算
-                    tbName = String.format("(SELECT %s FROM  %s WHERE %s %s) AS a", compareSelect, tbName, pctWhere, compareGroup);
-                    //去重计数百分比，查询项
-                    compareSelect = compareDistCountSelectList.stream().collect(Collectors.joining(","));
-                    //去重计数百分比，分组项
-                    compareGroup = " GROUP BY " + compareDistCountGroupList.stream().collect(Collectors.joining(","));
-                }
+
+                tbName = String.format("(SELECT %s FROM  %s WHERE %s %s) AS a", compareSelect, tbName, pctWhere, compareGroup);
+                //去重计数百分比，查询项
+                compareSelect = compareDistCountSelectList.stream().collect(Collectors.joining(","));
+                //去重计数百分比，分组项
+                compareGroup = " GROUP BY " + compareDistCountGroupList.stream().collect(Collectors.joining(","));
+
                 //百分比分母项SQL，根据对比项计算
                 pctJoinSql = String.format("(SELECT %s FROM  %s WHERE %s %s) AS %s ON %s", compareSelect, tbName, pctWhere, compareGroup, pctJoinTableAlias, compareJoinOn);
 
@@ -734,7 +732,7 @@ public class SqlBuilder extends BaseBuilder {
             //日期字段格式化表达式
             String dateExpression;
             //等于表达式
-            String equalExpression = " %s ='%s'";
+            String equalExpression = " %s =%s";
             //范围前包括表达式
             String frontExpression = " %s>='%s'";
             //范围后表达式
@@ -752,7 +750,20 @@ public class SqlBuilder extends BaseBuilder {
             }
             if (!times.isEmpty()) {
                 if (timesSize == 1) {
-                    whereCondition.append(String.format(equalExpression, dateExpression, times.get(0)));
+                    String value1 = "'" + times.get(0) + "'";
+                    String valueFormula;
+                    if (granularity.equals(DateType.DATE_YEAR.getCode())) {
+                        value1 = String.format("'%s-01-01'", times.get(0));
+                    }
+                    if (granularity.equals(DateType.DATE_MONTH.getCode())) {
+                        value1 = String.format("'%s-01'", times.get(0));
+                    }
+                    if (granularity.equals(DateType.DATE_MAP_WEEK.getCode()) || granularity.equals(DateType.DATE_MAP_SEASON.getCode())) {
+                        valueFormula = value1;
+                    } else {
+                        valueFormula = getDateFormula(granularity, value1);
+                    }
+                    whereCondition.append(String.format(equalExpression, dateExpression, valueFormula));
                 }
                 if (timesSize > 1) {
                     String whereValue = String.format(frontExpression, dateExpression, times.get(0))
@@ -1304,13 +1315,7 @@ public class SqlBuilder extends BaseBuilder {
                         List<String> values = filter.getFieldValue();
                         if (Objects.nonNull(values) && !values.isEmpty()) {
                             selectBuild.append(String.format("%s as `%s`", filter.getFieldFormula(), fieldAliasName));
-//                            selectAllFieldMap.put(fieldAliasName, filter.getFieldFormula());
-//                            selectQoqSqlList.add(selectBuild.toString());
                         }
-                        //分组字段不为空，将筛选字段添加到分组中
-//                        if (!groupSqlList.contains(fieldAliasName)) {
-//                            groupSqlList.add(fieldAliasName);
-//                        }
                         filterCustomFieldList.add(fieldAliasName);
                     }
                     //表达式包含聚合函数
@@ -1402,7 +1407,7 @@ public class SqlBuilder extends BaseBuilder {
         String dateFormat = DATE_TYPE_FORMAT_MAP.get(granularity);
         //默认精确到秒
         if (Strings.isNullOrEmpty(dateFormat)) {
-            dateFormat = DateUtils.DAY_OF_DATE_FRM;
+            dateFormat = DateUtils.SECOND_OF_DATE_FRM;
         }
         return dateFormat;
     }
