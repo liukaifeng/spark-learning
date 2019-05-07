@@ -175,9 +175,9 @@ public class Constant {
      * DATE_MAP_*：日期钻取时的条件标识，筛选值需要转换才能使用（季度、周）
      */
     public enum DateType {
-        DATE_YEAR("year", "yyyy"),
+        DATE_YEAR("year", "year"),
         DATE_SEASON("season", "season"),
-        DATE_MONTH("month", "yyyy-MM"),
+        DATE_MONTH("month", "month"),
         DATE_WEEK("week", "yyyy-MM-dd"),
         DATE_DAY("day", "yyyy-MM-dd"),
         DATE_DAY_SECOND("day_second", "yyyy-MM-dd HH:mm:ss"),
