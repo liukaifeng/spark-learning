@@ -18,6 +18,7 @@ package org.apache.livy.client.ext.model;
 
 import lombok.Data;
 
+
 /**
  * @package: cn.com.tcsl.loongboss.bigscreen.api.report.model
  * @project-name: tcsl-loongboss-parent
@@ -80,4 +81,12 @@ public class BaseConditionBean {
      * 年季月周标识
      */
     private String granularity;
+
+    /**
+     * 同环比类型
+     * 1-同比；2-环比
+     */
+    private int qoqType;
+
+
 }
