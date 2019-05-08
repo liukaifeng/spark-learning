@@ -2,11 +2,12 @@ package com.lkf.v3
 
 import java.io.StringWriter
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.spark.SparkConf
 import org.apache.spark.scheduler._
 import org.slf4j.LoggerFactory
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.scala.DefaultScalaModule
+
 class MySparkAppListener(val sparkConf: SparkConf) extends SparkListener {
 
   private val logger = LoggerFactory.getLogger(this.getClass)
@@ -26,10 +27,12 @@ class MySparkAppListener(val sparkConf: SparkConf) extends SparkListener {
   }
 
   override def onJobStart(jobStart: SparkListenerJobStart): Unit = {
+    val begin = System.currentTimeMillis()
     logger.info("onJobStart =========================")
     logger.info("onJobStart, jobId:{},stageIds:{}", jobStart.jobId, jobStart.stageIds)
     logger.info(objectToJson(jobStart.properties))
-    logger.info("onJobStart =========================")
+    val end = System.currentTimeMillis()
+    logger.info("onJobStart ==========={}==============", end - begin)
 
   }
 

@@ -47,4 +47,8 @@ public class SparkSqlBuild {
         SqlBuilder sqlBuilder = new SqlBuilder(biReportBuildInDTO);
         return new SearchBuilder().toSparkSql(sqlBuilder);
     }
+
+    public SparkSqlCondition getDataCubeExecuteCondition( String param ) {
+        return new SqlDataCubeCondition().parseDataCubeCondition(param);
+    }
 }

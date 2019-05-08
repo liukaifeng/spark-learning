@@ -17,16 +17,18 @@ object SparkImpala {
       .setAppName("spark_sql_default")
     val sparkSession = SparkSession.builder().config(sparkConf).getOrCreate()
     //    val hiveJdbcUrl = "jdbc:hive2://192.168.12.204:21050/default;auth=noSasl"
-    val hiveJdbcUrl = "jdbc:impala://192.168.12.204:21050/default;auth=noSasl"
+    val hiveJdbcUrl = "jdbc:hive2://192.168.12.204:21050/default;auth=noSasl"
 
     var df: DataFrame = sparkSession.read
       .format("jdbc")
       .options(Map("driver" -> "org.apache.hive.jdbc.HiveDriver",
-        "dbtable" -> "(show databases) as T",
+        "dbtable" -> "(select di1lie,di2lie,di3lie,di4lie FROM e000112.shujuquanbiao2019maying_sheet1_000112) as T",
         "url" -> hiveJdbcUrl,
         "user" -> "",
         "password" -> ""))
       .load()
+
+    df.show()
   }
 
 }

@@ -18,6 +18,7 @@
 package org.apache.livy.client.ext.model;
 
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -39,6 +40,12 @@ public class Constant {
      * 默认返回结果集条数
      */
     public static Long DEFAULT_LIMIE = 1500L;
+
+    /**
+     * 导出数据条数限制
+     */
+    public static int EXPORT_LIMIE = 10000;
+
     /**
      * 筛选项条数限制
      */
@@ -53,9 +60,17 @@ public class Constant {
      */
     public static final String COMPARE_SPLIT_CHAR = ":%";
     /**
+     * 百分比计算字段后缀
+     */
+    public static final String PCT_SUFFIX_1 = "_pct1";
+    /**
+     * 百分比计算字段后缀
+     */
+    public static final String PCT_SUFFIX_2 = "_pct2";
+    /**
      * 用户自定义函数集合
      */
-    public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newLinkedHashMap();
+    public static final Map<Integer, String> SPARK_UDF_MAP = Maps.newHashMap();
     /**
      * 聚合函数集合
      */
@@ -64,23 +79,38 @@ public class Constant {
     /**
      * 日期类型与表达式对应关系
      */
-    public static final Map<String, String> DATE_TYPE_FORMAT_MAP = Maps.newLinkedHashMap();
+    public static final Map<String, String> DATE_TYPE_FORMAT_MAP = Maps.newHashMap();
 
-    public static String weekFormula = "CASE \n" +
-            "WHEN dayofweek(`%s`) = 1 THEN '周一'\n" +
-            "WHEN dayofweek(`%s`) = 2 THEN '周二'\n" +
-            "WHEN dayofweek(`%s`) = 3 THEN '周三'\n" +
-            "WHEN dayofweek(`%s`) = 4 THEN '周四'\n" +
-            "WHEN dayofweek(`%s`) = 5 THEN '周五'\n" +
-            "WHEN dayofweek(`%s`) = 6 THEN '周六'\n" +
-            "WHEN dayofweek(`%s`) = 7 THEN '周日'\n" +
-            "END";
-    public static String seasonFormula = "CASE\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 1 and 3) THEN '第1季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 4 and 6) THEN '第2季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 7 and 9) THEN '第3季度'\n" +
-            "WHEN (MONTH(`%s`) BETWEEN 10 and 12) THEN '第4季度'\n" +
-            "END ";
+    /**
+     * 周逻辑值与中文映射关系
+     */
+    public static final Map<String, String> WEEK_CN_MAP = Maps.newHashMap();
+
+    /**
+     * 季度逻辑值与中文映射关系
+     */
+    public static final Map<String, String> SEASON_CN_MAP = Maps.newHashMap();
+    /**
+     * 算子与表达式的映射关系
+     */
+    public static final Map<String, String> AGG_FUNCTION_MAP = Maps.newHashMap();
+    /**
+     * 同环比集合
+     */
+    public static final List<Integer> QOQ_LIST = Lists.newArrayList();
+
+
+    public static String weekFormula2 = "CONCAT(from_timestamp (%s, 'yyyy'),'年第',CAST(WEEKOFYEAR(%s) AS STRING  ),'周')";
+
+    public static String everyWeekFormula = "IF(\n" +
+            "    DAYOFWEEK(%s) = 1,\n" +
+            "    DAYOFWEEK(%s) + 6,\n" +
+            "    DAYOFWEEK(%s) - 1\n" +
+            "  )";
+    /**
+     * 季度格式化表达式
+     */
+    public static String seasonFormula = " CONCAT(CAST(YEAR(%s) AS STRING),'年第',CAST(QUARTER(%s) AS STRING ), '季度')";
 
     static {
         for (SparkUdf sparkUdf : SparkUdf.values()) {
@@ -89,11 +119,35 @@ public class Constant {
         //聚合函数名
         for (FunctionType functionType : FunctionType.values()) {
             AGG_FUNCTION.add(functionType.getCode());
+            if (!Strings.isNullOrEmpty(functionType.getFormula())) {
+                AGG_FUNCTION_MAP.put(functionType.getCode(), functionType.getFormula());
+            }
         }
         //日期类型与表达式对应关系
         for (DateType dateType : DateType.values()) {
             DATE_TYPE_FORMAT_MAP.put(dateType.getCode(), dateType.getFormat());
         }
+        WEEK_CN_MAP.put("周一", "2");
+        WEEK_CN_MAP.put("周二", "3");
+        WEEK_CN_MAP.put("周三", "4");
+        WEEK_CN_MAP.put("周四", "5");
+        WEEK_CN_MAP.put("周五", "6");
+        WEEK_CN_MAP.put("周六", "7");
+        WEEK_CN_MAP.put("周日", "1");
+
+        SEASON_CN_MAP.put("第1季度", "1");
+        SEASON_CN_MAP.put("第2季度", "2");
+        SEASON_CN_MAP.put("第3季度", "3");
+        SEASON_CN_MAP.put("第4季度", "4");
+
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_QOQ_1.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_QOQ_2.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_2.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_WEEK.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_MONTH.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_YEAR.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_ROLL_QOQ_SEASON.getCode());
+        QOQ_LIST.add(AdvancedCmpType.ADVANCED_QOQ_CUSTOM.getCode());
     }
 
     public enum DataFieldType {
@@ -116,11 +170,14 @@ public class Constant {
 
     /**
      * 日期类型
+     * DATE_EVERY_*：权限设置时的条件，筛选值不需要进行日期格式化直接使用
+     * <p>
+     * DATE_MAP_*：日期钻取时的条件标识，筛选值需要转换才能使用（季度、周）
      */
     public enum DateType {
-        DATE_YEAR("year", "yyyy"),
+        DATE_YEAR("year", "year"),
         DATE_SEASON("season", "season"),
-        DATE_MONTH("month", "yyyy-MM"),
+        DATE_MONTH("month", "month"),
         DATE_WEEK("week", "yyyy-MM-dd"),
         DATE_DAY("day", "yyyy-MM-dd"),
         DATE_DAY_SECOND("day_second", "yyyy-MM-dd HH:mm:ss"),
@@ -128,7 +185,9 @@ public class Constant {
         DATE_EVERY_YEAR("every_year", "MM-dd"),
         DATE_EVERY_MONTH("every_month", "dd"),
         DATE_EVERY_WEEK("every_week", "d"),
-        DATE_EVERY_DAY("every_day", "HH:mm:ss");
+        DATE_EVERY_DAY("every_day", "HH:mm:ss"),
+        DATE_MAP_SEASON("map_season", "d"),
+        DATE_MAP_WEEK("map_week", "d");
 
         private String code;
 
@@ -146,35 +205,40 @@ public class Constant {
         public String getCode() {
             return code;
         }
-
-
     }
 
     /**
      * 函数类型
      */
     public enum FunctionType {
-        FUNC_SUM("sum"),
-        FUNC_COUNT("count"),
-        FUNC_AVG("avg"),
-        FUNC_DISTINCT_COUNT("dis_count"),
-        FUNC_FILTER("filter"),
-        FUNC_COMPARE("compare"),
-        FUNC_MIN("min"),
-        FUNC_MAX("max"),
-        FUNC_GROUP("group"),
-        FUNC_QOQ("qoq");
+        FUNC_SUM("sum", "sum(CAST(%s AS DOUBLE)) as `%s`"),
+        FUNC_COUNT("count", "count(%s) as `%s`"),
+        FUNC_AVG("avg", "avg(CAST(%s AS DOUBLE)) as `%s`"),
+        FUNC_DISTINCT_COUNT("dis_count", "count(distinct(%s)) as `%s`"),
+        FUNC_FILTER("filter", ""),
+        FUNC_COMPARE("compare", ""),
+        FUNC_MIN("min", ""),
+        FUNC_MAX("max", ""),
+        FUNC_GROUP("group", ""),
+        FUNC_QOQ("qoq", ""),
+        FUNC_PCT("pct", "");
 
         private String code;
+        private String formula;
 
-        FunctionType( String code ) {
+        FunctionType( String code, String formula ) {
             this.code = code;
-
+            this.formula = formula;
         }
 
         public String getCode() {
             return code;
         }
+
+        public String getFormula() {
+            return formula;
+        }
+
     }
 
     /**
@@ -225,6 +289,66 @@ public class Constant {
 
         public String getFunction() {
             return this.function;
+        }
+
+        public int getCode() {
+            return this.code;
+        }
+    }
+
+    /**
+     * 符号枚举
+     *
+     * @author 刘凯峰
+     * @date 2019/3/11 15:08
+     */
+    public enum SymbolType {
+        SYMBOL_DOT(".", "点"),
+        SYMBOL_POUND_KEY("#", "井号键");
+        private String code;
+        private String desc;
+
+        SymbolType( String code, String desc ) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public String getDesc() {
+            return this.desc;
+        }
+
+        public String getCode() {
+            return this.code;
+        }
+    }
+
+    /**
+     * 高级计算类型
+     *
+     * @author 刘凯峰
+     * @date 2019/3/13 15:36
+     */
+    public enum AdvancedCmpType {
+        ADVANCED_QOQ_1(1, "同比"),
+        ADVANCED_QOQ_2(2, "环比"),
+        ADVANCED_QOQ_CUSTOM(6, "自定义"),
+        ADVANCED_PCT(7, "百分比"),
+        ADVANCED_ROLL_QOQ_2(8, "滚动环比计算"),
+        ADVANCED_ROLL_QOQ_WEEK(9, "周滚动同比计算"),
+        ADVANCED_ROLL_QOQ_MONTH(10, "月滚动同比计算"),
+        ADVANCED_ROLL_QOQ_YEAR(11, "年滚动同比计算"),
+        ADVANCED_ROLL_QOQ_SEASON(12, "季度滚动同比计算");
+
+        private int code;
+        private String desc;
+
+        AdvancedCmpType( int code, String desc ) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public String getDesc() {
+            return this.desc;
         }
 
         public int getCode() {

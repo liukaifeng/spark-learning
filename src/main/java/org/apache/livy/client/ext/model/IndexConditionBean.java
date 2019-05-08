@@ -52,7 +52,7 @@ public class IndexConditionBean extends BaseConditionBean {
 
     /**
      * 同环比类型
-     * 1-同比；2-环比
+     * 1-同比；2-环比；
      */
     private int qoqType;
     /**
