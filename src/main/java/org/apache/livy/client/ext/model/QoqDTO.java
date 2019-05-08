@@ -49,8 +49,39 @@ public class QoqDTO extends QoqConditionBean {
      */
     private int qoqType;
 
+
+    /**
+     * 同环比日期格式
+     */
+    private String qoqJoinOn;
+
+
+    /**
+     * join 表别名
+     */
+    private String tableAlias;
+
+    /**
+     * 同环比计算表达式(增长值，增长率)
+     */
+    private String fieldFormula;
+
+    /**
+     * 同环比计算表达式(增长值，增长率)别名
+     */
+    private String fieldFormulaAlias;
+
+
     public QoqDTO() {
         this.delQoqField = false;
+    }
+
+    public String getTableAlias() {
+        return tableAlias;
+    }
+
+    public void setTableAlias( String tableAlias ) {
+        this.tableAlias = tableAlias;
     }
 
     public Boolean getDelQoqField() {
@@ -84,4 +115,31 @@ public class QoqDTO extends QoqConditionBean {
     public void setQoqType( int qoqType ) {
         this.qoqType = qoqType;
     }
+
+
+    public String getQoqJoinOn() {
+        return qoqJoinOn;
+    }
+
+    public void setQoqJoinOn( String qoqJoinOn ) {
+        this.qoqJoinOn = qoqJoinOn;
+    }
+
+    public String getFieldFormula() {
+        return fieldFormula;
+    }
+
+    public void setFieldFormula( String fieldFormula ) {
+        this.fieldFormula = fieldFormula;
+    }
+
+
+    public String getFieldFormulaAlias() {
+        return fieldFormulaAlias;
+    }
+
+    public void setFieldFormulaAlias( String fieldFormulaAlias ) {
+        this.fieldFormulaAlias = fieldFormulaAlias;
+    }
+
 }

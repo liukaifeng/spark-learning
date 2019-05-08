@@ -52,15 +52,11 @@ object SQLExtInterpreter3 {
       val sqlStr: String = sparkSqlCondition.getSelectSql
 
       logger.info(s"【SQLExtInterpreter-日志】-【execute】-主体SQL：${sparkSqlCondition.getSelectSql}")
-      logger.info(s"【SQLExtInterpreter-日志】-【execute】-同环比SQL：${sparkSqlCondition.getSelectQoqSql}")
 
       var df: DataFrame = null
       if (sqlStr.nonEmpty) {
         df = spark.sql(sqlStr)
       }
-
-      //同环比
-      df = handleQoqSql(df, sparkSqlCondition, spark)
 
       //自定义字段作为筛选项处理
       df = handleCustomField(df, sparkSqlCondition)
@@ -110,136 +106,8 @@ object SQLExtInterpreter3 {
     }
   }
 
-  /**
-    * 同环比指标计算
-    *
-    * @param df                主体数据集（非同比计算数据集）
-    * @param sparkSqlCondition 同环比计算条件
-    * @param hiveContext       hive上下文
-    */
-  private[this] def handleQoqSql(df: DataFrame, sparkSqlCondition: SparkSqlCondition, hiveContext: SparkSession): DataFrame = {
-    var dfQoqResult = df
-    //排序项
-    val orderMap: util.Map[String, String] = sparkSqlCondition.getOrderByMap
-    //字段排序
-    val orderList: List[Column] = sparkOrderCols(orderMap)
-    //同环比
-    if (sparkSqlCondition.getQoqList != null && sparkSqlCondition.getQoqList.size() > 0) {
-      //同环比SQL
-      var df1: DataFrame = hiveContext.sql(sparkSqlCondition.getSelectQoqSql)
-      //同环比计算
-      dfQoqResult = handleQoqDf(df, df1, sparkSqlCondition)
-    }
-    if (orderList.nonEmpty) {
-      dfQoqResult = dfQoqResult.sort(orderList: _*)
-    }
-    dfQoqResult
-  }
 
-  /**
-    * 同环比计算
-    *
-    * @param df0               主体SQL数据集
-    * @param dfQoq             同环比SQL数据集
-    * @param sparkSqlCondition 同环比计算条件
-    */
-  private[this] def handleQoqDf(df0: DataFrame, dfQoq: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
-    var df1 = df0
-    //同环比计算条件
-    val qoqList: List[QoqDTO] = JavaConversions.asScalaBuffer(sparkSqlCondition.getQoqList).toList
 
-    if (qoqList.nonEmpty) {
-      //查询项字段
-      var selectList: List[String] = if (sparkSqlCondition.getSelectList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getSelectList).toList else Nil
-      //分组字段
-      var groupList: List[String] = if (sparkSqlCondition.getGroupList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getGroupList).toList else Nil
-      //对比字段
-      val compareList: List[String] = if (sparkSqlCondition.getCompareList != null) JavaConversions.asScalaBuffer(sparkSqlCondition.getCompareList).toList else Nil
-      //聚合字段
-      val sparkAggMap: mutable.Map[String, util.List[String]] = sparkSqlCondition.getSparkAggMap.asScala
-      //聚合字段
-      val aggList: List[Column] = sparkAgg(sparkAggMap)
-      if (compareList != null) {
-        groupList = compareList.:::(groupList)
-      }
-      //同环比计算
-      var df2 = handleQoq(dfQoq, qoqList.head, groupList, aggList)
-
-      //同环比结果集合并
-      qoqList.tail.foreach(qoq => df2 = df2.join(handleQoq(dfQoq, qoq, groupList, aggList), groupList))
-
-      //主体结果集与同环比结果合并
-      if (df0 == null) {
-        df1 = df2
-      }
-      else {
-        df1 = df0.join(df2, groupList)
-      }
-      var selectCols: List[Column] = List()
-      selectList = groupList.:::(selectList)
-      selectList.foreach(select => selectCols = selectCols :+ col(select))
-
-      //重新查询,统计和排序,确保顺序与参数一致
-      //分组字段不为空
-      if (groupList.nonEmpty) {
-        df1 = df1.select(selectCols: _*).groupBy(groupList.head, groupList.tail: _*).agg(aggList.head, aggList.tail: _*)
-      }
-      else {
-        df1 = df1.select(selectCols: _*).agg(aggList.head, aggList.tail: _*)
-      }
-    }
-    df1
-  }
-
-  /** 同环比计算
-    * 1）环比增长率=（本期数－上期数）/上期数×100%
-    * 2）同比增长率=（本期数－同期数）/同期数×100%
-    *
-    * @param dfQoq     数据集
-    * @param qoqDTO    同环比条件
-    * @param groupList 分组字段
-    */
-  private[this] def handleQoq(dfQoq: DataFrame, qoqDTO: QoqDTO, groupList: List[String], sparkAggList: List[Column]): DataFrame = {
-    //根据同环比字段反转
-    var df1 = dfQoq
-    if (groupList.nonEmpty) {
-      df1 = dfQoq.coalesce(defaultNumPartitions).groupBy(groupList.head, groupList.tail: _*)
-        .pivot(qoqDTO.getQoqTimeAliasName, Seq(qoqDTO.getQoqRadixTime, qoqDTO.getQoqReducedTime))
-        .agg(sum(qoqDTO.getQoqIndexAliasName))
-    } else {
-      df1 = dfQoq.coalesce(defaultNumPartitions).groupBy()
-        .pivot(qoqDTO.getQoqTimeAliasName, Seq(qoqDTO.getQoqRadixTime, qoqDTO.getQoqReducedTime))
-        .agg(sum(qoqDTO.getQoqIndexAliasName))
-    }
-    //组装查询项
-    var selectCols: List[Column] = List()
-    groupList.foreach(group => selectCols = selectCols :+ col(group))
-
-    //同环比基数时间
-    var qoqRadixTime = qoqDTO.getQoqRadixTime
-    //同环比对比时间
-    var qoqReducedTime = qoqDTO.getQoqReducedTime
-    //同环比指标别名
-    val qoqIndexAliasName = qoqDTO.getQoqIndexAliasName
-
-    //增长值表达式
-    val growthValueExpression: Column = (col(qoqRadixTime) - col(qoqReducedTime)).as(qoqIndexAliasName)
-
-    //增长率表达式
-    val growthRateExpression: Column = ((col(qoqRadixTime) - col(qoqReducedTime)) / col(qoqReducedTime)).as(qoqIndexAliasName)
-
-    //增长值
-    if (qoqDTO.getQoqResultType == 1) {
-      selectCols = selectCols :+ growthValueExpression
-    }
-
-    //增长率
-    if (qoqDTO.getQoqResultType == 2) {
-      selectCols = selectCols :+ growthRateExpression
-    }
-    df1 = df1.select(selectCols: _*)
-    df1
-  }
 
   //取前后n条数据排序
   private[this] def handleLimitResult(limitDf: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {

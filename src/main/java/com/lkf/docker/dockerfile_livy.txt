@@ -1,0 +1,26 @@
+FROM registry.cn-beijing.aliyuncs.com/tcsl/centos74-jdk152:v1.1
+# spark_home
+ENV SPARK_HOME /spark-2.3.0-bin-hadoop2.7
+# spark_home
+ENV HADOOP_HOME /hadoop-3.0.0
+# livy_home
+ENV LIVY_HOME /loongboss-bi-livy
+# scala_home
+ENV SPARK_HOME /scala-2.12.8
+
+# 添加到系统环境变量
+ENV PATH $JAVA_HOME/bin:$PATH
+ENV PATH $LIVY_HOME/bin:$PATH
+ENV PATH $HADOOP_HOME/bin:$PATH
+ENV PATH $SCALA_HOME/bin:$PATH
+
+RUN mkdir -p /loongboss-bi-livy && mkdir -p /spark-2.3.0-bin-hadoop2.7
+ADD scala-2.12.8.tgz /scala-2.12.8
+COPY loongboss-bi-livy /loongboss-bi-livy
+COPY spark-2.3.0-bin-hadoop2.7 /spark-2.3.0-bin-hadoop2.7
+COPY hadoop-3.0.0 /hadoop-3.0.0
+
+EXPOSE 9889
+#ENTRYPOINT ["/loongboss-bi-livy/bin/livy-server","start"] 
+CMD ["/bin/bash","/loongboss-bi-livy/bin/livy-server","start"] 
+

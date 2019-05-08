@@ -1,0 +1,17 @@
+#设置基础镜像
+FROM registry.cn-beijing.aliyuncs.com/tcsl/centos74-jdk152:v1.1
+
+#作者信息
+MAINTAINER liukaifeng
+
+#要执行的命令
+RUN mkdir -p /data
+
+
+RUN chmod 755 /run.sh
+
+#开放端口
+EXPOSE 22
+
+#设置自启动命令
+CMD ["/run.sh"]
