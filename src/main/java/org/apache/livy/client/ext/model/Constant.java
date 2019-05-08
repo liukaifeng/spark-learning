@@ -99,6 +99,15 @@ public class Constant {
      */
     public static final List<Integer> QOQ_LIST = Lists.newArrayList();
 
+    /**
+     * 日期格式化表达式
+     */
+    public static String DATE_FORMULA = "UNIX_TIMESTAMP(date_trunc('%s',%s))";
+    /**
+     * 季度格式化表达式
+     */
+    public static String DATE_QUARTER_FORMULA = "UNIX_TIMESTAMP(trunc (%s,'%s'))";
+
 
     public static String weekFormula2 = "CONCAT(from_timestamp (%s, 'yyyy'),'年第',CAST(WEEKOFYEAR(%s) AS STRING  ),'周')";
 
@@ -176,18 +185,18 @@ public class Constant {
      */
     public enum DateType {
         DATE_YEAR("year", "year"),
-        DATE_SEASON("season", "season"),
+        DATE_SEASON("season", "Q"),
         DATE_MONTH("month", "month"),
-        DATE_WEEK("week", "yyyy-MM-dd"),
-        DATE_DAY("day", "yyyy-MM-dd"),
-        DATE_DAY_SECOND("day_second", "yyyy-MM-dd HH:mm:ss"),
+        DATE_WEEK("week", "week"),
+        DATE_DAY("day", "day"),
+        DATE_DAY_SECOND("day_second", "second"),
         DATE_UD("ud", "yyyy-MM-dd"),
         DATE_EVERY_YEAR("every_year", "MM-dd"),
         DATE_EVERY_MONTH("every_month", "dd"),
         DATE_EVERY_WEEK("every_week", "d"),
         DATE_EVERY_DAY("every_day", "HH:mm:ss"),
-        DATE_MAP_SEASON("map_season", "d"),
-        DATE_MAP_WEEK("map_week", "d");
+        DATE_MAP_SEASON("map_season", "Q"),
+        DATE_MAP_WEEK("map_week", "week");
 
         private String code;
 
