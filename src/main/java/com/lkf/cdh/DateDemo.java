@@ -1,6 +1,11 @@
 package com.lkf.cdh;
 
-import java.time.LocalDate;
+import org.apache.livy.client.ext.model.DateUtils;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 
 /**
  * todo 一句话描述该类的用途
@@ -10,6 +15,14 @@ import java.time.LocalDate;
  */
 public class DateDemo {
     public static void main( String[] args ) {
-        System.out.println(LocalDate.now());
+
+        System.out.println(convertTimeToLong("2018-11-25"));
     }
+
+    public static Long convertTimeToLong(String time) {
+        DateTimeFormatter ftf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parse = LocalDateTime.parse(time, ftf);
+        return LocalDateTime.from(parse).atZone(ZoneId.systemDefault()).toEpochSecond();
+    }
+
 }

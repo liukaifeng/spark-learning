@@ -229,18 +229,17 @@ public class SqlBuilder extends BaseBuilder {
         tableBuilder(biReportBuildInDTO);
         //where
         whereSqlBuilder(biReportBuildInDTO.getFilterCondition());
+        //自定义字段作为筛选项
+        customFieldHandle(biReportBuildInDTO.getFilterCondition());
         //select
         selectSqlBuilder(biReportBuildInDTO);
         //index
         sparkAggBuilder(biReportBuildInDTO.getIndexCondition());
         //orderBy
         orderBySqlBuilder(biReportBuildInDTO);
-        //自定义字段作为筛选项
-        customFieldHandle(biReportBuildInDTO.getFilterCondition());
         //同环比
         qoqHandle(biReportBuildInDTO.getIndexCondition());
         getAllSelectItems();
-
     }
 
     //endregion
@@ -413,10 +412,7 @@ public class SqlBuilder extends BaseBuilder {
                     sqlExpression = String.format(AGG_FUNCTION_MAP.get(aggregatorType), fieldName, fieldAliasName);
                 }
             }
-            //百分比计算
-            if (selectOptionDTO.getQoqType() == AdvancedCmpType.ADVANCED_PCT.getCode()) {
-                sqlExpression = generatePctSql(selectOptionDTO, sqlExpression);
-            }
+
             //对比字段
             if (FUNC_COMPARE.getCode().equals(aggregatorType)) {
                 fieldName = customField(fieldName, formula, customAggFlag, granularity, targetDataType);
@@ -437,6 +433,10 @@ public class SqlBuilder extends BaseBuilder {
                 if (!originDataType.equals(DataFieldType.DATETIME_TYPE.getType()) || customAggFlag != 0) {
                     selectQoqSqlList.add(sqlExpression);
                 }
+            }
+            //百分比计算
+            if (selectOptionDTO.getQoqType() == AdvancedCmpType.ADVANCED_PCT.getCode()) {
+                sqlExpression = generatePctSql(selectOptionDTO, sqlExpression);
             }
         }
         if (Strings.isNullOrEmpty(aggregatorType)) {
@@ -1297,7 +1297,14 @@ public class SqlBuilder extends BaseBuilder {
             StringBuilder selectBuild = new StringBuilder();
             //筛选项
             StringBuilder whereBuilder = new StringBuilder();
-
+            //字段别名与字段名映射关系
+            Map<String, String> fieldMap = Maps.newLinkedHashMap();
+            //维度字段
+            biReportBuildInDTO.getDimensionCondition().forEach(d -> fieldMap.put(d.getFieldAliasName(), d.getFieldName()));
+            //对比字段
+            biReportBuildInDTO.getCompareCondition().forEach(c -> fieldMap.put(c.getFieldAliasName(), c.getFieldName()));
+            //指标字段
+            biReportBuildInDTO.getIndexCondition().forEach(i -> fieldMap.put(i.getFieldAliasName(), i.getFieldName()));
             //筛选条件遍历
             filterConditionList.forEach(filter -> {
                 //如果是自定义字段
@@ -1306,9 +1313,9 @@ public class SqlBuilder extends BaseBuilder {
                     String fieldAliasName = fieldName;
 
                     //维度条件、对比条件、指标条件中包含筛选项
-                    if (aliasAndFieldMap.values().contains(fieldName)
-                            || aliasAndFieldMap.keySet().contains(filter.getFieldAliasName())) {
-                        fieldAliasName = findKeyByValue(fieldName, aliasAndFieldMap);
+                    if (fieldMap.values().contains(fieldName)
+                            || fieldMap.keySet().contains(filter.getFieldAliasName())) {
+                        fieldAliasName = findKeyByValue(fieldName, fieldMap);
                     } else {
                         fieldAliasName = filter.getFieldAliasName();
                         //维度条件、对比条件、指标条件中不包含筛选项
@@ -1316,13 +1323,7 @@ public class SqlBuilder extends BaseBuilder {
                         List<String> values = filter.getFieldValue();
                         if (Objects.nonNull(values) && !values.isEmpty()) {
                             selectBuild.append(String.format("%s as `%s`", filter.getFieldFormula(), fieldAliasName));
-//                            selectAllFieldMap.put(fieldAliasName, filter.getFieldFormula());
-//                            selectQoqSqlList.add(selectBuild.toString());
                         }
-                        //分组字段不为空，将筛选字段添加到分组中
-//                        if (!groupSqlList.contains(fieldAliasName)) {
-//                            groupSqlList.add(fieldAliasName);
-//                        }
                         filterCustomFieldList.add(fieldAliasName);
                     }
                     //表达式包含聚合函数
