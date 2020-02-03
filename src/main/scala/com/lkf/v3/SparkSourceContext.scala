@@ -1,7 +1,7 @@
 package com.lkf.v3
 
 
-import org.apache.livy.client.ext.model.SparkSqlCondition
+import cn.com.tcsl.cmp.client.dto.report.condition.SparkSqlCondition
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.slf4j.{Logger, LoggerFactory}

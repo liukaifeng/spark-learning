@@ -10,7 +10,7 @@ object SparkKuduDemo {
     val spark: SparkSession = newSparkSession()
     spark.sparkContext.setLogLevel("INFO")
     val s = System.currentTimeMillis()
-    val kuduDataFrame: DataFrame = spark.read.options(Map("kudu.master" -> "192.168.12.207:7051", "kudu.table" -> "impala::e000.dw_trade_bill_fact_p_group")).kudu
+    val kuduDataFrame: DataFrame = spark.read.options(Map("kudu.master" -> "hadoop-slave2:7051,hadoop-slave5:7051,hadoop-slave4:7051", "kudu.table" -> "(select * from impala::e000.dw_trade_bill_fact_p_group limit 5) as T")).kudu
     //    kuduDataFrame.filter("group_code=18291").show()
     //    kuduDataFrame.show()  where group_code='9759'
     kuduDataFrame.createTempView("temp_kudu")

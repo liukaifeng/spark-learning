@@ -4,11 +4,9 @@ import java.lang.reflect.InvocationTargetException
 import java.util
 import java.util.Objects
 
-import com.mongodb.casbah.{MongoClient, MongoCredential}
-import com.mongodb.util.JSON
-import com.mongodb.{DBCollection, DBObject, ServerAddress}
-import org.apache.livy.client.ext.model.Constant.PIVOT_ALIAS
-import org.apache.livy.client.ext.model.{DateUtils, SparkSqlCondition, _}
+import cn.com.tcsl.cmp.client.dto.report.condition.Constant.{DataFieldType, PIVOT_ALIAS}
+import cn.com.tcsl.cmp.client.dto.report.condition.{DateUtils, SparkSqlCondition, _}
+import org.apache.livy.client.common.ext.SparkExtParam
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types.{DataType, StringType, StructType}
@@ -42,7 +40,10 @@ object SQLExtInterpreter_hive_jdbc {
   //默认分区数量
   private var defaultNumPartitions = 10
 
-  private val unknown = "未知"
+  //数值类型空值填充值
+  private val numFillValue = 0
+  //非数值类型空值填充值
+  private val nonNumFillValue = "- -"
 
   private val joinTypeInner = "left"
   private val joinTypeCross = "cross"
@@ -52,18 +53,23 @@ object SQLExtInterpreter_hive_jdbc {
     val beginTime: Long = System.currentTimeMillis()
     sqlExtLog.beginTime = DateUtils.convertTimeToString(beginTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
     System.setProperty("hadoop.home.dir", "D:\\Java\\hadoop-3.0")
-    val param = "{\"accessToken\":\"21bb11d5-5e33-4d9b-b5b8-29ee3d8696cc\",\"compareCondition\":[{\"aliasName\":\"集团名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_compare_x_group_namestr1557042410000_0\",\"fieldDescription\":\"集团名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000825\",\"fieldName\":\"group_name\",\"granularity\":\"str\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1557042410000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"优惠总额\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_group_x_disc_money_totaldouble1557039852000_0\",\"fieldDescription\":\"优惠总额\",\"fieldGroup\":0,\"fieldId\":\"180620140418000778\",\"fieldName\":\"disc_money_total\",\"granularity\":\"double\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"udfType\":0,\"uniqId\":\"1557039852000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"用餐时长(求和)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_dinner_timeint1557042421000_0\",\"fieldDescription\":\"用餐时长\",\"fieldGroup\":0,\"fieldId\":\"180620140417000726\",\"fieldName\":\"dinner_time\",\"granularity\":\"int\",\"isBuildAggregated\":0,\"originDataType\":\"int\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1557042421000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":3,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":1,\"queryType\":0,\"reportCode\":\"181220143334000400\",\"sessionGroup\":\"group_report\",\"sessionId\":\"1\",\"sortCondition\":[],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group_n2\",\"tracId\":\"1557042421000881691469\"}"
-    //    val param = "{\"accessToken\":\"34763405-afd4-44bd-bd86-fa277dc2879b\",\"compareCondition\":[{\"aliasName\":\"营业日\",\"dataType\":\"datetime\",\"fieldAliasName\":\"ljc_compare_x_settle_biz_date1553235288000_0\",\"fieldDescription\":\"营业日\",\"fieldGroup\":0,\"fieldId\":\"180620140417000718\",\"fieldName\":\"settle_biz_date\",\"isBuildAggregated\":0,\"originDataType\":\"datetime\",\"udfType\":0,\"uniqId\":\"1553235288000\"}],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000\",\"dimensionCondition\":[{\"aliasName\":\"门店名称\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_store_name1553235279000_0\",\"fieldDescription\":\"门店名称\",\"fieldGroup\":0,\"fieldId\":\"180620140418000824\",\"fieldName\":\"store_name\",\"isBuildAggregated\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1553235279000\"}],\"filterCondition\":[{\"dataType\":\"int\",\"fieldAliasName\":\"ljc_filter_x_group_codefilter_0\",\"fieldDescription\":\"集团\",\"fieldGroup\":0,\"fieldName\":\"group_code\",\"fieldValue\":[\"9759\"],\"isBuildAggregated\":0,\"originDataType\":\"int\",\"udfType\":0}],\"hiveJdbcConfig\":{\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"hiveUser\":\"\",\"hivePassword\":\"\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和\",\"aliasName\":\"实际收入（实收）(求和)\",\"dataType\":\"double\",\"fieldAliasName\":\"ljc_sum_x_real_income1553235341000_0\",\"fieldDescription\":\"实际收入（实收）\",\"fieldGroup\":0,\"fieldId\":\"180620140418000779\",\"fieldName\":\"real_income\",\"isBuildAggregated\":0,\"originDataType\":\"double\",\"qoqType\":0,\"udfType\":0,\"uniqId\":\"1553235341000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":1500,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":0,\"reportCode\":\"181115134910005556\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[{\"dataType\":\"\",\"fieldAliasName\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldDescription\":\"\",\"fieldGroup\":0,\"fieldId\":\"实际收入（实收）(求和):%2017-09-01\",\"fieldName\":\"实际收入（实收）(求和):%2017-09-01\",\"isBuildAggregated\":0,\"sortFlag\":\"desc\",\"sortType\":1,\"udfType\":0}],\"sparkConfig\":{\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.executor.instances\":\"2\",\"spark.executor.cores\":\"2\",\"spark.driver.cores\":\"1\",\"spark.driver.memory\":\"2000m\",\"spark.executor.memory\":\"2000m\",\"spark.scheduler.mode\":\"FAIR\",\"spark.custom.coalesce\":\"1\"},\"synSubmit\":true,\"tbId\":\"180620140417000008\",\"tbName\":\"dw_trade_bill_fact_p_group_n2\",\"tracId\":\"1553235392000\"}"
+
+    //    val param = "{\"accessToken\":\"141a40df-692f-477c-abe7-bd7be9ee1712\",\"compareCondition\":[],\"computeKind\":\"sql_ext\",\"dataSourceType\":1,\"dbName\":\"impala::e000379\",\"dimensionCondition\":[{\"aliasName\":\"姓名\",\"dataType\":\"str\",\"fieldAliasName\":\"ljc_group_x_di2liestr1559617341000_0\",\"fieldDescription\":\"姓名\",\"fieldGroup\":0,\"fieldId\":\"190531180038016266\",\"fieldName\":\"di2lie\",\"granularity\":\"str\",\"isBuildAggregated\":0,\"nanFlag\":0,\"originDataType\":\"str\",\"udfType\":0,\"uniqId\":\"1559617341000\"}],\"filterCondition\":[],\"predictCondition\":{\"city\":[\"天津\"],\"storeName\":[\"九田家天津武清区体育中心店\",\"九田家天津和平区吉利商厦店\",\"九田家天津红桥区欧亚达\",\"九田家天津南开区熙悦汇店\",\"九田家天津武清区保利金街店\",\"九田家天津滨海新区八角楼店\"],\"groupCode\":[\"3297\",\"9759\"],\"historyDate\":[\"2018-07-01\",\"2018-12-10\"],\"predictDays\":7},\"hiveJdbcConfig\":{\"hivePassword\":\"\",\"hiveUrl\":\"jdbc:hive2://192.168.12.204:21050/%s;auth=noSasl\",\"preExecuteSqls\":\"set mem_limit=2G;set NUM_SCANNER_THREADS=1\",\"hiveUser\":\"\"},\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"indexCondition\":[{\"aggregator\":\"sum\",\"aggregatorName\":\"求和-百分比\",\"aliasName\":\"计算——应修年假(求和-百分比)\",\"dataType\":\"int\",\"fieldAliasName\":\"ljc_sum_x_jisuan__yingxiunianjiaint1559617327000_0\",\"fieldDescription\":\"计算——应修年假\",\"fieldFormula\":\"CAST(  CAST(  #di11lie AS DOUBLE) AS DOUBLE)\",\"fieldGroup\":0,\"fieldId\":\"190604110156016823\",\"fieldName\":\"jisuan__yingxiunianjia\",\"granularity\":\"int\",\"isBuildAggregated\":2,\"nanFlag\":0,\"originDataType\":\"int\",\"qoqType\":7,\"udfType\":0,\"uniqId\":\"1559617327000\"}],\"indexDoubleCondition\":[],\"kuduMaster\":\"hadoop207\",\"limit\":-1,\"maxWaitSeconds\":60,\"mongoConfig\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"page\":0,\"platformVersion\":\"0\",\"queryPoint\":0,\"queryType\":3,\"reportCode\":\"190604110130000834\",\"sessionGroup\":\"group_report\",\"sessionId\":\"0\",\"sortCondition\":[],\"sparkConfig\":{\"spark.executor.memory\":\"2400m\",\"spark.executor.cores\":\"1\",\"groupName\":\"group_report\",\"spark.driver.cores\":\"1\",\"spark.scheduler.mode\":\"FAIR\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.driver.memory\":\"2400m\",\"spark.executor.instances\":\"1\",\"spark.custom.coalesce\":\"1\",\"spark.default.parallelism\":\"20\"},\"sqlPlan\":false,\"synSubmit\":true,\"tbId\":\"190531180038000563\",\"tbName\":\"tonghuanbisigeyueshuju0530_sheet1_000379\",\"tbType\":\"0\",\"tracId\":\"CP__1402302091112187197\"}"
+    val param = "{\"queryType\":0,\"queryPoint\":0,\"page\":0,\"limit\":1500,\"dataSourceType\":1,\"table\":\"tubiaoxianshitestjkn_0001123646842025070813184\",\"keyspace\":\"impala::e000112\",\"kuduMaster\":\"hadoop207\",\"sessionId\":\"5\",\"tracId\":\"1577757177000608258312\",\"compareSortFlag\":true,\"sparkConfigMap\":null,\"mongoConfigMap\":{\"mongoHost\":\"192.168.12.117\",\"mongoUserName\":\"lb\",\"mongoPort\":\"30017\",\"mongoPassword\":\"Lb#827\",\"mongoDb\":\"lb\"},\"hiveJdbcConfig\":{\"hiveUser\":\"root\",\"preExecuteSqls\":\"\",\"hivePassword\":\"\",\"hiveUrl\":\"jdbc:hive2://192.168.12.203:21050/%s;auth=noSasl\"},\"secondaryFlag\":true,\"dimensionIsExists\":false,\"comparePctFlag\":true,\"selectSql\":\"select \ttb_1.di7lie as `ljc_group_x_di7liestr1576562556000_0` , \ttb_1.di3lie as `ljc_compare_x_di3liestr1576562531000_0` , \ttb_1.di18lie as `ljc_compare_x_di18liestr1576562540000_0` , \tsum(CAST(tb_1.di13lie AS DOUBLE)) AS ljc_sum_x_di13liedouble1576562514000_0_pct1 , \tMIN(tb_2.`ljc_sum_x_di13liedouble1576562514000_0`) AS ljc_sum_x_di13liedouble1576562514000_0_pct2 from \te000112.tubiaoxianshitestjkn_0001123646842025070813184 as tb_1 left join  ( \tSELECT  \t\tSUM(a.ljc_sum_x_di13liedouble1576562514000_0) AS ljc_sum_x_di13liedouble1576562514000_0, \t\ta.ljc_compare_x_di3liestr1576562531000_0 AS ljc_compare_x_di3liestr1576562531000_0, \t\ta.ljc_compare_x_di18liestr1576562540000_0 AS ljc_compare_x_di18liestr1576562540000_0 \tFROM \t( \t\tSELECT  \t\t\tdi3lie as `ljc_compare_x_di3liestr1576562531000_0` , \t\t\tdi18lie as `ljc_compare_x_di18liestr1576562540000_0` , \t\t\tsum(CAST(di13lie AS DOUBLE)) as `ljc_sum_x_di13liedouble1576562514000_0`, \t\t\tdi7lie as `ljc_group_x_di7liestr1576562556000_0` \t\tFROM \t\t\te000112.tubiaoxianshitestjkn_0001123646842025070813184 \t\tWHERE \t\t\tdi3lie in ('业务中心') and di3lie is not null\tand di3lie != '' \t\tGROUP BY \t\t\tljc_group_x_di7liestr1576562556000_0, \t\t\tljc_compare_x_di3liestr1576562531000_0, \t\t\tljc_compare_x_di18liestr1576562540000_0 \t) AS a \tGROUP BY \t\tljc_compare_x_di3liestr1576562531000_0, \t\tljc_compare_x_di18liestr1576562540000_0 ) AS tb_2 ON \ttb_1.di3lie = tb_2.ljc_compare_x_di3liestr1576562531000_0 \tand tb_1.di18lie = tb_2.ljc_compare_x_di18liestr1576562540000_0 where \tdi3lie in ('业务中心') \tand di3lie is not null \tand di3lie != '' group by \t`ljc_group_x_di7liestr1576562556000_0`, \t`ljc_compare_x_di3liestr1576562531000_0`, \t`ljc_compare_x_di18liestr1576562540000_0` order by \t`ljc_compare_x_di3liestr1576562531000_0` ASC NULLS FIRST limit 1500\",\"selectQoqSql\":null,\"delFilterField\":false,\"selectList\":[\"ljc_group_x_di7liestr1576562556000_0\",\"ljc_sum_x_di13liedouble1576562514000_0_pct1\",\"ljc_sum_x_di13liedouble1576562514000_0_pct2\"],\"indexList\":[\"ljc_sum_x_di13liedouble1576562514000_0\"],\"groupList\":[\"ljc_group_x_di7liestr1576562556000_0\"],\"compareList\":[\"ljc_compare_x_di3liestr1576562531000_0\",\"ljc_compare_x_di18liestr1576562540000_0\"],\"filterCustomFieldList\":[],\"filterFormula\":\"\",\"cassandraFilter\":\"1=1\",\"orderByMap\":null,\"sparkConfig\":{\"spark.executor.memory\":\"2000m\",\"spark.driver.memory\":\"2000m\",\"spark.yarn.appMasterEnv.PYSPARK_PYTHON\":\"./environment/bi_predict_python/bin/python\",\"spark.driver.cores\":\"1\",\"spark.yarn.dist.archives\":\"hdfs://hadoop-slave2:6020/kaifeng/environment.tar.gz#environment\",\"spark.custom.coalesce\":\"1\",\"spark.executor.cores\":\"1\",\"spark.pyspark.driver.python\":\"./environment/bi_predict_python/bin/python\",\"spark.sql.shuffle.partitions\":\"20\",\"spark.pyspark.python\":\"./environment/bi_predict_python/bin/python\",\"groupName\":\"group_report\",\"spark.default.parallelism\":\"20\",\"spark.scheduler.mode\":\"FAIR\",\"spark.executor.extraJavaOptions\":\"-Dfile.encoding=utf8\",\"spark.executor.instances\":\"1\",\"spark.driver.extraJavaOptions\":\"-Dfile.encoding=utf8\"},\"sparkAggMap\":{},\"fieldAliasAndDescMap\":{},\"crosstabByMap\":{},\"reverseByMap\":{},\"qoqList\":[],\"pctMap\":{\"ljc_sum_x_di13liedouble1576562514000_0_pct1\":\"ljc_sum_x_di13liedouble1576562514000_0_pct2\"},\"compareFieldTypeMap\":{\"ljc_compare_x_di18liestr1576562540000_0\":\"str\",\"ljc_compare_x_di3liestr1576562531000_0\":\"str\"},\"predict2PythonDTO\":null}"
 
     //组装spark sql
-    val sparkSqlCondition: SparkSqlCondition = new SparkSqlBuild().buildSqlStatement(param)
-    val sparkSession: SparkSession = SparkSourceContext.getSparkSession(sparkSqlCondition)
+    val sparkSqlCondition: SparkSqlCondition = new SparkExtParam().analyzeParam(param)
+    if (sparkSqlCondition.getQueryType == 3) {
+      val sparkSession: SparkSession = SparkSourceContext.getSparkSession(sparkSqlCondition)
+      DataPredictUtil.asyncProcessPredictData(sparkSession, sparkSqlCondition)
+      return
+    }
 
     try {
       sqlExtLog.sessionId = sparkSqlCondition.getSessionId
       sqlExtLog.tracId = sparkSqlCondition.getTracId
       sparkSqlCondition.getLimit
-      var sqlStr: String = sparkSqlCondition.getSelectSql
+      val sqlStr: String = sparkSqlCondition.getSelectSql
       logger.info(s"【SQLExtInterpreter-日志】-【execute】-主体SQL：$sqlStr")
 
       //3-主体SQL执行
@@ -73,15 +79,18 @@ object SQLExtInterpreter_hive_jdbc {
       if (sqlStr.nonEmpty) {
         sqlExtLog.mainSql = sqlStr
         if (sparkSqlCondition.getSecondaryFlag) {
+          val sparkSession: SparkSession = SparkSourceContext.getSparkSession(sparkSqlCondition)
           df = HiveJdbcUtil.execute2DataFrame(sparkSession, sparkSqlCondition, sqlStr)
-          df.show()
         }
         else {
           val map = HiveJdbcUtil.execute2Result(sparkSqlCondition, sqlStr)
           val schema = map("schema").asInstanceOf[StructType]
           val rows = map("rowList").asInstanceOf[List[Row]]
           val jSchema = parse(schema.json)
-          val jRows = Extraction.decompose(rows.toArray.map(_.toSeq))
+          val collect = rows.toArray.map(_.toSeq)
+          implicit val formats = org.json4s.DefaultFormats.withBigDecimal
+          val jRows = ExtractionUtil.decompose(collect)
+
           println(jSchema)
           println(jRows)
           return
@@ -115,11 +124,12 @@ object SQLExtInterpreter_hive_jdbc {
 
       // 10-获取数据结构
       val jsonString = df.schema.json
+      import org.json4s.jackson.JsonMethods._
       val jSchema = parse(jsonString)
       // 11-获取数据
       val rows = df.take(sparkSqlCondition.getLimit).map(_.toSeq)
-      val jRows = Extraction.decompose(rows)
-      df.show()
+      val jRows = ExtractionUtil.decompose(rows)
+      df.show(100)
       df.unpersist()
       println(jSchema)
       println(jRows)
@@ -133,10 +143,10 @@ object SQLExtInterpreter_hive_jdbc {
         logger.info(s"Error ${f.getMessage},${f.getStackTrace.map(_.toString)}")
     }
     finally {
-      //      val endTime = System.currentTimeMillis()
-      //      sqlExtLog.endTime = DateUtils.convertTimeToString(endTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
-      //      sqlExtLog.totalElapsedTime = endTime - beginTime
-      //      saveSqlExtLog(sqlExtLog, sparkSqlCondition)
+      val endTime = System.currentTimeMillis()
+      sqlExtLog.endTime = DateUtils.convertTimeToString(endTime, DateUtils.MILLS_SECOND_OF_DATE_FRM)
+      sqlExtLog.totalElapsedTime = endTime - beginTime
+      InterpreterUtil.saveSqlExtLog(sqlExtLog, sparkSqlCondition)
     }
   }
 
@@ -150,11 +160,9 @@ object SQLExtInterpreter_hive_jdbc {
     var df = limitDf
     //交叉表排序条件
     val orderCols = sparkOrderCols(sparkSqlCondition.getCrosstabByMap)
-
     //交叉表排序
-    //    df = df.na.fill(fillValue).orderBy(orderCols: _*)
     df = df.orderBy(orderCols: _*)
-
+    //    df = df.na.fill(fillValue).orderBy(orderCols: _*)
     //取后n条数据
     if (sparkSqlCondition.getQueryPoint == 2) {
       //总条数
@@ -171,6 +179,7 @@ object SQLExtInterpreter_hive_jdbc {
     }
     df
   }
+
 
   //筛选项的值处理
   private[this] def handleFilterValueDf(sqlDf: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
@@ -255,7 +264,6 @@ object SQLExtInterpreter_hive_jdbc {
   //自定义字段作为筛选项处理
   private[this] def handleCustomField(sqlDf: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
     var df = sqlDf
-    df.show()
     //自定义字段筛选项
     val customField: util.List[String] = sparkSqlCondition.getFilterCustomFieldList
     //筛选表达式
@@ -315,7 +323,7 @@ object SQLExtInterpreter_hive_jdbc {
     } else {
       compareValues = compareValues.slice(0, sparkSqlCondition.getLimit)
     }
-
+    df1.show()
     //聚合字段
     var aggList: List[Column] = sparkAgg(sparkAggMap)
     if ((aggList != null && aggList.nonEmpty) || sparkSqlCondition.getComparePctFlag) {
@@ -369,8 +377,6 @@ object SQLExtInterpreter_hive_jdbc {
 
   //合并对比列,并设置别名为【y】
   private[this] def combineCompareColumn(df: DataFrame, sparkSqlCondition: SparkSqlCondition): DataFrame = {
-    import org.apache.spark.sql.Column
-    import org.apache.spark.sql.functions.{col, concat_ws}
     var df1 = df
     //对比项
     val compareList: util.List[String] = sparkSqlCondition.getCompareList
@@ -394,8 +400,16 @@ object SQLExtInterpreter_hive_jdbc {
     for (select <- selectList.asScala) {
       colList = colList :+ col(select)
     }
+    val compareFieldTypeMap = sparkSqlCondition.getCompareFieldTypeMap
     for (compare <- compareList.asScala) {
-      compareCols = compareCols :+ when(col(compare).isNull, unknown).otherwise(col(compare))
+      //对比项数据类型
+      val compareDataType = compareFieldTypeMap.get(compare)
+      //如果对比项类型是字符串，使用【- -】代替空值，否则使用【0】代替空值
+      if (compareDataType.equals(DataFieldType.STRING_TYPE.getType) || compareDataType.equals(DataFieldType.DATETIME_TYPE.getType)) {
+        compareCols = compareCols :+ when(col(compare).isNull, nonNumFillValue).when(col(compare).isin(""), nonNumFillValue).otherwise(col(compare))
+      } else {
+        compareCols = compareCols :+ when(col(compare).isNull, numFillValue).otherwise(col(compare))
+      }
     }
     //多个对比项
     if (compareList.size() > 1) {
@@ -407,47 +421,6 @@ object SQLExtInterpreter_hive_jdbc {
     df1
   }
 
-  /**
-    * 保存日志到mongodb
-    *
-    * @param log 日志对象
-    **/
-  def saveSqlExtLog(log: SqlExtInterpreterLog, sparkSqlCondition: SparkSqlCondition): Unit = {
-    try {
-      val mongoMap = sparkSqlCondition.getMongoConfigMap
-      val mongoClient: MongoClient = getMongoClient(mongoMap.get("mongoHost"),
-        mongoMap.get("mongoPort").toInt,
-        mongoMap.get("mongoDb"),
-        mongoMap.get("mongoUserName"),
-        mongoMap.get("mongoPassword"))
-
-      val collection: DBCollection = mongoClient.getDB(mongoMap.get("mongoDb")).getCollection("loongboss_livy_server_log")
-      import com.google.gson.Gson
-      val gson = new Gson
-      val dbObject: DBObject = JSON.parse(gson.toJson(log)).asInstanceOf[DBObject]
-      collection.insert(dbObject)
-    } catch {
-      case exception: Exception =>
-        logger.error("【SQLExtInterpreter::saveSqlExtLog】-MongoDB记录日志出现异常")
-    }
-  }
-
-  /**
-    * 连接mongodb
-    *
-    * @param ip        ip地址
-    * @param port      端口号
-    * @param dbName    数据库名
-    * @param loginName 用户名
-    * @param password  密码
-    **/
-  def getMongoClient(ip: String, port: Int, dbName: String, loginName: String, password: String): MongoClient = {
-    val server = new ServerAddress(ip, port)
-    //注意：MongoCredential中有6种创建连接方式，这里使用MONGODB_CR机制进行连接。如果选择错误则会发生权限验证失败
-    val credentials = MongoCredential.createScramSha1Credential(loginName, dbName, password.toCharArray)
-    val mongoClient = MongoClient(server, List(credentials))
-    mongoClient
-  }
 
   private[this] def newSparkSession(sparkSqlCondition: SparkSqlCondition): SparkSession = {
 

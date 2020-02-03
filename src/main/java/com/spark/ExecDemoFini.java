@@ -1,5 +1,7 @@
 package com.spark;
 
+import java.util.Optional;
+
 /**
  * todo 一句话描述该类的用途
  *
@@ -8,14 +10,14 @@ package com.spark;
  */
 public class ExecDemoFini {
     public static void main( String args[] ) {
-        Runtime r = Runtime.getRuntime();
-        Process p = null;
-        try {
-            p = r.exec("notepad");
-            p.waitFor();
-        } catch (Exception e) {
-            System.out.println("Error executing notepad.");
-        }
-        System.out.println("Notepad returned " + p.exitValue());
+//        Runtime r = Runtime.getRuntime();
+//        Process p = null;
+//        try {
+//            p = r.exec("notepad");
+//            p.waitFor();
+//        } catch (Exception e) {
+//            System.out.println("Error executing notepad.");
+//        }
+//        System.out.println("Notepad returned " + p.exitValue());
     }
 }

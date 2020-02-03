@@ -10,6 +10,7 @@
 
     <properties>
         <spark.version>2.3.0</spark.version>
+        <ignite.version>2.7.0</ignite.version>
     </properties>
 
     <dependencies>
@@ -25,6 +26,10 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -146,81 +151,58 @@
             <version>2.2.3</version>
         </dependency>
 
-
         <dependency>
-            <groupId>org.apache.hive</groupId>
-            <artifactId>hive-jdbc</artifactId>
-            <version>1.2.1</version>
+            <groupId>tcsl.ds.connector.jdbc</groupId>
+            <artifactId>jdbc-impala-ds-connector</artifactId>
+            <version>1.0-SNAPSHOT</version>
             <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
                 <exclusion>
                     <groupId>org.eclipse.jetty.aggregate</groupId>
                     <artifactId>jetty-all</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty</artifactId>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-util</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-sslengine</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jetty-sslengine</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.eclipse.jetty.orbit</groupId>
-                    <artifactId>javax.servlet</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jsp-2.1</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>jsp-api-2.1</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>servlet-api-2.5</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.0.1-SNAPSHOT</version>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-async_2.12</artifactId>
+            <version>0.9.7</version>
         </dependency>
 
         <dependency>
-            <groupId>com.cloudera.api.swagger</groupId>
-            <artifactId>cloudera-manager-api-swagger</artifactId>
-            <version>6.1.0</version>  <!-- or CM version 6.0 and above -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
+            <version>5.1.6.RELEASE</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>com.cloudera.api.swagger</groupId>-->
+        <!--<artifactId>cloudera-manager-api-swagger</artifactId>-->
+        <!--<version>6.1.0</version>  &lt;!&ndash; or CM version 6.0 and above &ndash;&gt;-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.squareup.okhttp</groupId>
@@ -249,6 +231,102 @@
             <version>RELEASE</version>
         </dependency>
 
+        <!--<dependency>-->
+        <!--<groupId>org.apache.ignite</groupId>-->
+        <!--<artifactId>ignite-spring</artifactId>-->
+        <!--<version>${ignite.version}</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-core</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-indexing</artifactId>
+            <version>${ignite.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ignite</groupId>
+            <artifactId>ignite-spark</artifactId>
+            <version>${ignite.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.json4s</groupId>
+                    <artifactId>json4s-core_2.11</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>contiperf</artifactId>
+            <version>2.1.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jpmml</groupId>
+            <artifactId>pmml-evaluator</artifactId>
+            <version>1.4.1</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>guava</artifactId>
+                    <groupId>com.google.guava</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jpmml</groupId>
+            <artifactId>pmml-evaluator-extension</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.apache.ignite</groupId>-->
+        <!--<artifactId>ignite-spark</artifactId>-->
+        <!--<version>2.11.0</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.jpmml</groupId>-->
+        <!--<artifactId>jpmml-evaluator-spark</artifactId>-->
+        <!--<version>1.2.2</version>-->
+        <!--</dependency>-->
+
+
+        <!--<dependency>-->
+        <!--<groupId>org.apache.spark</groupId>-->
+        <!--<artifactId>spark-mllib_2.11</artifactId>-->
+        <!--<version>${spark.version}</version>-->
+        <!--<scope>provided</scope>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>org.jpmml</groupId>-->
+        <!--<artifactId>pmml-model</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.28</version>
+        </dependency>
+        <dependency>
+            <groupId>tcsl.cp.common</groupId>
+            <artifactId>tcsl-cmp-common</artifactId>
+            <version>5.0-SNAPSHOT</version>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.redislabs</groupId>-->
+<!--            <artifactId>spark-redis</artifactId>-->
+<!--            <version>2.3.1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -268,15 +346,21 @@
 
     <repositories>
         <!--<repository>-->
-            <!--<id>snapshots-repo</id>-->
-            <!--<url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+        <!--<id>snapshots-repo</id>-->
+        <!--<url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
         <!--</repository>-->
 
         <!--<repository>-->
-            <!--<id>cm.repo</id>-->
-            <!--<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>-->
-            <!--<name>Cloudera Repository</name>-->
+        <!--<id>cm.repo</id>-->
+        <!--<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>-->
+        <!--<name>Cloudera Repository</name>-->
         <!--</repository>-->
+
+        <repository>
+            <id>nexus-tcsl</id>
+            <name>Nexus tcsl</name>
+            <url>http://192.168.8.17:8082/nexus/content/groups/t-c</url>
+        </repository>
     </repositories>
 
 

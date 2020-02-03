@@ -1,7 +1,7 @@
 package com.lkf.v3
 
+import cn.com.tcsl.cmp.client.dto.report.condition.SparkSqlCondition
 import org.apache.kudu.spark.kudu._
-import org.apache.livy.client.ext.model.SparkSqlCondition
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.{DataFrame, SparkSession}
 

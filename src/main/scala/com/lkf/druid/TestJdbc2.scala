@@ -21,7 +21,7 @@ object TestJdbc2 {
     val rs: ResultSet = ps.executeQuery
     val col = rs.getMetaData.getColumnCount
     //获取元数据
-    val dialect = JdbcDialects.get(HiveJdbcPoolUtil.druidProps.getProperty("url"))
+    val dialect = JdbcDialects.get(HiveJdbcPoolUtil.confMap.getProperty("url"))
     val schema: StructType = JdbcUtils.getSchema(rs, dialect)
     val rows: List[Row] = JdbcUtils.resultSetToRows(rs, schema).toList
 
@@ -34,6 +34,7 @@ object TestJdbc2 {
     val conf = new SparkConf().setAppName("TestJDBC").setMaster("local[2]")
     val spark: SparkSession = SparkSession.builder().config(conf).getOrCreate()
     val df: DataFrame = spark.createDataFrame( rows.asJava, schema)
+
     df.show()
 
   }

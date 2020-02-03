@@ -19,16 +19,21 @@ package com.lkf.v3
 
 import java.sql._
 
-import org.apache.livy.client.ext.model.SparkSqlCondition
+import cn.com.tcsl.cmp.client.dto.report.condition.{DateUtils, SparkSqlCondition}
+import cn.com.tcsl.ds.connector.jdbc.impala.HiveQueryResultSet
+import com.alibaba.druid.pool.DruidPooledResultSet
 import org.apache.spark.sql.execution.datasources.jdbc.JdbcUtils
 import org.apache.spark.sql.jdbc.{JdbcDialect, JdbcDialects}
 import org.apache.spark.sql.types.DecimalType.{MAX_PRECISION, MAX_SCALE}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.Array
 import scala.collection.JavaConverters._
+import scala.concurrent.Future
 import scala.math.min
+import scala.util.{Failure, Success}
 
 /**
   * todo 一句话描述该类的用途
@@ -36,6 +41,8 @@ import scala.math.min
   * @author 刘凯峰
   */
 object HiveJdbcUtil {
+  private val logger: Logger = LoggerFactory.getLogger(this.getClass)
+
   //hive URL  地址
   private val hiveUrl = "hiveUrl"
   //hive 用户名
@@ -78,54 +85,6 @@ object HiveJdbcUtil {
     df
   }
 
-  def loadData2DataFrame2(sparkSession: SparkSession, sparkSqlCondition: SparkSqlCondition, sql: String): DataFrame = {
-    //数据库名称
-    var dataBaseName = sparkSqlCondition.getKeyspace
-    //hive jdbc配置项
-    val hiveJdbcMap = sparkSqlCondition.getHiveJdbcConfig
-    // 替换掉数据库前缀
-    var preSql = sql
-    if (preSql.contains("impala::")) {
-      preSql = preSql.replace("impala::", "")
-    }
-    //hive jdbc URL地址
-    val hiveJdbcUrl = HiveJdbcPoolUtil.url
-    val memLimit = "set mem_limit=1G"
-    //从连接池获取数据源
-    val conn: Connection = HiveJdbcPoolUtil.getConnection.get
-    try {
-      //执行sql
-      val statement = conn.prepareStatement(preSql)
-      try {
-        statement.execute(memLimit)
-        //结果集
-        val rs: ResultSet = statement.executeQuery
-        try {
-          //根据URL获取对应的jdbc方言
-          val dialect = JdbcDialects.get(hiveJdbcUrl)
-          //数据集字段属性
-          val schema: StructType = getSchema(rs, dialect)
-          //数据集row集合
-          val rows: List[Row] = JdbcUtils.resultSetToRows(rs, schema).toList
-
-          //          implicit val formats = Serialization.formats(ShortTypeHints(List()))
-          //          val data = Extraction.decompose(rows)
-          //          println(schema)
-          //          println(data)
-          import scala.collection.JavaConverters._
-          val df: DataFrame = sparkSession.createDataFrame(rows.asJava, schema)
-          df
-        }
-        finally {
-          rs.close()
-        }
-      } finally {
-        statement.close()
-      }
-    } finally {
-      HiveJdbcPoolUtil.releaseConnection(conn)
-    }
-  }
 
   def execute2DataFrame(sparkSession: SparkSession, sparkSqlCondition: SparkSqlCondition, sql: String): DataFrame = {
     val map = excecute(sparkSqlCondition, sql)
@@ -141,29 +100,23 @@ object HiveJdbcUtil {
   }
 
   def excecute(sparkSqlCondition: SparkSqlCondition, sql: String): Map[String, Object] = {
-    //数据库名称
-    var dataBaseName = sparkSqlCondition.getKeyspace
-    //hive jdbc配置项
-    val hiveJdbcMap = sparkSqlCondition.getHiveJdbcConfig
     // 替换掉数据库前缀
     var preSql = sql
     if (preSql.contains("impala::")) {
       preSql = preSql.replace("impala::", "")
     }
     //hive jdbc URL地址
-    val hiveJdbcUrl = HiveJdbcPoolUtil.url
-    val memLimit = "set mem_limit=1G"
+    val hiveJdbcUrl = HiveJdbcPoolUtil.getUrl(sparkSqlCondition.getMongoConfigMap)
     //从连接池获取数据源
     val conn: Connection = HiveJdbcPoolUtil.getConnection.get
-
     try {
       //执行sql
       val statement = conn.prepareStatement(preSql)
       try {
-        statement.execute(memLimit)
-        statement.execute("set NUM_SCANNER_THREADS=1")
         //结果集
-        val rs: ResultSet = statement.executeQuery
+        val rs: DruidPooledResultSet = statement.executeQuery.asInstanceOf[DruidPooledResultSet]
+        //异步记录SQL执行信息
+        executionLog(rs, sparkSqlCondition)
         try {
           //根据URL获取对应的jdbc方言
           val dialect = JdbcDialects.get(hiveJdbcUrl)
@@ -184,11 +137,37 @@ object HiveJdbcUtil {
     }
   }
 
+  import scala.concurrent.ExecutionContext.Implicits.global
 
-  def getSchema(
-                 resultSet: ResultSet,
-                 dialect: JdbcDialect,
-                 alwaysNullable: Boolean = false): StructType = {
+  /**
+    * 异步记录 sql 执行统计信息
+    *
+    * @param sql执行统计信息
+    * @param sparkSqlCondition 请求条件
+    **/
+  def executionLog(rs: DruidPooledResultSet, sparkSqlCondition: SparkSqlCondition) = {
+    val f: Future[Boolean] = Future {
+      val begin = System.currentTimeMillis()
+      val hrs: HiveQueryResultSet = rs.getRawResultSet.asInstanceOf[HiveQueryResultSet]
+      val profile: String = hrs.getRuntimeProfie
+      val executionProfile: SqlExecutionProfile = new SqlExecutionProfile
+      executionProfile.tracId = sparkSqlCondition.getTracId
+      executionProfile.createTime = DateUtils.convertTimeToString(begin, DateUtils.MILLS_SECOND_OF_DATE_FRM)
+      executionProfile.summary = profile
+      executionProfile.executionType = "report"
+      InterpreterUtil.saveSqlExtLog(executionProfile, sparkSqlCondition, SqlExecutionEnum.SQL_SUMMARY.toString)
+      true
+    }
+    f onComplete {
+      case Success(result) => logger.info("==========Async log record success===========")
+      case Failure(t) => logger.error("An error has occured: " + t.getMessage)
+    }
+  }
+
+  private def getSchema(
+                         resultSet: ResultSet,
+                         dialect: JdbcDialect,
+                         alwaysNullable: Boolean = false): StructType = {
     val rsmd = resultSet.getMetaData
     val ncols = rsmd.getColumnCount
     val fields = new Array[StructField](ncols)
@@ -296,5 +275,4 @@ object HiveJdbcUtil {
   private def bounded(precision: Int, scale: Int): DecimalType = {
     DecimalType(min(precision, MAX_PRECISION), min(scale, MAX_SCALE))
   }
-
 }

@@ -11,9 +11,8 @@ import org.json4s.jackson.Serialization
 
 object ImpalaJdbcDemo {
   def main(args: Array[String]): Unit = {
-
     val conn: Connection = getConnection
-    val sql = "SELECT\n  di3lie AS `ljc_group_x_di3lie1548050049000_0`,\n  SUM(CAST(di9lie AS DOUBLE)) AS `ljc_sum_x_di9lie1548050987000_0`,\n  AVG(CAST(di10lie AS DOUBLE)) AS `ljc_avg_x_di10lie1548050989000_0`,\n  AVG(CAST(di11lie AS DOUBLE)) AS `ljc_avg_x_di11lie1548051313000_0`\nFROM\n  e000112.shujuquanbiao2019maying_sheet1_000112\nGROUP BY `ljc_group_x_di3lie1548050049000_0`\nORDER BY `ljc_avg_x_di10lie1548050989000_0` DESC NULLS LAST\nLIMIT 1500"
+    val sql = "SELECT\n\ta.storeid,\n\ta.openid\nFROM\n\twx.kudu_wuxiang_src_pho_order a\nLEFT JOIN wx.kudu_wuxiang_src_pho_afterpay_order b ON\n\ta.storeid = b.storeid\ngroup by\n\ta.storeid,\n\ta.openid"
     val ps = conn.prepareStatement(sql)
     val rs: ResultSet = ps.executeQuery
     val col = rs.getMetaData.getColumnCount
@@ -21,7 +20,6 @@ object ImpalaJdbcDemo {
     val dialect = JdbcDialects.get("jdbc:hive2://192.168.12.204:21050/default;auth=noSasl")
     val schema: StructType = JdbcUtils.getSchema(rs, dialect)
     val rows: Iterator[Row] = JdbcUtils.resultSetToRows(rs, schema)
-
     import org.json4s._
     implicit val formats = Serialization.formats(ShortTypeHints(List()))
     val data = Extraction.decompose(rows.toList)
